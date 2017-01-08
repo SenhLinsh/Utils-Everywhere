@@ -1,6 +1,10 @@
 package com.senh.lshutils.utils;
 
-/** 单例工具类，懒汉式，直接继承即可 */
+/**
+ * Created by Senh Linsh on 17/1/8.
+ * <p>
+ * 单例工具类，懒汉式，直接继承即可
+ */
 public abstract class LshSingletonUtils<T> {
 
     private T instance;

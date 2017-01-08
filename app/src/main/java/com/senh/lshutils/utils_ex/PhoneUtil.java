@@ -1,4 +1,5 @@
 package com.senh.lshutils.utils_ex;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -7,13 +8,15 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
+
 import java.io.File;
 
 /**
  * 手机组件调用工具类
  */
 public final class PhoneUtil {
-	private static long lastClickTime;
+    private static long lastClickTime;
+
     private PhoneUtil() {
         throw new Error("Do not need instantiate!");
     }
@@ -39,7 +42,7 @@ public final class PhoneUtil {
     /**
      * 判断是否为连击
      *
-     * @return  boolean
+     * @return boolean
      */
     public static boolean isFastDoubleClick() {
         long time = System.currentTimeMillis();
@@ -51,7 +54,9 @@ public final class PhoneUtil {
         return false;
     }
 
-    /** 获取手机型号 */
+    /**
+     * 获取手机型号
+     */
     public static String getMobileModel(Context context) {
         try {
             String model = android.os.Build.MODEL; // 手机型号
@@ -61,7 +66,9 @@ public final class PhoneUtil {
         }
     }
 
-    /** 获取手机品牌 */
+    /**
+     * 获取手机品牌
+     */
     public static String getMobileBrand(Context context) {
         try {
             String brand = android.os.Build.BRAND; // android系统版本号
@@ -71,11 +78,23 @@ public final class PhoneUtil {
         }
     }
 
+    /**
+     * 获取安卓API level
+     */
+    public static int getAndroidSDKVersion() {
+        try {
+            return Integer.valueOf(android.os.Build.VERSION.SDK);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
 
     /**
      * 拍照打开照相机！
-     * @param requestcode   返回值
-     * @param activity   上下文
+     *
+     * @param requestcode 返回值
+     * @param activity    上下文
      * @param fileName    生成的图片文件的路径
      */
     public static void toTakePhoto(int requestcode, Activity activity, String fileName) {
@@ -97,10 +116,11 @@ public final class PhoneUtil {
 
     /**
      * 打开相册
-     * @param requestcode  响应码
-     * @param activity  上下文
+     *
+     * @param requestcode 响应码
+     * @param activity    上下文
      */
-    public static void toTakePicture(int requestcode, Activity activity){
+    public static void toTakePicture(int requestcode, Activity activity) {
         Intent intent = new Intent(Intent.ACTION_PICK, null);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 "image/*");
@@ -110,21 +130,23 @@ public final class PhoneUtil {
 
     /**
      * 获取所有联系人的姓名和电话号码，需要READ_CONTACTS权限
+     *
      * @param context 上下文
      * @return Cursor。姓名：CommonDataKinds.Phone.DISPLAY_NAME；号码：CommonDataKinds.Phone.NUMBER
      */
-    public static Cursor getContactsNameAndNumber(Context context){
+    public static Cursor getContactsNameAndNumber(Context context) {
         return context.getContentResolver().query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new String[] {
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new String[]{
                         ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
     }
 
     /**
      * 获取手机号码
+     *
      * @param context 上下文
      * @return 手机号码，手机号码不一定能获取到
      */
-    public static String getMobilePhoneNumber(Context context){
+    public static String getMobilePhoneNumber(Context context) {
         return ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number();
     }
 

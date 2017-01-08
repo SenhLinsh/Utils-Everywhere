@@ -1,11 +1,4 @@
-package com.senh.lshutils.utils;
-
-import java.io.File;
-import java.util.List;
-
-import lshutils.LshShellUtils.CommandResult;
-
-
+package com.senh.lshutils.utils_ex;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
@@ -16,9 +9,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
-import android.os.Build;
-import android.provider.Settings;
 import android.util.Log;
+
+import java.io.File;
+import java.util.List;
 
 public class LshPackageUtils {
 
@@ -29,7 +23,6 @@ public class LshPackageUtils {
     }
 
     /**
-     * App installation location settings values, same to {@link #PackageHelper}
      */
     public static final int APP_INSTALL_AUTO     = 0;
     public static final int APP_INSTALL_INTERNAL = 1;
@@ -161,10 +154,9 @@ public class LshPackageUtils {
      * 手机内存或SD卡
      * 可通过查看系统菜单 Setting->Storage->Prefered install location
      * @return
-     * @see {@link IPackageManager#getInstallLocation()}
      */
     public static int getInstallLocation() {
-        CommandResult commandResult = LshShellUtils.execCommand(
+        LshShellUtils.CommandResult commandResult = LshShellUtils.execCommand(
                 "LD_LIBRARY_PATH=/vendor/lib:/system/lib pm get-install-location", false, true);
         if (commandResult.result == 0 && commandResult.successMsg != null && commandResult.successMsg.length() > 0) {
             try {

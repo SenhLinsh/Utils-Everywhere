@@ -1,4 +1,4 @@
-package com.senh.lshutils.utils;
+package com.senh.lshutils.utils_ex;
 
 import java.util.Random;
 

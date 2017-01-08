@@ -1,4 +1,6 @@
-package com.senh.lshutils.utils;
+package com.senh.lshutils.utils_ex;
+
+import android.content.Context;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,15 +8,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
-
 public class LshResourceUtils {
 
     private LshResourceUtils() {
         throw new AssertionError();
     }
 
-    /** 从Assets目录里读取文件的文本 */
+    /**
+     * 从Assets目录里读取文件的文本
+     */
     public static String getFileFromAssets(Context context, String fileName) {
         if (context == null || LshStringUtils.isEmpty(fileName)) {
             return null;
@@ -35,7 +37,9 @@ public class LshResourceUtils {
         }
     }
 
-    /** 从Raw目录里读取文件的文本 */
+    /**
+     * 从Raw目录里读取文件的文本
+     */
     public static String geFileFromRaw(Context context, int resId) {
         if (context == null) {
             return null;
@@ -56,7 +60,9 @@ public class LshResourceUtils {
         }
     }
 
-    /** 从Assets目录里读取文件的文本字符串集合 */
+    /**
+     * 从Assets目录里读取文件的文本字符串集合
+     */
     public static List<String> geFileToListFromAssets(Context context, String fileName) {
         if (context == null || LshStringUtils.isEmpty(fileName)) {
             return null;
@@ -78,7 +84,9 @@ public class LshResourceUtils {
         }
     }
 
-    /** 从Raw目录里读取文件的文本字符串集合 */
+    /**
+     * 从Raw目录里读取文件的文本字符串集合
+     */
     public static List<String> geFileToListFromRaw(Context context, int resId) {
         if (context == null) {
             return null;
