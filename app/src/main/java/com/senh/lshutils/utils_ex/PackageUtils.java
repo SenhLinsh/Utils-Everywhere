@@ -14,11 +14,11 @@ import android.util.Log;
 import java.io.File;
 import java.util.List;
 
-public class LshPackageUtils {
+public class PackageUtils {
 
     public static final String TAG = "PackageUtils";
 
-    private LshPackageUtils() {
+    private PackageUtils() {
         throw new AssertionError();
     }
 
@@ -113,13 +113,13 @@ public class LshPackageUtils {
      * @return 如果参数为null或者任务为null，返回null，其他返回是否在栈顶
      */
     public static Boolean isTopActivity(Context context, String packageName) {
-        if (context == null || LshStringUtils.isEmpty(packageName)) {
+        if (context == null || StringUtils.isEmpty(packageName)) {
             return null;
         }
 
         ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
         List<RunningTaskInfo> tasksInfo = activityManager.getRunningTasks(1);
-        if (LshListUtils.isEmpty(tasksInfo)) {
+        if (ListUtils.isEmpty(tasksInfo)) {
             return null;
         }
         try {
@@ -156,7 +156,7 @@ public class LshPackageUtils {
      * @return
      */
     public static int getInstallLocation() {
-        LshShellUtils.CommandResult commandResult = LshShellUtils.execCommand(
+        ShellUtils.CommandResult commandResult = ShellUtils.execCommand(
                 "LD_LIBRARY_PATH=/vendor/lib:/system/lib pm get-install-location", false, true);
         if (commandResult.result == 0 && commandResult.successMsg != null && commandResult.successMsg.length() > 0) {
             try {

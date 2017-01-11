@@ -1,11 +1,10 @@
-package com.senh.lshutils.utils;
+package com.senh.lshutils.utils_ex;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.text.TextUtils;
 
-import com.senh.lshutils.utils_ex.LshListUtils;
-import com.senh.lshutils.utils_ex.LshStringUtils;
+import com.senh.lshutils.utils.Basic.LshIOUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,11 +22,11 @@ import java.util.List;
 /**
  * 文件处理工具类
  */
-public class LshFileUtils {
+public class FileUtils {
 
     public final static String FILE_EXTENSION_SEPARATOR = ".";
 
-    private LshFileUtils() {
+    private FileUtils() {
         throw new AssertionError();
     }
 
@@ -143,7 +142,7 @@ public class LshFileUtils {
      * @return return 写入内容为空返回false，其余返回true
      */
     public static boolean writeFile(File file, String content, boolean append) {
-        if (LshStringUtils.isEmpty(content) || file == null || file.isDirectory()) {
+        if (StringUtils.isEmpty(content) || file == null || file.isDirectory()) {
             return false;
         }
 
@@ -171,7 +170,7 @@ public class LshFileUtils {
      * @return return 写入内容为空返回false，其余返回true
      */
     public static boolean writeFile(File file, List<String> contentList, boolean append) {
-        if (LshListUtils.isEmpty(contentList) || file == null || file.isDirectory()) {
+        if (ListUtils.isEmpty(contentList) || file == null || file.isDirectory()) {
             return false;
         }
 
@@ -299,7 +298,7 @@ public class LshFileUtils {
      * @param filePath 文件路径
      */
     public static String getFileNameWithoutExtension(String filePath) {
-        if (LshStringUtils.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             return filePath;
         }
 
@@ -335,7 +334,7 @@ public class LshFileUtils {
      * @param filePath 文件路径
      */
     public static String getFileName(String filePath) {
-        if (LshStringUtils.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             return filePath;
         }
 
@@ -364,7 +363,7 @@ public class LshFileUtils {
      */
     public static String getFolderName(String filePath) {
 
-        if (LshStringUtils.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             return filePath;
         }
 
@@ -392,7 +391,7 @@ public class LshFileUtils {
      * </pre>
      */
     public static String getFileExtension(String filePath) {
-        if (LshStringUtils.isBlank(filePath)) {
+        if (StringUtils.isBlank(filePath)) {
             return filePath;
         }
 
@@ -409,7 +408,7 @@ public class LshFileUtils {
      */
     public static boolean makeDirs(String filePath) {
         String folderName = getFolderName(filePath);
-        if (LshStringUtils.isEmpty(folderName)) {
+        if (StringUtils.isEmpty(folderName)) {
             return false;
         }
 
@@ -421,7 +420,7 @@ public class LshFileUtils {
      * 判断文件是否存在
      */
     public static boolean isFileExist(String filePath) {
-        if (LshStringUtils.isBlank(filePath)) {
+        if (StringUtils.isBlank(filePath)) {
             return false;
         }
 
@@ -433,7 +432,7 @@ public class LshFileUtils {
      * 判断文件夹是否存在
      */
     public static boolean isFolderExist(String directoryPath) {
-        if (LshStringUtils.isBlank(directoryPath)) {
+        if (StringUtils.isBlank(directoryPath)) {
             return false;
         }
 
@@ -450,7 +449,7 @@ public class LshFileUtils {
      * <ul>
      */
     public static boolean deleteFile(String path) {
-        if (LshStringUtils.isBlank(path)) {
+        if (StringUtils.isBlank(path)) {
             return true;
         }
 
@@ -482,7 +481,7 @@ public class LshFileUtils {
      * <ul>
      */
     public static long getFileSize(String path) {
-        if (LshStringUtils.isBlank(path)) {
+        if (StringUtils.isBlank(path)) {
             return -1;
         }
 

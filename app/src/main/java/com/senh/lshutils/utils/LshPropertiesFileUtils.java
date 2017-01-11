@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.senh.lshutils.common.Config;
 import com.senh.lshutils.common.FileProperties;
+import com.senh.lshutils.utils_ex.FileUtils;
 
 import java.io.File;
 
@@ -23,7 +24,7 @@ public class LshPropertiesFileUtils {
     private static void putString(String str) {
         File file = new File(PropertyFilePath);
         if (str != null && str.length() > 0) {
-            LshFileUtils.writeFile(file, str, false);
+            FileUtils.writeFile(file, str, false);
         }
     }
 
@@ -44,7 +45,7 @@ public class LshPropertiesFileUtils {
         File file = new File(PropertyFilePath);
         if (!file.exists()) return null;
 
-        StringBuilder stringBuilder = LshFileUtils.readFile(file);
+        StringBuilder stringBuilder = FileUtils.readFile(file);
         return stringBuilder.toString();
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.google.gson.Gson;
+import com.senh.lshutils.utils.Basic.LshApplicationUtils;
 import com.senh.lshutils.utils.base.JsonBean;
 
 /**

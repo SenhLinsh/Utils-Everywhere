@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * <h2>正则表达式工具类，提供一些常用的正则表达式</h2>
  */
-public class LshRegexUtils {
+public class RegexUtils {
     /**
      * 匹配全网IP的正则表达式
      */

@@ -5,14 +5,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class LshShellUtils {
+public class ShellUtils {
 
     public static final String COMMAND_SU       = "su";
     public static final String COMMAND_SH       = "sh";
     public static final String COMMAND_EXIT     = "exit\n";
     public static final String COMMAND_LINE_END = "\n";
 
-    private LshShellUtils() {
+    private ShellUtils() {
         throw new AssertionError();
     }
 
@@ -29,7 +29,7 @@ public class LshShellUtils {
      * @param isRoot whether need to run with root
      * @param isNeedResultMsg 是否需要返回信息
      * @return
-     * @see LshShellUtils#execCommand(String[], boolean, boolean)
+     * @see ShellUtils#execCommand(String[], boolean, boolean)
      */
     public static CommandResult execCommand(String command, boolean isRoot, boolean isNeedResultMsg) {
         return execCommand(new String[] {command}, isRoot, isNeedResultMsg);

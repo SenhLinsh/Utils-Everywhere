@@ -11,9 +11,9 @@ import java.io.ByteArrayOutputStream;
 /**
  * 图片类转换的工具类
  */
-public class LshImageUtils {
+public class ImageUtils {
 
-    private LshImageUtils() {
+    private ImageUtils() {
         throw new AssertionError();
     }
 

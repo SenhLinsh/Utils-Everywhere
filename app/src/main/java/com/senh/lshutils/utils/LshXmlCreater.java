@@ -7,9 +7,9 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 
 /**
- * 代码生成XML文件或属性的辅助类
- * <p/>
  * Created by Senh Linsh on 16/12/21.
+ * <p/>
+ * 代码生成XML文件或属性的辅助类
  */
 public class LshXmlCreater {
 

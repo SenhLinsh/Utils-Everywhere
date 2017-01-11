@@ -5,7 +5,7 @@ import android.graphics.PointF;
 /**
  * 几何图形工具
  */
-public class LshGeometryUtil {
+public class GeometryUtil {
 
     /**
      * 获得两点之间的距离

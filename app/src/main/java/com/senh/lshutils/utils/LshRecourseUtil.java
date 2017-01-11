@@ -2,7 +2,11 @@ package com.senh.lshutils.utils;
 
 import android.graphics.drawable.Drawable;
 
+import com.senh.lshutils.utils.Basic.LshApplicationUtils;
 
+/**
+ * Created by Senh Linsh on 17/1/11.
+ */
 public class LshRecourseUtil {
 
     public static String getString(int resId) {

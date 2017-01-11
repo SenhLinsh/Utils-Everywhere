@@ -3,7 +3,7 @@ package com.senh.lshutils.utils_ex;
 import android.util.Log;
 
 
-public class LshLogUtils {
+public class LogUtils {
     /**
      * 日志输出级别NONE
      */

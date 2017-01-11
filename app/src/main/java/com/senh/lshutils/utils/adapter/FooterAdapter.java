@@ -9,7 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.senh.lshutils.R;
-import com.senh.lshutils.utils.BaseUtils.BaseRecyclerViewAdapter;
+import com.senh.lshutils.utils.base.BaseRecyclerViewAdapter;
 
 /**
  * Created by Senh Linsh on 16/12/16.

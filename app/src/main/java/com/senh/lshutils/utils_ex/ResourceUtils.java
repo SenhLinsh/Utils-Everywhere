@@ -8,9 +8,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LshResourceUtils {
+public class ResourceUtils {
 
-    private LshResourceUtils() {
+    private ResourceUtils() {
         throw new AssertionError();
     }
 
@@ -18,7 +18,7 @@ public class LshResourceUtils {
      * 从Assets目录里读取文件的文本
      */
     public static String getFileFromAssets(Context context, String fileName) {
-        if (context == null || LshStringUtils.isEmpty(fileName)) {
+        if (context == null || StringUtils.isEmpty(fileName)) {
             return null;
         }
 
@@ -64,7 +64,7 @@ public class LshResourceUtils {
      * 从Assets目录里读取文件的文本字符串集合
      */
     public static List<String> geFileToListFromAssets(Context context, String fileName) {
-        if (context == null || LshStringUtils.isEmpty(fileName)) {
+        if (context == null || StringUtils.isEmpty(fileName)) {
             return null;
         }
 

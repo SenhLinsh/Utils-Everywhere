@@ -5,9 +5,9 @@ import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LshStringUtils {
+public class StringUtils {
 
-    private LshStringUtils() {
+    private StringUtils() {
         throw new AssertionError();
     }
 
@@ -159,7 +159,7 @@ public class LshStringUtils {
      * @return
      */
     public static String htmlEscapeCharsToString(String source) {
-        return LshStringUtils.isEmpty(source) ? source : source.replaceAll("&lt;", "<").replaceAll("&gt;", ">")
+        return StringUtils.isEmpty(source) ? source : source.replaceAll("&lt;", "<").replaceAll("&gt;", ">")
                 .replaceAll("&amp;", "&").replaceAll("&quot;", "\"");
     }
 

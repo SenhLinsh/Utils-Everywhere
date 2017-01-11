@@ -17,9 +17,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 视图工具箱
  */
-public class LshViewUtils {
+public class ViewUtils {
 
-    private LshViewUtils() {
+    private ViewUtils() {
         throw new AssertionError();
     }
 

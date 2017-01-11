@@ -8,14 +8,14 @@ import java.util.List;
 /**
  * 集合工具类
  */
-public class LshListUtils {
+public class ListUtils {
 
     /**
      * default join separator
      **/
     public static final String DEFAULT_JOIN_SEPARATOR = ",";
 
-    private LshListUtils() {
+    private ListUtils() {
         throw new AssertionError();
     }
 

@@ -1,4 +1,4 @@
-package com.senh.lshutils.utils;
+package com.senh.lshutils.utils.Basic;
 
 import android.app.Activity;
 import android.app.Application;

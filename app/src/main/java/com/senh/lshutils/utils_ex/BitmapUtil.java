@@ -23,12 +23,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-final class LshBitmapUtil {
+final class BitmapUtil {
 
     private static final boolean DEBUG = false;
-    private static final String TAG = LshBitmapUtil.class.getSimpleName();
+    private static final String TAG = BitmapUtil.class.getSimpleName();
 
-    private LshBitmapUtil() {
+    private BitmapUtil() {
         throw new Error("Do not need instantiate!");
     }
 

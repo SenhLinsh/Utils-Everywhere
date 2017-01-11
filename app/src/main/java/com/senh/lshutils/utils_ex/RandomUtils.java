@@ -2,7 +2,7 @@ package com.senh.lshutils.utils_ex;
 
 import java.util.Random;
 
-public class LshRandomUtils {
+public class RandomUtils {
 
     public static final String NUMBERS_AND_LETTERS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public static final String NUMBERS             = "0123456789";
@@ -10,7 +10,7 @@ public class LshRandomUtils {
     public static final String CAPITAL_LETTERS     = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public static final String LOWER_CASE_LETTERS  = "abcdefghijklmnopqrstuvwxyz";
 
-    private LshRandomUtils() {
+    private RandomUtils() {
         throw new AssertionError();
     }
 
@@ -41,7 +41,7 @@ public class LshRandomUtils {
 
     /** 获取一个固定长度的随机字符串, 包含：指定资源字符串的字符 */
     public static String getRandom(String source, int length) {
-        return LshStringUtils.isEmpty(source) ? null : getRandom(source.toCharArray(), length);
+        return StringUtils.isEmpty(source) ? null : getRandom(source.toCharArray(), length);
     }
 
     /** 获取一个固定长度的随机字符串, 包含：指定资源字符数组的字符 */

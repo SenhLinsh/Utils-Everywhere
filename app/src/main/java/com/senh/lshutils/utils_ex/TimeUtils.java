@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class LshTimeUtils {
+public class TimeUtils {
 
     public static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static final SimpleDateFormat DATE_FORMAT_DATE = new SimpleDateFormat("yyyy-MM-dd");
@@ -14,7 +14,7 @@ public class LshTimeUtils {
     public static final int WEEKDAYS = 7;
     public static final String[] WEEK = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
 
-    private LshTimeUtils() {
+    private TimeUtils() {
         throw new AssertionError();
     }
 
