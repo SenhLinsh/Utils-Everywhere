@@ -1,5 +1,6 @@
 package com.linsh.lshutils.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -8,6 +9,26 @@ import java.util.Date;
  * Created by Senh Linsh on 17/1/11.
  */
 public class LshTimeUtils {
+
+    public static long getTimeLong(String time) {
+        try {
+            Date parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+            return parse.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static long getTimeLong(String time, String pattern) {
+        try {
+            Date parse = new SimpleDateFormat(pattern).parse(time);
+            return parse.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
     public static String getWeekDayString(long milliseconds, String prefix) {
         return getWeekDayString(new Date(milliseconds), prefix);

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Process;
 
+import com.linsh.lshutils.utils.LshArrayUtils;
+
 /**
  * Created by Senh Linsh on 16/12/23.
  */
@@ -15,6 +17,8 @@ public class LshApplicationUtils {
     private static int mainTid;
     private static Handler mainHandler;
 
+    private static String realPackageName;
+
     public static void init(Application application) {
         // 初始化context
         appContext = application.getApplicationContext();
@@ -22,6 +26,8 @@ public class LshApplicationUtils {
         mainTid = Process.myTid();
         // 初始化handler
         mainHandler = new Handler();
+        // 设置真正的包名
+        setRealPackageName(application);
     }
 
     public static void init(Activity activity) {
@@ -50,7 +56,39 @@ public class LshApplicationUtils {
         getMainHandler().postDelayed(runnable, delay);
     }
 
-    public static void removeRunnalbe(Runnable runnable) {
+    public static void removeRunnable(Runnable runnable) {
         getMainHandler().removeCallbacks(runnable);
+    }
+
+    public static String getPackageName() {
+        return appContext.getPackageName();
+    }
+
+    private static void setRealPackageName(Application application) {
+        String contextPac = application.getApplicationContext().getPackageName();
+        String applicationPac = application.getClass().getPackage().getName();
+        if (applicationPac.contains(contextPac)) {
+            // 可以匹配上, 包名没有添加后缀
+            realPackageName = contextPac;
+        } else {
+            // 包名添加后缀
+            String[] contextSplit = contextPac.split("\\.");
+            String[] applicationSplit = applicationPac.split("\\.");
+            for (int i = 0; i < applicationSplit.length; i++) {
+                if (i >= contextSplit.length || i >= applicationSplit.length || !contextSplit[i].equals(applicationSplit[i])) {
+                    if (contextSplit[i].contains(applicationSplit[i])) {
+                        realPackageName = LshArrayUtils.joint(applicationSplit, i + 1, ".");
+                    } else {
+                        realPackageName = LshArrayUtils.joint(applicationSplit, i, ".");
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    // gradle可以给PackageName添加后缀, 导致Context.getPackageName()无法获取真正的包名
+    public static String getRealPackageName() {
+        return realPackageName;
     }
 }

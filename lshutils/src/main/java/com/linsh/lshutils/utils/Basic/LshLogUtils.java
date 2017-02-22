@@ -8,12 +8,14 @@ import com.linsh.lshutils.BuildConfig;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.lang.reflect.Field;
 
 /**
  * Created by Senh Linsh on 17/1/8.
  */
 public class LshLogUtils {
-    public static boolean IS_DEBUG = BuildConfig.DEBUG;
+    public static boolean IS_DEBUG = isDebugMode();
+
     private static String mTag = "LshLogUtils: ";
     // 保存本地log文件的目录
     private static String FilePath =
@@ -96,6 +98,17 @@ public class LshLogUtils {
         }
     }
 
+    private static boolean isDebugMode() {
+        boolean debug;
+        if (LshLogUtils.class.getPackage().getName().contains("com.linsh.lshutils")) {
+            debug = getBuildConfigValue();
+        } else {
+            debug = BuildConfig.DEBUG;
+        }
+        Log.i("LshLog", "isDebugMode: " + debug);
+        return debug;
+    }
+
     public static void printE(String msg, Throwable e) {
         if (IS_DEBUG) {
             Log.e(mTag + getClassName(), msg, e);
@@ -136,9 +149,8 @@ public class LshLogUtils {
      * 获取调用Log方法的类名
      */
     private static String getClassName() {
-        String result = "";
         StackTraceElement thisMethodStack = (new Exception()).getStackTrace()[2];
-        result = thisMethodStack.getClassName();
+        String result = thisMethodStack.getClassName();
         String[] split = result.split("\\.");
         try {
             result = split[split.length - 1];
@@ -167,6 +179,18 @@ public class LshLogUtils {
     public static boolean isFileSizeOutof1M(File file) throws Exception {
         if (file == null) return false;
         return file.length() >= 1048576 * 0.1;
+    }
+
+    private static boolean getBuildConfigValue() {
+        try {
+            String packageName = LshApplicationUtils.getRealPackageName();
+            Class<?> clazz = Class.forName(packageName + ".BuildConfig");
+            Field field = clazz.getField("DEBUG");
+            return (boolean) field.get(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return BuildConfig.DEBUG;
     }
 
 }
