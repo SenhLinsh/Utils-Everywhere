@@ -508,19 +508,19 @@ public class LshDialog extends Dialog {
 
 
     //================================================ 工具方法 ================================================//
-    public int dp2px(float dpValue) {
+    private int dp2px(float dpValue) {
         final float scale = getContext().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
 
-    public int getScreenShortSide() {
+    private int getScreenShortSide() {
         WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
         return Math.min(outMetrics.widthPixels, outMetrics.heightPixels);
     }
 
-    public boolean isEmpty(CharSequence str) {
+    private boolean isEmpty(CharSequence str) {
         return (str == null || str.length() == 0);
     }
 }

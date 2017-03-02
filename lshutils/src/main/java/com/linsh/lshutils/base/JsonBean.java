@@ -1,4 +1,4 @@
-package com.linsh.lshutils.utils.base;
+package com.linsh.lshutils.base;
 
 /**
  * Created by Senh Linsh on 16/12/23.

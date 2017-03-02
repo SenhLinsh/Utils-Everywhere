@@ -21,6 +21,11 @@ public class LshLogUtils {
     private static String FilePath =
             Environment.getExternalStorageDirectory() + "/" + LshApplicationUtils.getContext().getPackageName() + "/LshLog.txt";
 
+    public static void init(String tag, boolean isDebug) {
+        mTag = tag;
+        IS_DEBUG = isDebug;
+    }
+
     public static void v(Object msg) {
         String mmsg = msg != null ? msg.toString() : "obj == null";
         if (IS_DEBUG) {

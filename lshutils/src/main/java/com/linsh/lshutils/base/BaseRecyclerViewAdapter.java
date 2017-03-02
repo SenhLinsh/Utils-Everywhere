@@ -1,4 +1,4 @@
-package com.linsh.lshutils.utils.base;
+package com.linsh.lshutils.base;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

@@ -1,4 +1,4 @@
-package com.linsh.lshutils.utils.adapter;
+package com.linsh.lshutils.adapter;
 
 import android.text.TextWatcher;
 

@@ -1,4 +1,4 @@
-package com.linsh.lshutils.utils.adapter;
+package com.linsh.lshutils.adapter;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.linsh.lshutils.R;
-import com.linsh.lshutils.utils.base.BaseRecyclerViewAdapter;
+import com.linsh.lshutils.base.BaseRecyclerViewAdapter;
 
 /**
  * Created by Senh Linsh on 16/12/16.

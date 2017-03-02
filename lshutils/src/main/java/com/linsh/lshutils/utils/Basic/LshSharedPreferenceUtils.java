@@ -7,12 +7,13 @@ import android.content.SharedPreferences;
  * Created by Senh Linsh on 16/11/11.
  */
 public class LshSharedPreferenceUtils {
+
     private static SharedPreferences sp;
 
     private static void getSharedPreferences() {
         if (sp == null) {
             Context context = LshApplicationUtils.getContext();
-            sp = context.getSharedPreferences("config", context.MODE_PRIVATE);
+            sp = context.getSharedPreferences("LshSharedPreferenceUtils", Context.MODE_PRIVATE);
         }
     }
 

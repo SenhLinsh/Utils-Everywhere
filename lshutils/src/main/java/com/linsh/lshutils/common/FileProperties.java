@@ -1,6 +1,6 @@
 package com.linsh.lshutils.common;
 
-import com.linsh.lshutils.utils.base.JsonBean;
+import com.linsh.lshutils.base.JsonBean;
 
 /**
  * Created by Senh Linsh on 16/10/22.

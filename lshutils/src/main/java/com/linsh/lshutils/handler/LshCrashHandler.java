@@ -40,7 +40,6 @@ public class LshCrashHandler implements Thread.UncaughtExceptionHandler {
 
     /**
      * 获取手机的硬件信息
-     *
      * @return
      */
     private static String getMobileInfo() {

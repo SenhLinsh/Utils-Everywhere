@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import com.google.gson.Gson;
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-import com.linsh.lshutils.utils.base.JsonBean;
+import com.linsh.lshutils.base.JsonBean;
 
 /**
  * Created by Senh Linsh on 16/12/23.
