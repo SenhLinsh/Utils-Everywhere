@@ -10,7 +10,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.provider.Settings;
 
-import com.linsh.lshutils.utils_ex.AppUtils;
+import com.linsh.lshutils.others.AppUtils;
 
 /**
  * Created by Senh Linsh on 16/7/9.

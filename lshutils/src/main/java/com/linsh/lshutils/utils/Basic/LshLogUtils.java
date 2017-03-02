@@ -89,6 +89,15 @@ public class LshLogUtils {
         }
     }
 
+    public static void e(String tag, String msg, Throwable e) {
+        if (IS_DEBUG) {
+            Log.e(mTag + getClassName(), tag + ": " + msg);
+        }
+        if (e != null) {
+            e.printStackTrace();
+        }
+    }
+
     public static void e(String msg, Throwable e) {
         if (IS_DEBUG) {
             Log.e(mTag + getClassName(), msg, e);
