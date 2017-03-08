@@ -1,10 +1,12 @@
 package com.linsh.lshutils.utils;
 
+import android.annotation.TargetApi;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.os.Build;
 
 /**
  * Created by Senh Linsh on 16/12/21.
@@ -44,6 +46,26 @@ public class LshXmlCreater {
         GradientDrawable gradientDrawable = new GradientDrawable();
         gradientDrawable.setShape(GradientDrawable.RECTANGLE);
         return gradientDrawable;
+    }
+
+    public static GradientDrawable createRectangleCorner(float[] radii) {
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setShape(GradientDrawable.RECTANGLE);
+        gradientDrawable.setCornerRadii(radii);
+        return gradientDrawable;
+    }
+
+    public static GradientDrawable createRectangleCorner(float[] radii, int fillColor) {
+        GradientDrawable rectangleCorner = createRectangleCorner(radii);
+        rectangleCorner.setColor(fillColor);
+        return rectangleCorner;
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static GradientDrawable createRectangleCorner(float[] radii, ColorStateList color) {
+        GradientDrawable rectangleCorner = createRectangleCorner(radii);
+        rectangleCorner.setColor(color);
+        return rectangleCorner;
     }
 
     /**

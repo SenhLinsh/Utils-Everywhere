@@ -6,7 +6,7 @@ import android.view.View;
 /**
  * Created by Senh Linsh on 17/1/4.
  */
-public abstract class BaseRecyclerViewAdapter extends RecyclerView.Adapter {
+public abstract class BaseRecyclerViewAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T> {
     protected RecyclerView mRecyclerView;
 
     public BaseRecyclerViewAdapter(RecyclerView recyclerView) {

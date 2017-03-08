@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_dialog_lsh_root"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:id="@+id/ll_dialog_lsh_bg_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00809c"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_dialog_lsh_title"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+
+        <FrameLayout
+            android:id="@+id/fl_dialog_lsh_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="60dp"
+            android:minWidth="250dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_dialog_lsh_btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_dialog_lsh_positive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:textColor="#676767"/>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/v_dialog_lsh_divider"
+                android:layout_width="1px"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:background="#929292"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_dialog_lsh_negative"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:textColor="#676767"/>
+
+    </LinearLayout>
+
+</LinearLayout>
