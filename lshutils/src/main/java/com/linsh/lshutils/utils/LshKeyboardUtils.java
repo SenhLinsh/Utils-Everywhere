@@ -18,6 +18,15 @@ public class LshKeyboardUtils {
                 (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+    /**
+     * 隐藏键盘
+     */
+    public static void hideKeyboard(Activity activity) {
+        View focusView = activity.getCurrentFocus();
+        if (focusView != null) {
+            LshKeyboardUtils.hideKeyboard(focusView);
+        }
+    }
 
     /**
      * 显示键盘
@@ -36,7 +45,7 @@ public class LshKeyboardUtils {
     public static void clearFocusAndHideKeyboard(Activity activity) {
         View focusView = activity.getCurrentFocus();
         if (focusView != null) {
-            LshKeyboardUtils.hideKeyboard(activity.getCurrentFocus());
+            LshKeyboardUtils.hideKeyboard(focusView);
             focusView.clearFocus();
         }
     }
