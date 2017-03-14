@@ -2,6 +2,7 @@ package com.linsh.lshutils.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
@@ -46,6 +47,14 @@ public class LshAppUtils {
     }
 
     /**
+     * 获取顶部Activity的名称
+     */
+    public static String getTopActivityName() {
+        ActivityManager activityManager = (ActivityManager) LshApplicationUtils.getContext().getSystemService(Context.ACTIVITY_SERVICE);
+        return activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+    }
+
+    /**
      * 获取包名
      */
     public static String getPackageName() {
@@ -81,6 +90,35 @@ public class LshAppUtils {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    /**
+     * 获取应用名称
+     */
+    public String getAppName() {
+        //包管理操作管理类
+        PackageManager pm = LshApplicationUtils.getContext().getPackageManager();
+        try {
+            ApplicationInfo info = pm.getApplicationInfo(getPackageName(), 0);
+            return info.loadLabel(pm).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取当前应用签名
+     */
+    public static String getAppSignature() {
+        PackageManager pm = LshApplicationUtils.getContext().getPackageManager();
+        try {
+            PackageInfo packinfo = pm.getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            return packinfo.signatures[0].toCharsString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

@@ -64,6 +64,9 @@ public class LshApplicationUtils {
         return appContext.getPackageName();
     }
 
+    /**
+     * 获取应用真正的包名, 即清单文件里声明的包名, 用来存放R文件和BuildConfig, 以及常用来作为项目的一级包名
+     */
     private static void setRealPackageName(Application application) {
         String contextPac = application.getApplicationContext().getPackageName();
         String applicationPac = application.getClass().getPackage().getName();
@@ -85,9 +88,16 @@ public class LshApplicationUtils {
                 }
             }
         }
+        // FIXME: 17/3/14
+        // 当前方法有可能无法获取真正的包名
     }
 
-    // gradle可以给PackageName添加后缀, 导致Context.getPackageName()无法获取真正的包名
+    /**
+     * 获取应用真正的包名
+     * 1. gradle可以重新指定包名
+     * 2. gradle可以给PackageName添加后缀
+     * 从而导致Context.getPackageName()无法获取真正的包名
+     */
     public static String getRealPackageName() {
         return realPackageName;
     }

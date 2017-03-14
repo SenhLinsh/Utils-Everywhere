@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.google.gson.Gson;
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 import com.linsh.lshutils.base.JsonBean;
+import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 
 /**
  * Created by Senh Linsh on 16/12/23.
@@ -184,6 +184,14 @@ public class LshActivityUtils {
         }
     }
 
+
     //================================================ Activity相关方法 ================================================//
+
+    /**
+     * 获取顶部Activity的名称
+     */
+    public static String getTopActivityName() {
+        return LshAppUtils.getTopActivityName();
+    }
 
 }
