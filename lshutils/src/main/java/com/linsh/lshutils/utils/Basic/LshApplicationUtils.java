@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Process;
 
 import com.linsh.lshutils.utils.LshArrayUtils;
+import com.linsh.lshutils.utils.LshClassUtils;
 
 /**
  * Created by Senh Linsh on 16/12/23.
@@ -74,19 +75,16 @@ public class LshApplicationUtils {
             // 可以匹配上, 包名没有添加后缀
             realPackageName = contextPac;
         } else {
-            // 包名添加后缀
-            String[] contextSplit = contextPac.split("\\.");
+            // gradle中修改ApplicationId 或者 添加包名后缀
             String[] applicationSplit = applicationPac.split("\\.");
-            for (int i = 0; i < applicationSplit.length; i++) {
-                if (i >= contextSplit.length || i >= applicationSplit.length || !contextSplit[i].equals(applicationSplit[i])) {
-                    if (contextSplit[i].contains(applicationSplit[i])) {
-                        realPackageName = LshArrayUtils.joint(applicationSplit, i + 1, ".");
-                    } else {
-                        realPackageName = LshArrayUtils.joint(applicationSplit, i, ".");
-                    }
-                    break;
+            for (int i = applicationSplit.length - 1; i > 0; i--) {
+                String checkPac = LshArrayUtils.joint(applicationSplit, i, ".");
+                if (LshClassUtils.isClassExist(checkPac + ".BuildConfig")) {
+                    realPackageName = checkPac;
+                    return;
                 }
             }
+            realPackageName = contextPac;
         }
         // FIXME: 17/3/14
         // 当前方法有可能无法获取真正的包名

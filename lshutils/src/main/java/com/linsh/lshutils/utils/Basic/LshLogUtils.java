@@ -1,5 +1,6 @@
 package com.linsh.lshutils.utils.Basic;
 
+import android.content.pm.ApplicationInfo;
 import android.os.Environment;
 import android.util.Log;
 
@@ -8,7 +9,6 @@ import com.linsh.lshutils.BuildConfig;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.lang.reflect.Field;
 
 /**
  * Created by Senh Linsh on 17/1/8.
@@ -115,7 +115,8 @@ public class LshLogUtils {
     private static boolean isDebugMode() {
         boolean debug;
         if (LshLogUtils.class.getPackage().getName().contains("com.linsh.lshutils")) {
-            debug = getBuildConfigValue();
+            ApplicationInfo applicationInfo = LshApplicationUtils.getContext().getApplicationInfo();
+            debug = applicationInfo != null && (applicationInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         } else {
             debug = BuildConfig.DEBUG;
         }
@@ -194,17 +195,4 @@ public class LshLogUtils {
         if (file == null) return false;
         return file.length() >= 1048576 * 0.1;
     }
-
-    private static boolean getBuildConfigValue() {
-        try {
-            String packageName = LshApplicationUtils.getRealPackageName();
-            Class<?> clazz = Class.forName(packageName + ".BuildConfig");
-            Field field = clazz.getField("DEBUG");
-            return (boolean) field.get(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return BuildConfig.DEBUG;
-    }
-
 }
