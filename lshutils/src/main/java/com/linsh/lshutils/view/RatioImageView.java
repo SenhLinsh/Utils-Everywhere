@@ -35,12 +35,6 @@ public class RatioImageView extends ImageView {
 
     public RatioImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-//      需要在attrs.xml中配置自定义属性
-//      <declare-styleable name="RatioImageView">
-//      <attr name="dafaultRatio" format="float"/>
-//      <attr name="decidedRatio" format="float"/>
-//      </declare-styleable>
-
         // 获取自定义属性值
         TypedArray typedArray = context.obtainStyledAttributes(attrs,
                 R.styleable.RatioImageView);

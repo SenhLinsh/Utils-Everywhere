@@ -111,6 +111,10 @@ abstract class BaseCircleProgress extends View {
     }
 
     protected void setProgressWithAnimation(int[] progresses, long duration) {
+        if (mProgressAnimator == null) {
+            setUpAnimation();
+        }
+
         if (mProgressAnimator.isRunning()) {
             mProgressAnimator.cancel();
         }

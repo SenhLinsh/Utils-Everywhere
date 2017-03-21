@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="RatioImageView">
         <attr name="dafaultRatio" format="float"/>
         <attr name="decidedRatio" format="float"/>
+    </declare-styleable>
+
+    <declare-styleable name="DashedLine">
+        <attr name="dashColor" format="color"/>
+        <attr name="dashGap" format="dimension"/>
+        <attr name="dashWidth" format="dimension"/>
+        <attr name="dashOrientation" format="enum">
+            <enum name="horizontal" value="0"/>
+            <enum name="vertical" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>
