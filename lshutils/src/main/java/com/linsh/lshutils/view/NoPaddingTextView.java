@@ -32,7 +32,6 @@ public class NoPaddingTextView extends TextView {
     @Override
     protected void onDraw(Canvas canvas) {
         int yOff = -mAdditionalPadding / 6;
-        Log.i("LshLog", "onDraw: mAdditionalPadding=" + mAdditionalPadding);
         canvas.translate(0, yOff);
         super.onDraw(canvas);
     }
