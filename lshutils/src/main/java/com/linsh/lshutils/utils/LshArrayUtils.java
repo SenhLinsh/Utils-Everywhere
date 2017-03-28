@@ -40,6 +40,29 @@ public class LshArrayUtils {
         return list;
     }
 
+    public static <T> void toArray(List<T> src, T[] dest) {
+        if (dest == null) {
+            return;
+        }
+        if (src == null) {
+            dest = null;
+            return;
+        }
+        for (int i = 0; i < dest.length; i++) {
+            dest[i] = i < src.size() ? src.get(i) : null;
+        }
+    }
+
+    public static int[] toArray(List<Integer> list) {
+        if (list == null) return null;
+
+        int[] array = new int[list.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
     public static void copy(int[] srcArray, int[] destArray) {
         if (srcArray == null) {
             destArray = null;
