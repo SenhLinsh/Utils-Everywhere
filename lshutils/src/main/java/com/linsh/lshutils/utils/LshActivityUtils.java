@@ -3,6 +3,7 @@ package com.linsh.lshutils.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 import com.google.gson.Gson;
 import com.linsh.lshutils.base.JsonBean;
@@ -23,6 +24,10 @@ public class LshActivityUtils {
 
     public static IntentBuilder newIntent(Class<?> activity) {
         return new IntentBuilder(activity);
+    }
+
+    public static IntentBuilder newIntent() {
+        return new IntentBuilder();
     }
 
     public static void startActivityWithData(Activity context, Class<?> activity, String... data) {
@@ -90,6 +95,10 @@ public class LshActivityUtils {
      */
     public static class IntentBuilder {
         private Intent intent;
+
+        public IntentBuilder() {
+            intent = new Intent();
+        }
 
         public IntentBuilder(Class<?> activity) {
             intent = new Intent(LshApplicationUtils.getContext(), activity);
@@ -167,6 +176,16 @@ public class LshActivityUtils {
 
         public IntentBuilder putExtra(JsonBean bean, String key) {
             intent.putExtra(key, new Gson().toJson(bean));
+            return this;
+        }
+
+        public IntentBuilder setData(Uri data) {
+            intent.setData(data);
+            return this;
+        }
+
+        public IntentBuilder setAction(String action) {
+            intent.setAction(action);
             return this;
         }
 
