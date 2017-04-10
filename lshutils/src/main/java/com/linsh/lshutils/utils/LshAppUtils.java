@@ -1,13 +1,18 @@
 package com.linsh.lshutils.utils;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
+import com.linsh.lshutils.utils.Basic.LshLogUtils;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -121,4 +126,13 @@ public class LshAppUtils {
         return null;
     }
 
+    public static void installApk(Activity activity, File file) {
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.setDataAndType(Uri.fromFile(file),
+                "application/vnd.android.package-archive");
+        // 避免用户在安装界面返回
+        activity.startActivity(intent);
+    }
 }
