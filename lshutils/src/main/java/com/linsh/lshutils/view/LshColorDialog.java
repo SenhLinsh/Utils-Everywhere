@@ -91,6 +91,14 @@ public class LshColorDialog extends Dialog {
             return LshColorDialog.this;
         }
 
+        public void dismiss() {
+            LshColorDialog.this.dismiss();
+        }
+
+        public LshColorDialog getDialog() {
+            return LshColorDialog.this;
+        }
+
         protected void initView(LshColorDialog dialog) {
             // 设置标题
             TextView tvTitle = (TextView) dialog.findViewById(R.id.tv_dialog_lsh_title);
@@ -153,6 +161,7 @@ public class LshColorDialog extends Dialog {
             super.initView(dialog);
             // 判断是否需要确认取消按钮
             if (!positiveBtnVisible && !negativeBtnVisible) {
+                dialog.findViewById(R.id.v_dialog_lsh_divider).setVisibility(View.GONE);
                 return;
             }
             setBtnLayoutVisible();
