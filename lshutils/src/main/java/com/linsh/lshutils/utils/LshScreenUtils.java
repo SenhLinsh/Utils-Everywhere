@@ -30,6 +30,16 @@ public class LshScreenUtils {
         return outMetrics.heightPixels;
     }
 
+    public static int getScreenShortSize() {
+        DisplayMetrics outMetrics = LshApplicationUtils.getContext().getResources().getDisplayMetrics();
+        return Math.min(outMetrics.widthPixels, outMetrics.heightPixels);
+    }
+
+    public static int getScreenLongSize() {
+        DisplayMetrics outMetrics = LshApplicationUtils.getContext().getResources().getDisplayMetrics();
+        return Math.max(outMetrics.widthPixels, outMetrics.heightPixels);
+    }
+
     public static int getScreenRotation() {
         WindowManager wm = (WindowManager) LshApplicationUtils.getContext().getSystemService(Context.WINDOW_SERVICE);
         return wm.getDefaultDisplay().getRotation();
