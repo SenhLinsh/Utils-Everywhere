@@ -26,6 +26,13 @@ public class LshSDCardUtils {
     }
 
     /**
+     * 检查SD卡是否存在
+     */
+    private static boolean checkSdCard() {
+        return isAvailable();
+    }
+
+    /**
      * 获取SD卡的根目录
      * @return null：不存在SD卡
      */
