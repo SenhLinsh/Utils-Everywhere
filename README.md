@@ -1,9 +1,27 @@
 # LshUtils
 个人收集的常用工具类
 
-## 自己收集整理并在工作之中抽取完善的个人工具类 (utils文件夹下)
+## 添加依赖
+1. 在项目根目录的build.gradle中添加自定义仓库
+```
+allprojects {
+  repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+  }
+}
+```
+2. 在module里面添加依赖
+```
+dependencies {
+        compile 'com.github.SenhLinsh:LshUtils:1.0.2'
+}
+ ```
 
-###Basic
+## 简介
+### 自己收集整理并在工作之中抽取完善的个人工具类 (utils文件夹下)
+
+####Basic
 utils/basic文件夹下的Utils是其他Utils经常引用的基本Utils, 如果你选择复制, 别忘了把里面的几个Utils复制过去哦, 你会发现里面几个Utils大有作用.</br>
 注意: LshApplicationUtils是非常关键的一个Utils, 因为其他Utils需要使用context的时候, 很多都是直接拿了它的context, 记得在程序入口Application中初始化LshApplicationUtils哦~
 
@@ -29,12 +47,12 @@ utils文件夹下的Utils, 大都是我的心血总结, 可以挑自己喜欢的
 
 其他的就不多介绍了, 随着日常开发, 工具类正在完善和壮大, 我相信总有一天你们会喜欢的
 
-## 除了工具类, 我还抽取了一些常用的类(其他分类文件夹下), 如:
+### 除了工具类, 我还抽取了一些常用的类(其他分类文件夹下), 如:
 * 简单实用的自定义控件:
 [NoPaddingTextView](https://github.com/SenhLinsh/LshUtils/blob/master/lshutils/src/main/java/com/linsh/lshutils/view/NoPaddingTextView.java)
 (在另一个项目中有详细的介绍 [详戳 NoPaddingTextView](https://github.com/SenhLinsh/NoPaddingTextView))
 
-## 引用摘抄了优秀开源的工具类 (others文件夹下)
+### 引用摘抄了优秀开源的工具类 (others文件夹下)
 整理自己的工具类之前, 我也是在GitHub上面去找别人用的工具类拿来用. 但别人的始终是别人的, 你没有自己去动手完善过始终不能很好地去运用.
 至今的工具类里面还保留着一些直接引用的别人的工具类, 在此表示感谢, 喜欢收集工具类的可以戳戳:
 
