@@ -486,11 +486,11 @@ public class LshDialog extends Dialog {
         T setNegativeButton(String negativeText, OnInputNegativeListener listener);
     }
 
-    private interface OnPositiveListener {
+    public interface OnPositiveListener {
         void onClick(LshDialog dialog);
     }
 
-    private interface OnNegativeListener {
+    public interface OnNegativeListener {
         void onClick(LshDialog dialog);
     }
 
