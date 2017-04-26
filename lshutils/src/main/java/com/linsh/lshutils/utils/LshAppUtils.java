@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-import com.linsh.lshutils.utils.Basic.LshLogUtils;
 
 import java.io.File;
 import java.util.List;
@@ -126,6 +125,10 @@ public class LshAppUtils {
         return null;
     }
 
+
+    /**
+     * 安装APK
+     */
     public static void installApk(Activity activity, File file) {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
@@ -134,5 +137,30 @@ public class LshAppUtils {
                 "application/vnd.android.package-archive");
         // 避免用户在安装界面返回
         activity.startActivity(intent);
+    }
+
+    /**
+     * 检测某个应用是否安装
+     */
+    public static boolean isAppInstalled(String packageName) {
+        try {
+            LshApplicationUtils.getContext().getPackageManager().getPackageInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    /**
+     * 检测某个应用是否安装, 如果一安装则启动跳转该应用
+     */
+    public static boolean checkAndStartInstalledApp(Activity activity, String packageName) {
+        if (isAppInstalled(packageName)) {
+            Intent intent = LshApplicationUtils.getContext().getPackageManager().getLaunchIntentForPackage(packageName);
+            activity.startActivity(intent);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
