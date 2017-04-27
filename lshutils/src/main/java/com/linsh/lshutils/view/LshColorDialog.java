@@ -498,11 +498,11 @@ public class LshColorDialog extends Dialog {
         void onClick(LshColorDialog dialog, T t, int index);
     }
 
-    private interface OnInputPositiveListener extends OnBasePositiveListener {
+    public interface OnInputPositiveListener extends OnBasePositiveListener {
         void onClick(LshColorDialog dialog, String inputText);
     }
 
-    private interface OnInputNegativeListener extends OnBaseNegativeListener {
+    public interface OnInputNegativeListener extends OnBaseNegativeListener {
         void onClick(LshColorDialog dialog, String inputText);
     }
 
