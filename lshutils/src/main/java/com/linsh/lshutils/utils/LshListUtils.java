@@ -33,8 +33,11 @@ public class LshListUtils {
 
     public static <T> List<String> getStringList(List<T> list, Action<String, T> getStringAction) {
         List<String> stringList = new ArrayList<>();
-        for (T t : list) {
-            stringList.add(getStringAction.call(t));
+
+        if (list != null && getStringAction != null) {
+            for (T t : list) {
+                stringList.add(getStringAction.call(t));
+            }
         }
         return stringList;
     }
