@@ -507,7 +507,7 @@ public class LshColorDialog extends Dialog {
     }
 
     public interface OnItemClickListener {
-        void onClick(LshColorDialog dialog, LshRecyclerViewAdapter.LshViewHolder viewHolder, int item);
+        void onClick(LshColorDialog dialog, LshRecyclerViewAdapter.LshViewHolder viewHolder, int index);
     }
 
     //================================================ 工具方法 ================================================//
