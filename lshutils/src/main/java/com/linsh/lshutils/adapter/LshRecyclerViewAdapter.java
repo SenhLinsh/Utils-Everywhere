@@ -19,21 +19,18 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.linsh.lshutils.base.BaseRecyclerViewAdapter;
-
 import java.util.List;
 
 /**
  * Created by Senh Linsh on 17/3/7.
  */
 
-public abstract class LshRecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<LshRecyclerViewAdapter.LshViewHolder> {
+public abstract class LshRecyclerViewAdapter<T> extends RecyclerView.Adapter<LshRecyclerViewAdapter.LshViewHolder> {
 
     private List<T> list;
     private int layoutId;
 
-    public LshRecyclerViewAdapter(RecyclerView recyclerView, int layoutId, List<T> list) {
-        super(recyclerView);
+    public LshRecyclerViewAdapter(int layoutId, List<T> list) {
         this.layoutId = layoutId;
         this.list = list;
     }
@@ -48,8 +45,20 @@ public abstract class LshRecyclerViewAdapter<T> extends BaseRecyclerViewAdapter<
         return viewHolder;
     }
 
+    @Override
+    public void onBindViewHolder(LshViewHolder holder, int position) {
+        T data = list.get(position);
+        onBindViewHolder(holder, data);
+    }
+
+    protected abstract void onBindViewHolder(LshViewHolder holder, T data);
+
     public void setData(List<T> list) {
         this.list = list;
+    }
+
+    public List<T> getData() {
+        return list;
     }
 
     @Override

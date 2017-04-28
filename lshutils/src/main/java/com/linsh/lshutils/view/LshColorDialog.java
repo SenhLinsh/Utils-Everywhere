@@ -296,7 +296,7 @@ public class LshColorDialog extends Dialog {
             recyclerView.setLayoutParams(params);
             recyclerView.setLayoutManager(new LinearLayoutManager(dialog.getContext()));
             if (layoutId != 0) {
-                CustomListDialogAdapter<String> adapter = new CustomListDialogAdapter<>(recyclerView, layoutId, list, mListDialogAdapterListener);
+                CustomListDialogAdapter<String> adapter = new CustomListDialogAdapter<>(layoutId, list, mListDialogAdapterListener);
                 if (mOnItemClickListener != null) {
                     adapter.setOnItemClickListener(new LshRecyclerViewAdapter.OnItemClickListener() {
                         @Override
@@ -333,22 +333,27 @@ public class LshColorDialog extends Dialog {
     }
 
     public static class CustomListDialogAdapter<T> extends LshRecyclerViewAdapter<T> {
-        private ListDialogAdapterListener mListDialogAdapterListener;
+        private ListDialogAdapterListener<T> mListDialogAdapterListener;
 
-        public CustomListDialogAdapter(RecyclerView recyclerView, int layoutId, List list, ListDialogAdapterListener listener) {
-            super(recyclerView, layoutId, list);
+        public CustomListDialogAdapter(int layoutId, List<T> list, ListDialogAdapterListener<T> listener) {
+            super(layoutId, list);
             mListDialogAdapterListener = listener;
         }
 
         @Override
         public void onBindViewHolder(LshViewHolder holder, int position) {
+
+        }
+
+        @Override
+        protected void onBindViewHolder(LshViewHolder holder, T data) {
             if (mListDialogAdapterListener != null) {
-                mListDialogAdapterListener.onBindViewHolder(holder, position);
+                mListDialogAdapterListener.onBindViewHolder(holder, data);
             }
         }
 
-        public interface ListDialogAdapterListener {
-            void onBindViewHolder(LshViewHolder holder, int position);
+        public interface ListDialogAdapterListener<T> {
+            void onBindViewHolder(LshViewHolder holder, T data);
         }
     }
 
