@@ -1,5 +1,7 @@
 package com.linsh.lshutils.utils;
 
+import com.linsh.lshutils.Rx.Action;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,5 +29,13 @@ public class LshListUtils {
             invertList.add(sourceList.get(i));
         }
         return invertList;
+    }
+
+    public static <T> List<String> getStringList(List<T> list, Action<String, T> getStringAction) {
+        List<String> stringList = new ArrayList<>();
+        for (T t : list) {
+            stringList.add(getStringAction.call(t));
+        }
+        return stringList;
     }
 }
