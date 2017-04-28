@@ -376,6 +376,7 @@ public class LshColorDialog extends Dialog {
             textView.setPadding(dp5, dp5, dp5, dp5);
             textView.setGravity(Gravity.CENTER_VERTICAL);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            textView.setTextColor(Color.WHITE);
             // 添加分割线
             View line = new View(parent.getContext());
             line.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
