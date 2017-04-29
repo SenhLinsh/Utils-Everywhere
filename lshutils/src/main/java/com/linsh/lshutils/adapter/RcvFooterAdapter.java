@@ -14,11 +14,11 @@ import com.linsh.lshutils.base.BaseRecyclerViewAdapter;
 /**
  * Created by Senh Linsh on 16/12/16.
  */
-public abstract class FooterAdapter extends BaseRecyclerViewAdapter {
+public abstract class RcvFooterAdapter extends BaseRecyclerViewAdapter {
     private boolean mCanLoadMore;
     private final int itemTypeFooter = 101;
 
-    public FooterAdapter(RecyclerView recyclerView) {
+    public RcvFooterAdapter(RecyclerView recyclerView) {
         super(recyclerView);
         recyclerView.addOnScrollListener(getOnScrollListener());
     }

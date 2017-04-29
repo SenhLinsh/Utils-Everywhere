@@ -12,7 +12,7 @@ import java.util.List;
  * 可展开RecyclerView的Adapter. 目前只能展开二级, 并且展开某一条目后之前展开的条目会自动关闭
  */
 
-public abstract class LshExpandableAdapter<F, S> extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener {
+public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener {
 
     private List<F> firstLevelData;
     private List<S> secondLevelData;

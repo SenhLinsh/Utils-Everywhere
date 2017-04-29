@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.linsh.lshutils.R;
-import com.linsh.lshutils.adapter.LshRecyclerViewAdapter;
+import com.linsh.lshutils.adapter.LshSimplifiedRcvAdapter;
 import com.linsh.lshutils.utils.LshArrayUtils;
 import com.linsh.lshutils.utils.LshXmlCreater;
 
@@ -298,9 +298,9 @@ public class LshColorDialog extends Dialog {
             if (layoutId != 0) {
                 CustomListDialogAdapter<String> adapter = new CustomListDialogAdapter<>(layoutId, list, mListDialogAdapterListener);
                 if (mOnItemClickListener != null) {
-                    adapter.setOnItemClickListener(new LshRecyclerViewAdapter.OnItemClickListener() {
+                    adapter.setOnItemClickListener(new LshSimplifiedRcvAdapter.OnItemClickListener() {
                         @Override
-                        public void onItemClick(LshRecyclerViewAdapter.LshViewHolder viewHolder, int position) {
+                        public void onItemClick(LshSimplifiedRcvAdapter.LshSimplifiedViewHolder viewHolder, int position) {
                             curClickedItem = position;
                             mOnItemClickListener.onClick(LshColorDialog.this, viewHolder, position);
                         }
@@ -310,7 +310,7 @@ public class LshColorDialog extends Dialog {
             } else {
                 recyclerView.setAdapter(new LshColorDialog.ListDialogAdapter(list, new OnItemClickListener() {
                     @Override
-                    public void onClick(LshColorDialog dialog, LshRecyclerViewAdapter.LshViewHolder viewHolder, int item) {
+                    public void onClick(LshColorDialog dialog, LshSimplifiedRcvAdapter.LshSimplifiedViewHolder viewHolder, int item) {
                         curClickedItem = item;
                         mOnItemClickListener.onClick(dialog, viewHolder, item);
                     }
@@ -332,7 +332,7 @@ public class LshColorDialog extends Dialog {
         }
     }
 
-    public static class CustomListDialogAdapter<T> extends LshRecyclerViewAdapter<T> {
+    public static class CustomListDialogAdapter<T> extends LshSimplifiedRcvAdapter<T> {
         private ListDialogAdapterListener<T> mListDialogAdapterListener;
 
         public CustomListDialogAdapter(int layoutId, List<T> list, ListDialogAdapterListener<T> listener) {
@@ -341,19 +341,19 @@ public class LshColorDialog extends Dialog {
         }
 
         @Override
-        public void onBindViewHolder(LshViewHolder holder, int position) {
+        public void onBindViewHolder(LshSimplifiedViewHolder holder, int position) {
 
         }
 
         @Override
-        protected void onBindViewHolder(LshViewHolder holder, T data) {
+        protected void onBindViewHolder(LshSimplifiedViewHolder holder, T data) {
             if (mListDialogAdapterListener != null) {
                 mListDialogAdapterListener.onBindViewHolder(holder, data);
             }
         }
 
         public interface ListDialogAdapterListener<T> {
-            void onBindViewHolder(LshViewHolder holder, T data);
+            void onBindViewHolder(LshSimplifiedViewHolder holder, T data);
         }
     }
 
@@ -513,7 +513,7 @@ public class LshColorDialog extends Dialog {
     }
 
     public interface OnItemClickListener {
-        void onClick(LshColorDialog dialog, LshRecyclerViewAdapter.LshViewHolder viewHolder, int index);
+        void onClick(LshColorDialog dialog, LshSimplifiedRcvAdapter.LshSimplifiedViewHolder viewHolder, int index);
     }
 
     //================================================ 工具方法 ================================================//
