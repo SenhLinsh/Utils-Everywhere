@@ -494,16 +494,16 @@ public class LshDialog extends Dialog {
         void onClick(LshDialog dialog);
     }
 
-    private interface OnInputPositiveListener {
+    public interface OnInputPositiveListener {
         void onClick(LshDialog dialog, String inputText);
     }
 
-    private interface OnInputNegativeListener {
+    public interface OnInputNegativeListener {
         void onClick(LshDialog dialog, String inputText);
     }
 
-    private interface OnItemClickListener {
-        void onClick(LshDialog dialog, int item);
+    public interface OnItemClickListener {
+        void onClick(LshDialog dialog, int index);
     }
 
 

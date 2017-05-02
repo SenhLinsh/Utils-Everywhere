@@ -40,7 +40,12 @@ public abstract class LshSimplifiedRcvAdapter<T> extends RecyclerView.Adapter<Ls
         View itemView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         LshSimplifiedViewHolder viewHolder = new LshSimplifiedViewHolder(itemView);
         if (mOnItemClickListener != null) {
-            viewHolder.setOnItemClickListener(mOnItemClickListener);
+            viewHolder.setOnItemClickListener(new OnItemClickListener<Void>() {
+                @Override
+                public void onItemClick(LshSimplifiedViewHolder viewHolder, Void data, int position) {
+                    mOnItemClickListener.onItemClick(viewHolder, list.get(position), position);
+                }
+            });
         }
         return viewHolder;
     }
@@ -48,10 +53,10 @@ public abstract class LshSimplifiedRcvAdapter<T> extends RecyclerView.Adapter<Ls
     @Override
     public void onBindViewHolder(LshSimplifiedViewHolder holder, int position) {
         T data = list.get(position);
-        onBindViewHolder(holder, data);
+        onBindViewHolder(holder, data, position);
     }
 
-    protected abstract void onBindViewHolder(LshSimplifiedViewHolder holder, T data);
+    protected abstract void onBindViewHolder(LshSimplifiedViewHolder holder, T data, int position);
 
     public void setData(List<T> list) {
         this.list = list;
@@ -66,20 +71,21 @@ public abstract class LshSimplifiedRcvAdapter<T> extends RecyclerView.Adapter<Ls
         return list == null ? 0 : list.size();
     }
 
-    private OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener<T> mOnItemClickListener;
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener<T> listener) {
         mOnItemClickListener = listener;
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(LshSimplifiedViewHolder viewHolder, int position);
+    public interface OnItemClickListener<T> {
+        void onItemClick(LshSimplifiedViewHolder viewHolder, T data, int position);
     }
 
     public static class LshSimplifiedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private OnItemClickListener mOnItemClickListener;
+        private OnItemClickListener<Void> mOnItemClickListener;
         private SparseArray<View> mViews;
+        private int curItemPosition = -1;
 
         public LshSimplifiedViewHolder(View itemView) {
             super(itemView);
@@ -229,14 +235,14 @@ public abstract class LshSimplifiedRcvAdapter<T> extends RecyclerView.Adapter<Ls
             return this;
         }
 
-        public void setOnItemClickListener(OnItemClickListener listener) {
+        public void setOnItemClickListener(OnItemClickListener<Void> listener) {
             mOnItemClickListener = listener;
         }
 
         @Override
         public void onClick(View v) {
             if (mOnItemClickListener != null) {
-                mOnItemClickListener.onItemClick(this, getAdapterPosition());
+                mOnItemClickListener.onItemClick(this, null, getAdapterPosition());
             }
         }
     }
