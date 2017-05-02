@@ -16,7 +16,7 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
 
     private List<F> firstLevelData;
     private List<S> secondLevelData;
-    private int firstLevelClickPosition = -1;
+    private int mLastFirstLevelClickPosition = -1;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -48,9 +48,9 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
     }
 
     protected int getFirstPosition(int position) {
-        if (position <= firstLevelClickPosition) {
+        if (position <= mLastFirstLevelClickPosition) {
             return position;
-        } else if (position > firstLevelClickPosition + getSecondLevelDataCount()) {
+        } else if (position > mLastFirstLevelClickPosition + getSecondLevelDataCount()) {
             return position - getSecondLevelDataCount();
         } else {
             return -1;
@@ -58,9 +58,9 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
     }
 
     protected int getSecondPosition(int position) {
-        if (getSecondLevelDataCount() > 0 && position > firstLevelClickPosition
-                && position <= firstLevelClickPosition + getSecondLevelDataCount()) {
-            return position - firstLevelClickPosition - 1;
+        if (getSecondLevelDataCount() > 0 && position > mLastFirstLevelClickPosition
+                && position <= mLastFirstLevelClickPosition + getSecondLevelDataCount()) {
+            return position - mLastFirstLevelClickPosition - 1;
         }
         return -1;
     }
@@ -70,7 +70,7 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
         notifyDataSetChanged();
     }
 
-    protected List<F> getFirstLevelData() {
+    public List<F> getFirstLevelData() {
         return firstLevelData;
     }
 
@@ -91,19 +91,20 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
     @Override
     public void onClick(View v) {
         int position = (int) v.getTag();
-        if (getFirstPosition(position) >= 0) {
+        int firstPosition = getFirstPosition(position);
+        if (firstPosition >= 0) {
             boolean expand;
-            if (position == firstLevelClickPosition) {
+            if (position == mLastFirstLevelClickPosition) {
                 // 点击已经打开的分组, 清除二级分组数据, 清楚点击位置
                 secondLevelData = null;
-                firstLevelClickPosition = -1;
+                mLastFirstLevelClickPosition = -1;
                 expand = false;
             } else {
                 // 点击没有打开过的分组, 先判断该分组是否有数据
-                List<S> secondData = getSecondData(getFirstPosition(position));
+                List<S> secondData = getSecondData(firstPosition);
                 if (secondData != null && secondData.size() > 0) {
                     // 有数据则打开该分组, 设置其点击位置
-                    firstLevelClickPosition = getFirstPosition(position);
+                    mLastFirstLevelClickPosition = firstPosition;
                     secondLevelData = secondData;
                     expand = true;
                 } else {
@@ -113,11 +114,12 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
             }
             notifyDataSetChanged();
             if (mOnItemClickListener != null) {
-                mOnItemClickListener.onFirstLevelItemClick(getFirstPosition(position), expand);
+                mOnItemClickListener.onFirstLevelItemClick(firstLevelData.get(firstPosition), firstPosition, expand);
             }
         } else {
             if (mOnItemClickListener != null) {
-                mOnItemClickListener.onSecondLevelItemClick(getSecondPosition(position));
+                int secondPosition = getSecondPosition(position);
+                mOnItemClickListener.onSecondLevelItemClick(secondLevelData.get(secondPosition), mLastFirstLevelClickPosition, secondPosition);
             }
         }
     }
@@ -146,14 +148,14 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
 
     private OnItemClickListener mOnItemClickListener;
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener<F, S> listener) {
         mOnItemClickListener = listener;
     }
 
-    public interface OnItemClickListener {
-        void onFirstLevelItemClick(int firstLevelPosition, boolean expand);
+    public interface OnItemClickListener<F, S> {
+        void onFirstLevelItemClick(F firstLevelData, int firstLevelPosition, boolean expand);
 
-        void onSecondLevelItemClick(int secondLevelPosition);
+        void onSecondLevelItemClick(S SecondLevelData, int firstLevelPosition, int secondLevelPosition);
     }
 
     private OnItemLongClickListener mOnItemLongClickListener;
