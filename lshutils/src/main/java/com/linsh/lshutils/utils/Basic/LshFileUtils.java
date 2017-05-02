@@ -110,4 +110,11 @@ public class LshFileUtils {
             LshIOUtils.close(fileWriter);
         }
     }
+
+    public static boolean delete(File file) {
+        if (file != null && file.exists()) {
+           return file.delete();
+        }
+        return false;
+    }
 }
