@@ -57,6 +57,7 @@ public abstract class LshNestedDataRcvAdapter<T, H extends RecyclerView.ViewHold
             }
         }
         mItems = items;
+        notifyDataSetChanged();
     }
 
     public List<T> getData() {
