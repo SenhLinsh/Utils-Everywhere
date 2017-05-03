@@ -64,6 +64,15 @@ public abstract class LshNestedDataRcvAdapter<T, H extends RecyclerView.ViewHold
         return mFirstLevelData;
     }
 
+    protected int getFirstLevelPosition(int position) {
+        return mItems.get(position).firstLevelPosition;
+    }
+
+    protected int getSecondLevelPosition(int position) {
+        return mItems.get(position).secondLevelPosition;
+    }
+
+
     private class NestedData {
         private int firstLevelPosition;
         private int secondLevelPosition;
