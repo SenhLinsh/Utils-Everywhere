@@ -3,6 +3,7 @@ package com.linsh.lshutils.utils;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.Surface;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
@@ -52,6 +53,20 @@ public class LshScreenUtils {
         } else {
             return LANDSCAPE;
         }
+    }
+
+    public static int[] getLocationOnScreen(View view) {
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+        return location;
+    }
+
+    public static int getLocationXOnScreen(View view) {
+        return getLocationOnScreen(view)[0];
+    }
+
+    public static int getLocationYOnScreen(View view) {
+        return getLocationOnScreen(view)[1];
     }
 
     public enum Orientation {
