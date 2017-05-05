@@ -20,6 +20,14 @@ public class LshStringUtils {
         return (str == null || str.length() == 0);
     }
 
+    public static boolean isAllEmpty(CharSequence... str) {
+        if (str == null) return true;
+        for (CharSequence charSequence : str) {
+            if (!isEmpty(charSequence)) return false;
+        }
+        return true;
+    }
+
     // 避免了空指针异常
     public static boolean isEquals(String actual, String expected) {
         return actual == expected || (actual == null ? expected == null : actual.equals(expected));
