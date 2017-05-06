@@ -56,6 +56,10 @@ public class LshActivityUtils {
         return activity.getIntent().getStringExtra(INTENT_EXTRA_PREFIX + "_string" + index);
     }
 
+    public static String getStringExtra(Activity activity, String key) {
+        return activity.getIntent().getStringExtra(key);
+    }
+
     public static int getIntExtra(Activity activity) {
         return activity.getIntent().getIntExtra(INTENT_EXTRA_PREFIX + "_int", 0);
     }
@@ -64,12 +68,20 @@ public class LshActivityUtils {
         return activity.getIntent().getIntExtra(INTENT_EXTRA_PREFIX + "_int" + index, 0);
     }
 
+    public static int getIntExtra(Activity activity, String key) {
+        return activity.getIntent().getIntExtra(key, 0);
+    }
+
     public static boolean getBooleanExtra(Activity activity, boolean defValue) {
         return activity.getIntent().getBooleanExtra(INTENT_EXTRA_PREFIX + "_boolean", defValue);
     }
 
     public static boolean getBooleanExtra(Activity activity, int index, boolean defValue) {
         return activity.getIntent().getBooleanExtra(INTENT_EXTRA_PREFIX + "_boolean" + index, defValue);
+    }
+
+    public static boolean getBooleanExtra(Activity activity, String key, boolean defValue) {
+        return activity.getIntent().getBooleanExtra(key, defValue);
     }
 
     public static <T extends JsonBean> T getJsonBeanExtra(Activity activity, Class<T> clazz) {
