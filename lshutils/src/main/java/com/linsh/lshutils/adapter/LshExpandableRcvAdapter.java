@@ -70,6 +70,10 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
         notifyDataSetChanged();
     }
 
+    public List<F> getData() {
+        return firstLevelData;
+    }
+
     public List<F> getFirstLevelData() {
         return firstLevelData;
     }
