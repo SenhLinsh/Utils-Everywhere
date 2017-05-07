@@ -441,11 +441,18 @@ public class LshColorDialog extends Dialog {
             implements LshColorDialog.InputDialogInterface {
 
         private String hint;
+        private String text;
         private EditText mEditText;
 
         @Override
         public LshColorDialog.InputDialogBuilder setHint(String hint) {
             this.hint = hint;
+            return this;
+        }
+
+        @Override
+        public InputDialogBuilder setText(String text) {
+            this.text = text;
             return this;
         }
 
@@ -456,6 +463,10 @@ public class LshColorDialog extends Dialog {
             mEditText = new EditText(dialog.getContext());
             if (!isEmpty(hint)) {
                 mEditText.setHint(hint);
+            }
+            if (!isEmpty(text)) {
+                mEditText.setText(text);
+                mEditText.setSelection(text.length());
             }
             mEditText.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -505,6 +516,8 @@ public class LshColorDialog extends Dialog {
 
     private interface InputDialogInterface<T extends LshColorDialog.InputDialogBuilder> {
         T setHint(String hint);
+
+        T setText(String text);
 
         T setPositiveButton(String positiveText, LshColorDialog.OnInputPositiveListener listener);
 
