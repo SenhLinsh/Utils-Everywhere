@@ -36,7 +36,10 @@ public class LshListUtils {
 
         if (list != null && getStringAction != null) {
             for (T t : list) {
-                stringList.add(getStringAction.call(t));
+                String item = getStringAction.call(t);
+                if (item != null) {
+                    stringList.add(item);
+                }
             }
         }
         return stringList;
