@@ -1,5 +1,8 @@
 package com.linsh.lshutils.utils;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 /**
  * Created by Senh Linsh on 17/3/14.
  */
@@ -28,6 +31,20 @@ public class LshClassUtils {
         } catch (ClassNotFoundException e) {
             return false;
         }
+    }
+
+    /**
+     * 获取泛型类型
+     */
+    public static Type getGenericType(Class<?> clazz) {
+        return getGenericType(clazz, 0);
+    }
+
+    /**
+     * 获取第index个的泛型的类型
+     */
+    public static Type getGenericType(Class<?> clazz, int index) {
+        return ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[index];
     }
 
 }
