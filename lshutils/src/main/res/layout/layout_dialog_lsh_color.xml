@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_dialog_lsh_root"
-    android:layout_width="300dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_margin="50dp"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp">
 
     <LinearLayout
-        android:id="@+id/ll_dialog_lsh_bg_layout"
+        android:id="@+id/ll_dialog_lsh_color_bg_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#00809c"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_dialog_lsh_title"
+            android:id="@+id/tv_dialog_lsh_color_title"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:ellipsize="end"
@@ -25,36 +27,39 @@
             android:padding="5dp"
             android:singleLine="true"
             android:textColor="@android:color/white"
-            android:textSize="16sp"/>
+            android:textSize="17sp"
+            tools:text="提示"/>
 
         <FrameLayout
-            android:id="@+id/fl_dialog_lsh_content"
+            android:id="@+id/fl_dialog_lsh_color_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:minHeight="60dp"
-            android:minWidth="250dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"/>
+            android:minWidth="300dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_dialog_lsh_btn_layout"
+        android:id="@+id/ll_dialog_lsh_color_btn_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:background="#ddd">
 
         <TextView
-            android:id="@+id/tv_dialog_lsh_positive"
+            android:id="@+id/tv_dialog_lsh_color_positive"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true"
             android:gravity="center"
             android:minHeight="40dp"
-            android:textColor="#676767"/>
+            android:textColor="#676767"
+            android:textSize="16sp"/>
 
 
         <LinearLayout
@@ -65,7 +70,7 @@
             android:orientation="horizontal">
 
             <View
-                android:id="@+id/v_dialog_lsh_divider"
+                android:id="@+id/v_dialog_lsh_color_divider"
                 android:layout_width="1px"
                 android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
@@ -74,14 +79,15 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_dialog_lsh_negative"
+            android:id="@+id/tv_dialog_lsh_color_negative"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true"
             android:gravity="center"
             android:minHeight="40dp"
-            android:textColor="#676767"/>
+            android:textColor="#676767"
+            android:textSize="16sp"/>
 
     </LinearLayout>
 

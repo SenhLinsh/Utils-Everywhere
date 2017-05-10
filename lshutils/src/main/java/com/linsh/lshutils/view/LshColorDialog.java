@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.linsh.lshutils.R;
 import com.linsh.lshutils.adapter.LshSimplifiedRcvAdapter;
 import com.linsh.lshutils.utils.LshArrayUtils;
+import com.linsh.lshutils.utils.LshUnitConverseUtils;
 import com.linsh.lshutils.utils.LshXmlCreater;
 
 import java.util.List;
@@ -60,6 +61,12 @@ public class LshColorDialog extends Dialog {
 
     public LshColorDialog.ListDialogBuilder buildList() {
         LshColorDialog.ListDialogBuilder listDialogBuilder = new LshColorDialog.ListDialogBuilder();
+        mBuilder = listDialogBuilder;
+        return listDialogBuilder;
+    }
+
+    public <T> LshColorDialog.CustomListDialogBuilder<T> buildCustomList(Class<T> clazzOfData) {
+        LshColorDialog.CustomListDialogBuilder<T> listDialogBuilder = new LshColorDialog.CustomListDialogBuilder<>();
         mBuilder = listDialogBuilder;
         return listDialogBuilder;
     }
@@ -101,26 +108,30 @@ public class LshColorDialog extends Dialog {
 
         protected void initView(LshColorDialog dialog) {
             // 设置标题
-            TextView tvTitle = (TextView) dialog.findViewById(R.id.tv_dialog_lsh_title);
+            TextView tvTitle = (TextView) dialog.findViewById(R.id.tv_dialog_lsh_color_title);
             if (isEmpty(title)) {
                 tvTitle.setVisibility(View.GONE);
             } else {
                 tvTitle.setText(title);
             }
             // 设置背景
-            View bgContentLayout = dialog.findViewById(R.id.ll_dialog_lsh_bg_layout);
+            View bgContentLayout = dialog.findViewById(R.id.ll_dialog_lsh_color_bg_layout);
             setBgContent(bgContentLayout, color);
         }
 
         // 根据子类需要添加不同布局
         protected void addView(LshColorDialog dialog, View childView) {
-            FrameLayout layout = (FrameLayout) dialog.findViewById(R.id.fl_dialog_lsh_content);
+            FrameLayout layout = (FrameLayout) dialog.findViewById(R.id.fl_dialog_lsh_color_content);
             layout.addView(childView);
+        }
+
+        protected FrameLayout getContentView() {
+            return (FrameLayout) LshColorDialog.this.findViewById(R.id.fl_dialog_lsh_color_content);
         }
 
         // 设置确认取消按钮是否可见
         protected void setBtnLayoutVisible() {
-            findViewById(R.id.ll_dialog_lsh_btn_layout).setVisibility(View.VISIBLE);
+            findViewById(R.id.ll_dialog_lsh_color_btn_layout).setVisibility(View.VISIBLE);
         }
 
         // 设置窗口宽度占屏幕短边的百分比
@@ -161,19 +172,19 @@ public class LshColorDialog extends Dialog {
             super.initView(dialog);
             // 判断是否需要确认取消按钮
             if (!positiveBtnVisible && !negativeBtnVisible) {
-                dialog.findViewById(R.id.v_dialog_lsh_divider).setVisibility(View.GONE);
+                dialog.findViewById(R.id.v_dialog_lsh_color_divider).setVisibility(View.GONE);
                 return;
             }
             setBtnLayoutVisible();
 
             // 设置确认取消按钮
-            TextView tvPositive = (TextView) dialog.findViewById(R.id.tv_dialog_lsh_positive);
-            TextView tvNegative = (TextView) dialog.findViewById(R.id.tv_dialog_lsh_negative);
+            TextView tvPositive = (TextView) dialog.findViewById(R.id.tv_dialog_lsh_color_positive);
+            TextView tvNegative = (TextView) dialog.findViewById(R.id.tv_dialog_lsh_color_negative);
             if (positiveBtnVisible && negativeBtnVisible) {
                 setBgLeftBtn(tvPositive);
                 setBgRightBtn(tvNegative);
             } else {
-                dialog.findViewById(R.id.v_dialog_lsh_divider).setVisibility(View.GONE);
+                dialog.findViewById(R.id.v_dialog_lsh_color_divider).setVisibility(View.GONE);
                 if (positiveBtnVisible) {
                     setBgCenterBtn(tvPositive);
                 } else {
@@ -240,7 +251,8 @@ public class LshColorDialog extends Dialog {
             // 生成TextView
             TextView textView = new TextView(dialog.getContext());
             textView.setText(content == null ? "" : content);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            textView.setTextColor(Color.WHITE);
             addView(dialog, textView);
         }
 
@@ -288,7 +300,10 @@ public class LshColorDialog extends Dialog {
             recyclerView.setLayoutParams(params);
             recyclerView.setLayoutManager(new LinearLayoutManager(dialog.getContext()));
             recyclerView.setAdapter(new LshColorDialog.ListDialogAdapter(list, mOnItemClickListener));
-            addView(dialog, recyclerView);
+
+            FrameLayout contentView = getContentView();
+            contentView.addView(recyclerView);
+            contentView.setMinimumWidth(LshUnitConverseUtils.dp2px(150));
         }
 
         @Override
@@ -304,30 +319,30 @@ public class LshColorDialog extends Dialog {
         }
     }
 
-    public class CustomListDialogBuilder<T> extends BtnDialogBuilder<CustomListDialogBuilder, OnListPositiveListener<T>, OnListNegativeListener<T>>
+    public class CustomListDialogBuilder<T> extends BtnDialogBuilder<CustomListDialogBuilder<T>, OnListPositiveListener<T>, OnListNegativeListener<T>>
             implements CustomListDialogInterface<CustomListDialogBuilder, T> {
 
         private List<T> list;
         private int layoutId;
         private int curClickedItem = -1;
-        private LshSimplifiedRcvAdapter<T> mAdapter;
+        private CustomListDialogAdapter.ListDialogAdapterListener<T> mAdapterListener;
         private LshSimplifiedRcvAdapter.OnItemClickListener<T> mOnItemClickListener;
 
         @Override
-        public CustomListDialogBuilder setList(List<T> list) {
+        public CustomListDialogBuilder<T> setList(List<T> list) {
             this.list = list;
             return this;
         }
 
         @Override
-        public CustomListDialogBuilder setCustomItem(int layoutId, LshSimplifiedRcvAdapter<T> adapter) {
+        public CustomListDialogBuilder<T> setCustomItem(int layoutId, CustomListDialogAdapter.ListDialogAdapterListener<T> listener) {
             this.layoutId = layoutId;
-            mAdapter = adapter;
+            mAdapterListener = listener;
             return this;
         }
 
         @Override
-        public CustomListDialogBuilder setOnItemClickListener(LshSimplifiedRcvAdapter.OnItemClickListener<T> listener) {
+        public CustomListDialogBuilder<T> setOnItemClickListener(LshSimplifiedRcvAdapter.OnItemClickListener<T> listener) {
             mOnItemClickListener = listener;
             return this;
         }
@@ -340,9 +355,13 @@ public class LshColorDialog extends Dialog {
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             recyclerView.setLayoutParams(params);
             recyclerView.setLayoutManager(new LinearLayoutManager(dialog.getContext()));
-            recyclerView.setAdapter(mAdapter);
-            mAdapter.setOnItemClickListener(mOnItemClickListener);
-            addView(dialog, recyclerView);
+            CustomListDialogAdapter<T> adapter = new CustomListDialogAdapter<>(layoutId, list, mAdapterListener);
+            recyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(mOnItemClickListener);
+
+            FrameLayout contentView = getContentView();
+            contentView.addView(recyclerView);
+            contentView.setMinimumWidth(LshUnitConverseUtils.dp2px(150));
         }
 
         @Override
@@ -509,7 +528,7 @@ public class LshColorDialog extends Dialog {
     private interface CustomListDialogInterface<T extends LshColorDialog.CustomListDialogBuilder, S> {
         T setList(List<S> list);
 
-        T setCustomItem(int layoutId, LshSimplifiedRcvAdapter<S> adapter);
+        T setCustomItem(int layoutId, CustomListDialogAdapter.ListDialogAdapterListener<S> listener);
 
         T setOnItemClickListener(LshSimplifiedRcvAdapter.OnItemClickListener<S> listener);
     }
