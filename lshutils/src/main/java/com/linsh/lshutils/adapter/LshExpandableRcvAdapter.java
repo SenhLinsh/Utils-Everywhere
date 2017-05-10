@@ -67,6 +67,7 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
 
     public void setData(List<F> firstLevelData) {
         this.firstLevelData = firstLevelData;
+        this.secondLevelData = null;
         notifyDataSetChanged();
     }
 
