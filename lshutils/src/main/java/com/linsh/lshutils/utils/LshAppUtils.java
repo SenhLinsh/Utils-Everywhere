@@ -1,5 +1,6 @@
 package com.linsh.lshutils.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.annotation.RequiresPermission;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 
@@ -36,7 +38,9 @@ public class LshAppUtils {
 
     /**
      * 判断App是否在前台运行
+     * 注意: 该方法是判断APP是否处于栈顶, 处于栈顶但是是关闭屏幕的情况下依然返回true
      */
+    @RequiresPermission(Manifest.permission.GET_TASKS)
     public boolean isAppOnForeground() {
         ActivityManager activityManager = (ActivityManager) LshApplicationUtils.getContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> tasksInfo = activityManager.getRunningTasks(1);
@@ -64,7 +68,6 @@ public class LshAppUtils {
     public static String getPackageName() {
         return LshApplicationUtils.getContext().getPackageName();
     }
-
 
     /**
      * 获取版本名称
