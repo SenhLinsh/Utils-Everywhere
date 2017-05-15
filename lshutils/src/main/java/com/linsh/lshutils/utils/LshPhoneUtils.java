@@ -17,8 +17,9 @@ public class LshPhoneUtils {
      * 获取ip地址
      */
     public static String getIp() {
+        Context context = LshApplicationUtils.getContext().getApplicationContext();
         //获取wifi服务
-        WifiManager wifiManager = (WifiManager) LshApplicationUtils.getContext().getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         // 获取IP
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         int ipAddress = wifiInfo.getIpAddress();
