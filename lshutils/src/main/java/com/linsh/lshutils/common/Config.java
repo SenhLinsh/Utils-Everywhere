@@ -6,5 +6,4 @@ package com.linsh.lshutils.common;
 public class Config {
 
     public static final String PropertyFilePath = "LshLog/properties/config.properties";
-    public static final String appNameEn = "LshLog/properties/config.properties";
 }
