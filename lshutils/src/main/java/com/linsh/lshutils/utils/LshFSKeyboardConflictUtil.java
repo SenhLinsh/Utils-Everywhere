@@ -3,7 +3,6 @@ package com.linsh.lshutils.utils;
 import android.app.Activity;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,14 +127,12 @@ public class LshFSKeyboardConflictUtil extends LshKeyboardUtils {
             }
             // 判断键盘的显示和隐藏
             if (keyboardHeight != 0 && maxBottom - rect.bottom > 100 && !isKeyboardShowed) {
-                Log.w("LshFSKeyboardUtil", "show keyboard  " + "keyboardHeight=" + keyboardHeight);
                 isKeyboardShowed = true;
                 if (mOnKeyboardShowingListener != null) {
                     mOnKeyboardShowingListener.onKeyboardShowing(true);
                 }
             }
             if (maxBottom != 0 && maxBottom == rect.bottom && isKeyboardShowed) {
-                Log.w("LshFSKeyboardUtil", "hide keyboard");
                 isKeyboardShowed = false;
                 if (mOnKeyboardShowingListener != null) {
                     mOnKeyboardShowingListener.onKeyboardShowing(false);
@@ -211,7 +208,6 @@ public class LshFSKeyboardConflictUtil extends LshKeyboardUtils {
             if (mPanel.getHeight() == height) {
                 return;
             }
-            Log.w("LshUtils---", "refreshPanelHeight:" + height);
             ViewGroup.LayoutParams layoutParams = mPanel.getLayoutParams();
             if (layoutParams == null) {
                 layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
