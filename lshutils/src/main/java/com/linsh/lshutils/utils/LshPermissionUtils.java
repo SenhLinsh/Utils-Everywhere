@@ -39,11 +39,15 @@ public class LshPermissionUtils {
 
     /**
      * 检查权限, 适用于 Android M 以上系统 <br/>
-     * 注: Android M 以下系统总是返回true
+     * 注: Android M 以下系统检查的是清单文件而不是用户决定是否授予的权限
      */
     public static boolean checkPermission(String permission) {
         return ContextCompat.checkSelfPermission(LshApplicationUtils.getContext(), permission)
                 == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void requestPermission(Activity activity, String permission) {
+        requestPermissions(activity, new String[]{permission}, 0, null);
     }
 
     public static void requestPermission(Activity activity, String permission, int code, PermissionRequestHandler handler) {
@@ -114,6 +118,7 @@ public class LshPermissionUtils {
 
     public static boolean hasRecordPermissionBeforeAndroidM() {
         try {
+            boolean hasPermission = true;
 
             AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
                     RECORDER_SAMPLERATE, RECORDER_CHANNELS, RECORDER_AUDIO_ENCODING, 1024 * 2);
@@ -126,12 +131,11 @@ public class LshPermissionUtils {
             }
             // 根据开始录音判断是否有录音权限
             if (audioRecord.getRecordingState() != AudioRecord.RECORDSTATE_RECORDING) {
-                return false;
+                hasPermission = false;
             }
             audioRecord.stop();
             audioRecord.release();
-            return true;
-
+            return hasPermission;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -163,6 +167,21 @@ public class LshPermissionUtils {
 
     public static boolean hasCameraPermissionAfterAndroidM() {
         return checkPermission(Manifest.permission.CAMERA);
+    }
+
+    public static boolean hasStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        return true;
+    }
+
+    public static boolean checkAndRequestStoragePerssion(Activity activity) {
+        if (hasStoragePermission()) {
+            return true;
+        }
+        requestPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return false;
     }
 
     // 跳转到设置界面

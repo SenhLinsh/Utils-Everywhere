@@ -2,6 +2,8 @@ package com.linsh.lshutils.utils.Basic;
 
 import android.os.Environment;
 
+import com.linsh.lshutils.utils.LshPermissionUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +16,10 @@ import java.io.InputStreamReader;
  */
 public class LshFileUtils {
 
+    public static boolean checkFilePermission() {
+        return LshPermissionUtils.hasStoragePermission();
+    }
+
     /**
      * 获取SD卡以app包名命名的文件夹路径
      */
@@ -25,6 +31,8 @@ public class LshFileUtils {
      * 判断文件夹不存在则创建
      */
     public static boolean makeDirs(File dir) {
+        if (!checkFilePermission()) return false;
+
         if (dir != null && !dir.exists()) {
             return dir.mkdirs();
         }
@@ -35,7 +43,7 @@ public class LshFileUtils {
      * 判断文件夹不存在则创建
      */
     public static boolean makeParentDirs(File file) {
-        if (file == null) return false;
+        if (file == null || !checkFilePermission()) return false;
 
         File dir = file.getParentFile();
         if (dir != null && !dir.exists()) {
@@ -56,11 +64,11 @@ public class LshFileUtils {
     }
 
     private static StringBuilder readFile(File file, String charsetName) {
-        StringBuilder fileContent = new StringBuilder("");
-        if (file == null || !file.isFile()) {
+        if (file == null || !file.isFile() || !checkFilePermission()) {
             return null;
         }
 
+        StringBuilder fileContent = new StringBuilder("");
         BufferedReader reader = null;
         try {
             InputStreamReader is = new InputStreamReader(new FileInputStream(file), charsetName);
@@ -92,7 +100,7 @@ public class LshFileUtils {
     }
 
     public static boolean writeFile(File file, String content, boolean append) {
-        if (LshStringUtils.isEmpty(content) || file == null || file.isDirectory()) {
+        if (LshStringUtils.isEmpty(content) || file == null || file.isDirectory() || !checkFilePermission()) {
             return false;
         }
 
@@ -113,7 +121,7 @@ public class LshFileUtils {
 
     public static boolean delete(File file) {
         if (file != null && file.exists()) {
-           return file.delete();
+            return file.delete();
         }
         return false;
     }
