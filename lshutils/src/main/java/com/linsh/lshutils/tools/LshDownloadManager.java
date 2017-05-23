@@ -135,27 +135,7 @@ public class LshDownloadManager {
     }
 
     public File getDownloadedFile() {
-        File file = null;
-        long requestId = mRequestId;
-        if (requestId == 0) {
-            requestId = LshSharedPreferenceUtils.getLong(mDownloadKey);
-        }
-        if (requestId != 0) {
-            DownloadManager manager = (DownloadManager) LshApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
-            DownloadManager.Query query = new DownloadManager.Query().setFilterById(mRequestId);
-            Cursor cursor = manager.query(query);
-            if (cursor != null) {
-                if (cursor.moveToFirst()) {
-                    String filePath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
-                    file = new File(filePath);
-                }
-                cursor.close();
-            }
-        }
-        if (file == null) {
-            file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), mFileName);
-        }
-        return file;
+        return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), mFileName);
     }
 
     //================================================ 构建 Request ================================================//
@@ -229,6 +209,12 @@ public class LshDownloadManager {
                         }
                     }
                     // 大于 0 小于 1 时, 执行下载, 会继续本次下载. 取消或删除任务之后, 查询为 0
+                } else {
+                    // 没有保存过 RequestId, 说明因为没有执行过该下载, 可先将可能存在的同名文件删除后再下载
+                    File file = getDownloadedFile();
+                    if (file.exists()) {
+                        file.delete();
+                    }
                 }
             }
             // 判断是否已经执行完该下载请求
