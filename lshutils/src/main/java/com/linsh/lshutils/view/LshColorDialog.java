@@ -299,7 +299,13 @@ public class LshColorDialog extends Dialog {
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             recyclerView.setLayoutParams(params);
             recyclerView.setLayoutManager(new LinearLayoutManager(dialog.getContext()));
-            recyclerView.setAdapter(new LshColorDialog.ListDialogAdapter(list, mOnItemClickListener));
+            recyclerView.setAdapter(new LshColorDialog.ListDialogAdapter(list, new OnItemClickListener() {
+                @Override
+                public void onClick(LshColorDialog dialog, String item, int index) {
+                    curClickedItem = index;
+                    mOnItemClickListener.onClick(dialog, item, index);
+                }
+            }));
 
             FrameLayout contentView = getContentView();
             contentView.addView(recyclerView);
