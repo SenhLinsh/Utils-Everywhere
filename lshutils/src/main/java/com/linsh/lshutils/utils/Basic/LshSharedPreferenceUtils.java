@@ -62,6 +62,21 @@ public class LshSharedPreferenceUtils {
         sp.edit().putInt(key, value).apply();
     }
 
+    public static long getLong(String key) {
+        getSharedPreferences();
+        return sp.getLong(key, 0);
+    }
+
+    public static long getLong(String key, long defValue) {
+        getSharedPreferences();
+        return sp.getLong(key, defValue);
+    }
+
+    public static void putLong(String key, long value) {
+        getSharedPreferences();
+        sp.edit().putLong(key, value).apply();
+    }
+
     public static void remove(String key) {
         getSharedPreferences();
         sp.edit().remove(key).apply();
