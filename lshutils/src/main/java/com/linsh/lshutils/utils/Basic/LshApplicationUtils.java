@@ -38,6 +38,9 @@ public class LshApplicationUtils {
     }
 
     public static Context getContext() {
+        if (appContext == null) {
+            throw new RuntimeException("must call LshApplicationUtils.init() first.");
+        }
         return appContext;
     }
 
