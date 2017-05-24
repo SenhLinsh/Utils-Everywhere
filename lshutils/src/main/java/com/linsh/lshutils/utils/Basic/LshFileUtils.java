@@ -5,6 +5,7 @@ import android.os.Environment;
 import com.linsh.lshutils.utils.LshPermissionUtils;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -104,18 +105,18 @@ public class LshFileUtils {
             return false;
         }
 
-        FileWriter fileWriter = null;
+        BufferedWriter writer = null;
         try {
             if (file.getParentFile() != null && !file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
-            fileWriter = new FileWriter(file, append);
-            fileWriter.write(content);
+            writer = new BufferedWriter(new FileWriter(file, append));
+            writer.append(content);
             return true;
         } catch (IOException e) {
             throw new RuntimeException("IOException occurred. ", e);
         } finally {
-            LshIOUtils.close(fileWriter);
+            LshIOUtils.close(writer);
         }
     }
 
