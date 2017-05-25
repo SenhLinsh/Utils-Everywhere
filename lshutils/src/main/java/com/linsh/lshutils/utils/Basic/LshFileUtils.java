@@ -17,7 +17,19 @@ import java.io.InputStreamReader;
  */
 public class LshFileUtils {
 
-    public static boolean checkFilePermission() {
+    /**
+     * 检查文件是否是 SD卡文件, 如果是则需要检查权限
+     */
+    private static boolean checkFile(File file) {
+        if (file == null) return false;
+        boolean isStorageFile = file.getAbsolutePath().contains(Environment.getExternalStorageDirectory().getAbsolutePath());
+        if (isStorageFile) {
+            return checkPermission();
+        }
+        return true;
+    }
+
+    public static boolean checkPermission() {
         return LshPermissionUtils.hasStoragePermission();
     }
 
@@ -32,9 +44,9 @@ public class LshFileUtils {
      * 判断文件夹不存在则创建
      */
     public static boolean makeDirs(File dir) {
-        if (!checkFilePermission()) return false;
+        if (!checkFile(dir)) return false;
 
-        if (dir != null && !dir.exists()) {
+        if (!dir.exists()) {
             return dir.mkdirs();
         }
         return false;
@@ -44,7 +56,7 @@ public class LshFileUtils {
      * 判断文件夹不存在则创建
      */
     public static boolean makeParentDirs(File file) {
-        if (file == null || !checkFilePermission()) return false;
+        if (!checkFile(file)) return false;
 
         File dir = file.getParentFile();
         if (dir != null && !dir.exists()) {
@@ -65,7 +77,7 @@ public class LshFileUtils {
     }
 
     private static StringBuilder readFile(File file, String charsetName) {
-        if (file == null || !file.isFile() || !checkFilePermission()) {
+        if (!checkFile(file) || !file.isFile()) {
             return null;
         }
 
@@ -101,7 +113,7 @@ public class LshFileUtils {
     }
 
     public static boolean writeFile(File file, String content, boolean append) {
-        if (LshStringUtils.isEmpty(content) || file == null || file.isDirectory() || !checkFilePermission()) {
+        if (LshStringUtils.isEmpty(content) || !checkFile(file) || file.isDirectory()) {
             return false;
         }
 
@@ -121,7 +133,7 @@ public class LshFileUtils {
     }
 
     public static boolean delete(File file) {
-        if (file != null && file.exists()) {
+        if (checkFile(file) && file.exists()) {
             return file.delete();
         }
         return false;
