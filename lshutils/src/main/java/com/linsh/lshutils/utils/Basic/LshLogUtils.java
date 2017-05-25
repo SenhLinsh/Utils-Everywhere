@@ -5,10 +5,14 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.linsh.lshutils.BuildConfig;
+import com.linsh.lshutils.utils.LshTimeUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Senh Linsh on 17/1/8.
@@ -124,6 +128,7 @@ public class LshLogUtils {
         return debug;
     }
 
+    //================================================ 打印日志到本地相关 ================================================//
     public static void printE(String msg, Throwable e) {
         if (IS_DEBUG) {
             Log.e(mTag + getClassName(), msg, e);
@@ -131,28 +136,46 @@ public class LshLogUtils {
                 e.printStackTrace();
             }
         }
-        msg = msg + "        (##" + getClassName() + "##" + callMethodAndLine() + ")";
-        printLog("--ERROR--" + msg);
-        printLog("---------------------程序崩溃啦---------------\r\n" + e.getMessage() + "\r\n");
-        StackTraceElement[] stackTrace = e.getStackTrace();
-        for (StackTraceElement stack : stackTrace) {
-            printLog(stack.toString());
+        List<String> logs = new ArrayList<>();
+        logs.add("  ---------------------Throw an ERROR----------------  ");
+        if (e == null) {
+            logs.add(msg);
+        } else {
+            logs.add(msg + " (##" + getClassName() + "##" + callMethodAndLine() + ")");
+            logs.add("Message = " + e.getMessage());
+            StackTraceElement[] stackTrace = e.getStackTrace();
+            for (StackTraceElement stack : stackTrace) {
+                logs.add(stack.toString());
+            }
         }
+        printLog(logs);
     }
 
-    /**
-     * 打印Log到本地
-     */
-    private static void printLog(String msg) {
+    private static void printLog(String... logs) {
+        printLog(Arrays.asList(logs));
+    }
+
+    private static void printLog(List<String> logs) {
+        if (!LshFileUtils.checkPermission()) return;
+
         BufferedWriter bw = null;
         try {
             File file = new File(FilePath);
-            if (file.exists() && isFileSizeOutof1M(file)) {
-                file.delete();
+            if (file.exists()) {
+                // 超过一个星期没有修改, 直接删除
+                if (System.currentTimeMillis() - file.lastModified() > 1000L * 60 * 60 * 24 * 7) {
+                    file.delete();
+                }
+            } else {
+                LshFileUtils.makeParentDirs(file);
             }
+
+            String curTime = "[" + LshTimeUtils.getCurrentTimeStringEN() + "] ";
             bw = new BufferedWriter(new FileWriter(file, true));
-            bw.append(msg);
-            bw.newLine();
+            for (String msg : logs) {
+                bw.append(curTime + msg);
+                bw.newLine();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -186,13 +209,5 @@ public class LshLogUtils {
         result += "(" + thisMethodStack.getFileName();
         result += ":" + thisMethodStack.getLineNumber() + ")  ";
         return result;
-    }
-
-    /**
-     * 判断大小是否超过1M
-     */
-    public static boolean isFileSizeOutof1M(File file) throws Exception {
-        if (file == null) return false;
-        return file.length() >= 1048576 * 0.1;
     }
 }
