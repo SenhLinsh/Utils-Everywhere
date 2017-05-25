@@ -23,10 +23,7 @@ public class LshFileUtils {
     private static boolean checkFile(File file) {
         if (file == null) return false;
         boolean isStorageFile = file.getAbsolutePath().contains(Environment.getExternalStorageDirectory().getAbsolutePath());
-        if (isStorageFile) {
-            return checkPermission();
-        }
-        return true;
+        return !isStorageFile || checkPermission();
     }
 
     public static boolean checkPermission() {
