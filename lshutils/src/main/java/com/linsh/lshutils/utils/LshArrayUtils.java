@@ -1,6 +1,7 @@
 package com.linsh.lshutils.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,6 +31,10 @@ public class LshArrayUtils {
             joint += arr[i].toString();
         }
         return joint;
+    }
+
+    public static <T> List<T> asList(T[] array) {
+       return Arrays.asList(array);
     }
 
     public static <T> List<T> toList(T[] array) {
