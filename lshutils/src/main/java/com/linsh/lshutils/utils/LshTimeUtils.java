@@ -10,6 +10,26 @@ import java.util.Date;
  */
 public class LshTimeUtils {
 
+    public static String getCurrentTimeStringEN() {
+        return getTimeStringEN(System.currentTimeMillis());
+    }
+
+    public static String getTimeStringEN(long time) {
+        return getTimeString(time, "yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static String getTimeStringEN(Date date) {
+        return getTimeString(date, "yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static String getTimeString(long time, String pattern) {
+        return getTimeString(new Date(time), pattern);
+    }
+
+    public static String getTimeString(Date date, String pattern) {
+        return new SimpleDateFormat(pattern).format(date);
+    }
+
     public static long getTimeLong(String time) {
         try {
             Date parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
