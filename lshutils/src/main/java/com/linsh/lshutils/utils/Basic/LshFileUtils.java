@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Senh Linsh on 17/1/10.
@@ -109,6 +111,14 @@ public class LshFileUtils {
         return writeFile(new File(filePath), content, false);
     }
 
+    public static boolean writeFile(String filePath, List<String> contents) {
+        return writeFile(new File(filePath), contents, false);
+    }
+
+    public static boolean writeFile(String filePath, String... contents) {
+        return writeFile(new File(filePath), Arrays.asList(contents), false);
+    }
+
     public static boolean writeFile(File file, String content, boolean append) {
         if (LshStringUtils.isEmpty(content) || !checkFile(file) || file.isDirectory()) {
             return false;
@@ -128,6 +138,32 @@ public class LshFileUtils {
             LshIOUtils.close(writer);
         }
     }
+
+    public static boolean writeFile(File file, List<String> contents, boolean append) {
+        if (contents == null || !checkFile(file) || file.isDirectory()) {
+            return false;
+        }
+
+        BufferedWriter writer = null;
+        try {
+            if (file.getParentFile() != null && !file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            writer = new BufferedWriter(new FileWriter(file, append));
+            for (int i = 0; i < contents.size(); i++) {
+                if (i > 0) {
+                    writer.newLine();
+                }
+                writer.append(contents.get(i));
+            }
+            return true;
+        } catch (IOException e) {
+            throw new RuntimeException("IOException occurred. ", e);
+        } finally {
+            LshIOUtils.close(writer);
+        }
+    }
+
 
     public static boolean delete(File file) {
         if (checkFile(file) && file.exists()) {
