@@ -166,4 +166,12 @@ public class LshAppUtils {
             return false;
         }
     }
+
+    /**
+     * 杀死当前进程, 退出APP
+     */
+    public static void killCurrentProcess() {
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+    }
 }
