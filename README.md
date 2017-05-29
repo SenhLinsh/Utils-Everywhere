@@ -14,7 +14,7 @@ allprojects {
 2. 在module里面添加依赖
 ```
 dependencies {
-    compile 'com.github.SenhLinsh:LshUtils:1.0.7'
+    compile 'com.github.SenhLinsh:LshUtils:1.0.8'
 }
  ```
 
