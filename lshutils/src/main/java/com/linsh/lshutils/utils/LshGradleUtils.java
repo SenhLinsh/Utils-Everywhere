@@ -17,7 +17,7 @@ public class LshGradleUtils {
      */
     public static Object getBuildConfigValue(String fieldName) {
         try {
-            String packageName = LshApplicationUtils.getRealPackageName();
+            String packageName = LshApplicationUtils.getPackageName();
             Class<?> clazz = Class.forName(packageName + ".BuildConfig");
             Field field = clazz.getField(fieldName);
             return field.get(null);
