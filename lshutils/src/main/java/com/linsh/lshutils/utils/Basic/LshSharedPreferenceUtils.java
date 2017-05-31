@@ -3,82 +3,74 @@ package com.linsh.lshutils.utils.Basic;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.lang.ref.SoftReference;
+
 /**
  * Created by Senh Linsh on 16/11/11.
  */
 public class LshSharedPreferenceUtils {
 
-    private static SharedPreferences sp;
+    private static SoftReference<SharedPreferences> sReference = new SoftReference<>(null);
 
-    private static void getSharedPreferences() {
+    private static SharedPreferences getSharedPreferences() {
+        SharedPreferences sp = sReference.get();
         if (sp == null) {
             Context context = LshApplicationUtils.getContext();
-            sp = context.getSharedPreferences("LshSharedPreferenceUtils", Context.MODE_PRIVATE);
+            sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
+            sReference = new SoftReference<>(sp);
         }
+        return sp;
     }
 
     public static String getString(String key) {
-        getSharedPreferences();
-        return sp.getString(key, "");
+        return getSharedPreferences().getString(key, "");
     }
 
     public static String getString(String key, String defValue) {
-        getSharedPreferences();
-        return sp.getString(key, defValue);
+        return getSharedPreferences().getString(key, defValue);
     }
 
     public static void putString(String key, String value) {
-        getSharedPreferences();
-        sp.edit().putString(key, value).apply();
+        getSharedPreferences().edit().putString(key, value).apply();
     }
 
     public static boolean getBoolean(String key) {
-        getSharedPreferences();
-        return sp.getBoolean(key, false);
+        return getSharedPreferences().getBoolean(key, false);
     }
 
     public static boolean getBoolean(String key, boolean defValue) {
-        getSharedPreferences();
-        return sp.getBoolean(key, defValue);
+        return getSharedPreferences().getBoolean(key, defValue);
     }
 
     public static void putBoolean(String key, boolean value) {
-        getSharedPreferences();
-        sp.edit().putBoolean(key, value).apply();
+        getSharedPreferences().edit().putBoolean(key, value).apply();
     }
 
     public static int getInt(String key) {
-        getSharedPreferences();
-        return sp.getInt(key, 0);
+        return getSharedPreferences().getInt(key, 0);
     }
 
     public static int getInt(String key, int defValue) {
-        getSharedPreferences();
-        return sp.getInt(key, defValue);
+        return getSharedPreferences().getInt(key, defValue);
     }
 
     public static void putInt(String key, int value) {
-        getSharedPreferences();
-        sp.edit().putInt(key, value).apply();
+        getSharedPreferences().edit().putInt(key, value).apply();
     }
 
     public static long getLong(String key) {
-        getSharedPreferences();
-        return sp.getLong(key, 0);
+        return getSharedPreferences().getLong(key, 0);
     }
 
     public static long getLong(String key, long defValue) {
-        getSharedPreferences();
-        return sp.getLong(key, defValue);
+        return getSharedPreferences().getLong(key, defValue);
     }
 
     public static void putLong(String key, long value) {
-        getSharedPreferences();
-        sp.edit().putLong(key, value).apply();
+        getSharedPreferences().edit().putLong(key, value).apply();
     }
 
     public static void remove(String key) {
-        getSharedPreferences();
-        sp.edit().remove(key).apply();
+        getSharedPreferences().edit().remove(key).apply();
     }
 }
