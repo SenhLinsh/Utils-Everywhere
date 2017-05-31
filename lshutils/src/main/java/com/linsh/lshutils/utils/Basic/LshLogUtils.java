@@ -17,93 +17,99 @@ import java.util.List;
  * Created by Senh Linsh on 17/1/8.
  */
 public class LshLogUtils {
-    public static final boolean IS_DEBUG = isDebugMode();
 
-    private static String mTag = "LshLogUtils: ";
+    private static boolean sIsDebug = checkDebugMode();
+    private static String sTag = "LshLogUtils: ";
     // 保存本地log文件的目录
-    private static String FilePath =
-            Environment.getExternalStorageDirectory() + "/" + LshApplicationUtils.getContext().getPackageName() + "/LshLog.txt";
+    private static String sErrorFilePath =
+            Environment.getExternalStorageDirectory() + "/" + LshApplicationUtils.getPackageName() + "/LshLog.txt";
 
-    public static void init(String tag) {
-        mTag = tag;
+    public static void init(boolean isDebug) {
+        sIsDebug = isDebug;
     }
 
-    public static void init(String tag, String errorFilePath) {
-        mTag = tag;
-        FilePath = errorFilePath;
+    public static void init(boolean isDebug, String tag) {
+        sIsDebug = isDebug;
+        sTag = tag;
+    }
+
+    public static void init(boolean isDebug, String tag, String errorFilePath) {
+        sIsDebug = isDebug;
+        sTag = tag;
+        sErrorFilePath = errorFilePath;
     }
 
     public static void v(Object msg) {
-        if (IS_DEBUG) {
-            String mmsg = msg != null ? msg.toString() : "obj == null";
-            Log.v(mTag + getClassName(), mmsg);
+        if (sIsDebug) {
+            String mmsg = msg != null ? msg.toString() : "msg == null";
+            Log.v(sTag + getClassName(), mmsg);
         }
     }
 
     public static void v(String tag, Object msg) {
-        if (IS_DEBUG) {
-            String mmsg = msg != null ? msg.toString() : "obj == null";
-            Log.v(mTag + getClassName(), tag + ": " + mmsg);
+        if (sIsDebug) {
+            String mmsg = msg != null ? msg.toString() : "msg == null";
+            Log.v(sTag + getClassName(), tag + ": " + mmsg);
         }
     }
 
     public static void d(Object msg) {
-        if (IS_DEBUG) {
-            String mmsg = msg != null ? msg.toString() : "obj == null";
-            Log.d(mTag + getClassName(), mmsg);
+        if (sIsDebug) {
+            String mmsg = msg != null ? msg.toString() : "msg == null";
+            Log.d(sTag + getClassName(), mmsg);
         }
     }
 
     public static void d(String tag, Object msg) {
-        String mmsg = msg != null ? msg.toString() : "obj == null";
-        if (IS_DEBUG) {
-            Log.d(mTag + getClassName(), tag + ": " + mmsg);
+        String mmsg = msg != null ? msg.toString() : "msg == null";
+        if (sIsDebug) {
+            Log.d(sTag + getClassName(), tag + ": " + mmsg);
         }
     }
 
     public static void i(Object msg) {
-        if (IS_DEBUG) {
-            String mmsg = msg != null ? msg.toString() : "obj == null";
-            Log.i(mTag + getClassName(), mmsg);
+        if (sIsDebug) {
+            String mmsg = msg != null ? msg.toString() : "msg == null";
+            Log.i(sTag + getClassName(), mmsg);
         }
     }
 
     public static void i(String tag, Object msg) {
-        if (IS_DEBUG) {
-            String mmsg = msg != null ? msg.toString() : "obj == null";
-            Log.i(mTag + getClassName(), tag + ": " + mmsg);
+        if (sIsDebug) {
+            String mmsg = msg != null ? msg.toString() : "msg == null";
+            Log.i(sTag + getClassName(), tag + ": " + mmsg);
         }
     }
 
     public static void w(Object msg) {
-        if (IS_DEBUG) {
-            String mmsg = msg != null ? msg.toString() : "obj == null";
-            Log.w(mTag + getClassName(), mmsg);
+        if (sIsDebug) {
+            String mmsg = msg != null ? msg.toString() : "msg == null";
+            Log.w(sTag + getClassName(), mmsg);
         }
     }
 
     public static void w(String tag, Object msg) {
-        if (IS_DEBUG) {
-            String mmsg = msg != null ? msg.toString() : "obj == null";
-            Log.w(mTag + getClassName(), tag + ": " + mmsg);
+        if (sIsDebug) {
+            String mmsg = msg != null ? msg.toString() : "msg == null";
+            Log.w(sTag + getClassName(), tag + ": " + mmsg);
         }
     }
 
     public static void e(String msg) {
-        if (IS_DEBUG) {
-            Log.e(mTag + getClassName(), msg);
+        if (sIsDebug) {
+            Log.e(sTag + getClassName(), msg);
         }
     }
 
     public static void e(String tag, String msg) {
-        if (IS_DEBUG) {
-            Log.e(mTag + getClassName(), tag + ": " + msg);
+        if (sIsDebug) {
+            Log.e(sTag + getClassName(), tag + ": " + msg);
         }
     }
 
     public static void e(String tag, String msg, Throwable e) {
-        if (IS_DEBUG) {
-            Log.e(mTag + getClassName(), tag + ": " + msg);
+        if (sIsDebug) {
+            Log.e(sTag + getClassName(), tag + ": " + msg);
             if (e != null) {
                 e.printStackTrace();
             }
@@ -111,25 +117,25 @@ public class LshLogUtils {
     }
 
     public static void e(String msg, Throwable e) {
-        if (IS_DEBUG) {
-            Log.e(mTag + getClassName(), msg, e);
+        if (sIsDebug) {
+            Log.e(sTag + getClassName(), msg, e);
             if (e != null) {
                 e.printStackTrace();
             }
         }
     }
 
-    private static boolean isDebugMode() {
+    private static boolean checkDebugMode() {
         ApplicationInfo applicationInfo = LshApplicationUtils.getContext().getApplicationInfo();
         boolean debug = applicationInfo != null && (applicationInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-        Log.i("LshLog", "isDebugMode: " + debug);
+        Log.i("LshLog", "checkDebugMode: " + debug);
         return debug;
     }
 
     //================================================ 打印日志到本地相关 ================================================//
     public static void printE(String msg, Throwable e) {
-        if (IS_DEBUG) {
-            Log.e(mTag + getClassName(), msg, e);
+        if (sIsDebug) {
+            Log.e(sTag + getClassName(), msg, e);
             if (e != null) {
                 e.printStackTrace();
             }
@@ -158,7 +164,7 @@ public class LshLogUtils {
 
         BufferedWriter bw = null;
         try {
-            File file = new File(FilePath);
+            File file = new File(sErrorFilePath);
             if (file.exists()) {
                 // 超过一个星期没有修改, 直接删除
                 if (System.currentTimeMillis() - file.lastModified() > 1000L * 60 * 60 * 24 * 7) {
