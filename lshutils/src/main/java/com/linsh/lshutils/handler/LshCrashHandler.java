@@ -1,81 +1,35 @@
 package com.linsh.lshutils.handler;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Build;
+import com.linsh.lshutils.utils.LshAppUtils;
 
-import com.linsh.lshutils.utils.Basic.LshLogUtils;
+public abstract class LshCrashHandler implements Thread.UncaughtExceptionHandler {
 
-import java.lang.reflect.Field;
+    private Thread.UncaughtExceptionHandler oldHandler;
 
-/**
- * 自定义的 异常处理类 , 实现了 UncaughtExceptionHandler接口
- *
- * @author Administrator
- */
-public class LshCrashHandler implements Thread.UncaughtExceptionHandler {
-
-    private Context context;
-
-    public LshCrashHandler(Context context) {
-        this.context = context;
+    private LshCrashHandler() {
+        // FbjyCrashHandler 不处理异常, 只是有异常的时候执行打印, 所有的异常使用之前的 DefaultUncaughtExceptionHandler 来处理
+        Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
+        if (handler != null && !handler.getClass().getName().equals(LshCrashHandler.class.getName())) {
+            oldHandler = handler;
+        }
     }
+
+    public abstract LshCrashHandler getInstance();
 
     @Override
-    public void uncaughtException(Thread thread, Throwable thr) {
-        caughtUncaughtException(context, thr);
+    public abstract void uncaughtException(Thread thread, Throwable thr);
+
+    public void exitApp() {
+        LshAppUtils.killCurrentProcess();
     }
 
-    public static void caughtUncaughtException(Context context, Throwable thr) {
-        // 1.获取当前程序的版本号. 版本的id
-        String versioninfo = getVersionInfo(context);
-
-        // 2.获取手机的硬件信息.
-        String mobileInfo = getMobileInfo();
-
-        LshLogUtils.e("程序挂掉了......................................................." +
-                "\r\n版本号:" + versioninfo + "||硬件信息:" + mobileInfo + "||错误信息:\r\n", thr);
-    }
-
-    /**
-     * 获取手机的硬件信息
-     * @return
-     */
-    private static String getMobileInfo() {
-        StringBuffer sb = new StringBuffer();
-        //通过反射获取系统的硬件信息   
-        try {
-
-            Field[] fields = Build.class.getDeclaredFields();
-            for (Field field : fields) {
-                //暴力反射 ,获取私有的信息   
-                field.setAccessible(true);
-                String name = field.getName();
-                String value = field.get(null).toString();
-                sb.append(name + "=" + value);
-                sb.append("\n");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return sb.toString();
-    }
-
-    /**
-     * 获取手机的版本信息
-     *
-     * @return
-     */
-    private static String getVersionInfo(Context context) {
-        try {
-            PackageManager pm = context.getPackageManager();
-            PackageInfo info = pm.getPackageInfo(context.getPackageName(), 0);
-            return info.versionName;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "版本号未知";
+    public void handleByDefaultHandler(Thread thread, Throwable thr) {
+        if (oldHandler != null) {
+            oldHandler.uncaughtException(thread, thr);
         }
     }
 
+    public static void init(LshCrashHandler handler) {
+        Thread.setDefaultUncaughtExceptionHandler(handler);
+    }
 }
