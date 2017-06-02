@@ -1,7 +1,10 @@
 package com.linsh.lshutils.utils.Basic;
 
 import android.os.Environment;
+import android.text.format.Formatter;
 
+import com.linsh.lshutils.module.unit.FileSize;
+import com.linsh.lshutils.module.unit.Unit;
 import com.linsh.lshutils.utils.LshPermissionUtils;
 
 import java.io.BufferedReader;
@@ -18,6 +21,7 @@ import java.util.List;
  * Created by Senh Linsh on 17/1/10.
  */
 public class LshFileUtils {
+
 
     /**
      * 检查文件是否是 SD卡文件, 如果是则需要检查权限
@@ -170,5 +174,44 @@ public class LshFileUtils {
             return file.delete();
         }
         return false;
+    }
+
+    /**
+     * 获取文件或文件夹的大小
+     */
+    public static long getFileSize(File file) {
+        if (file == null || !file.exists()) {
+            return 0;
+        }
+        if (file.isFile()) {
+            return file.length();
+        }
+        long size = 0;
+        for (File childFile : file.listFiles()) {
+            size += getFileSize(childFile);
+        }
+        return size;
+    }
+
+    public static float getFileSize(File file, @Unit.FileSizeDef int unit) {
+        float size = getFileSize(file);
+        switch (unit) {
+            case FileSize.GB:
+                size /= 1024L * 1024L * 1024L;
+                break;
+            case FileSize.MB:
+                size /= 1024L * 1024L;
+                break;
+            case FileSize.KB:
+                size /= 1024L;
+                break;
+            case FileSize.B:
+                break;
+        }
+        return size;
+    }
+
+    public static String getFormattedFileSize(File file) {
+        return Formatter.formatFileSize(LshApplicationUtils.getContext(), getFileSize(file));
     }
 }
