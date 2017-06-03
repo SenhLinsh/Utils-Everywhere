@@ -177,7 +177,7 @@ public class LshLogUtils {
             String curTime = "[" + LshTimeUtils.getCurrentTimeStringEN() + "] ";
             bw = new BufferedWriter(new FileWriter(file, true));
             for (String msg : logs) {
-                bw.append(curTime + msg);
+                bw.append(curTime).append(msg);
                 bw.newLine();
             }
         } catch (Exception e) {
