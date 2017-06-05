@@ -201,9 +201,18 @@ public class LshActivityUtils {
             return this;
         }
 
+        public IntentBuilder addFlags(int flags) {
+            intent.addFlags(flags);
+            return this;
+        }
+
         public IntentBuilder newTask() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             return this;
+        }
+
+        public Intent getIntent() {
+            return intent;
         }
 
         public void startActivity(Context activity) {
