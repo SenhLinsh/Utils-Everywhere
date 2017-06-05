@@ -12,7 +12,7 @@ public class LshSharedPreferenceUtils {
 
     private static SoftReference<SharedPreferences> sReference = new SoftReference<>(null);
 
-    private static SharedPreferences getSharedPreferences() {
+    public static SharedPreferences getSharedPreferences() {
         SharedPreferences sp = sReference.get();
         if (sp == null) {
             Context context = LshApplicationUtils.getContext();
