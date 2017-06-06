@@ -6,6 +6,7 @@ import android.text.format.Formatter;
 import com.linsh.lshutils.module.unit.FileSize;
 import com.linsh.lshutils.module.unit.Unit;
 import com.linsh.lshutils.utils.LshPermissionUtils;
+import com.linsh.lshutils.utils.LshSDCardUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,7 +30,7 @@ public class LshFileUtils {
     private static boolean checkFile(File file) {
         if (file == null) return false;
         boolean isStorageFile = file.getAbsolutePath().contains(Environment.getExternalStorageDirectory().getAbsolutePath());
-        return !isStorageFile || checkPermission();
+        return !isStorageFile || LshSDCardUtils.isAvailable() && checkPermission();
     }
 
     public static boolean checkPermission() {
@@ -194,21 +195,7 @@ public class LshFileUtils {
     }
 
     public static float getFileSize(File file, @Unit.FileSizeDef int unit) {
-        float size = getFileSize(file);
-        switch (unit) {
-            case FileSize.GB:
-                size /= 1024L * 1024L * 1024L;
-                break;
-            case FileSize.MB:
-                size /= 1024L * 1024L;
-                break;
-            case FileSize.KB:
-                size /= 1024L;
-                break;
-            case FileSize.B:
-                break;
-        }
-        return size;
+        return FileSize.formatByte(getFileSize(file), unit);
     }
 
     public static String getFormattedFileSize(File file) {
