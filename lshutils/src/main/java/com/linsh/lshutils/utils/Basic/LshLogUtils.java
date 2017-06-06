@@ -20,9 +20,9 @@ public class LshLogUtils {
 
     private static boolean sIsDebug = checkDebugMode();
     private static String sTag = "LshLogUtils: ";
-    // 保存本地log文件的目录
-    private static String sErrorFilePath =
-            Environment.getExternalStorageDirectory() + "/" + LshApplicationUtils.getPackageName() + "/LshLog.txt";
+
+    private static Tracer mTracer;
+    private static Printer mPrinter;
 
     public static void init(boolean isDebug) {
         sIsDebug = isDebug;
@@ -31,12 +31,6 @@ public class LshLogUtils {
     public static void init(boolean isDebug, String tag) {
         sIsDebug = isDebug;
         sTag = tag;
-    }
-
-    public static void init(boolean isDebug, String tag, String errorFilePath) {
-        sIsDebug = isDebug;
-        sTag = tag;
-        sErrorFilePath = errorFilePath;
     }
 
     public static void v(Object msg) {
@@ -132,58 +126,149 @@ public class LshLogUtils {
         return debug;
     }
 
-    //================================================ 打印日志到本地相关 ================================================//
-    public static void printE(String msg, Throwable e) {
-        if (sIsDebug) {
-            Log.e(sTag + getClassName(), msg, e);
-            if (e != null) {
-                e.printStackTrace();
-            }
-        }
-        List<String> logs = new ArrayList<>();
-        logs.add("  ---------------------Throw an ERROR----------------  ");
-        if (e == null) {
-            logs.add(msg);
-        } else {
-            logs.add(msg + " (##" + getClassName() + "##" + callMethodAndLine() + ")");
-            logs.add("Message = " + e.getMessage());
-            StackTraceElement[] stackTrace = e.getStackTrace();
-            for (StackTraceElement stack : stackTrace) {
-                logs.add(stack.toString());
-            }
-        }
-        printLog(logs);
-    }
-
-    private static void printLog(String... logs) {
-        printLog(Arrays.asList(logs));
-    }
-
-    private static void printLog(List<String> logs) {
-        if (!LshFileUtils.checkPermission()) return;
-
-        BufferedWriter bw = null;
-        try {
-            File file = new File(sErrorFilePath);
-            if (file.exists()) {
-                // 超过一个星期没有修改, 直接删除
-                if (System.currentTimeMillis() - file.lastModified() > 1000L * 60 * 60 * 24 * 7) {
-                    file.delete();
+    //================================================ 日志追踪相关 ================================================//
+    public static Tracer tracer() {
+        if (mTracer == null) {
+            synchronized (LshLogUtils.class) {
+                if (mTracer == null) {
+                    mTracer = new Tracer();
                 }
-            } else {
-                LshFileUtils.makeParentDirs(file);
             }
+        }
+        return mTracer;
+    }
 
-            String curTime = "[" + LshTimeUtils.getCurrentTimeStringEN() + "] ";
-            bw = new BufferedWriter(new FileWriter(file, true));
-            for (String msg : logs) {
-                bw.append(curTime).append(msg);
-                bw.newLine();
+    public static class Tracer {
+
+        private static int maxCount = 30;
+        private List<String> traces;
+
+        private Tracer() {
+            traces = new ArrayList<>();
+        }
+
+        public static void setMaxCount(int count) {
+            maxCount = count;
+        }
+
+        public void i(String msg) {
+            if (sIsDebug) {
+                Log.i(sTag + getClassName(), msg);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            LshIOUtils.close(bw);
+            traces.add(msg);
+            while (traces.size() > maxCount) {
+                traces.remove(0);
+            }
+        }
+
+        public List<String> getTraces() {
+            return traces;
+        }
+    }
+
+    //================================================ 打印日志到本地相关 ================================================//
+    public static Printer printer() {
+        if (mPrinter == null) {
+            synchronized (LshLogUtils.class) {
+                if (mPrinter == null) {
+                    mPrinter = new Printer();
+                }
+            }
+        }
+        return mPrinter;
+    }
+
+    /**
+     * Printer 目前还不完善, 没有开子线程加上频繁的 IO 调用对系统的损耗较多
+     */
+    public static class Printer {
+
+        // 保存本地log文件的目录
+        private static String sLogFilePath =
+                Environment.getExternalStorageDirectory() + "/" + LshApplicationUtils.getPackageName() + "/LshLog.txt";
+
+        private Printer() {
+        }
+
+        public static void setLogFilePath(File filePath) {
+            setLogFilePath(filePath.toString());
+        }
+
+        public static void setLogFilePath(String filePath) {
+            sLogFilePath = filePath;
+        }
+
+        public void i(String msg) {
+            if (sIsDebug) {
+                Log.i(sTag + getClassName(), msg);
+            }
+            print(msg);
+        }
+
+        public void i(List<String> msgs) {
+            if (sIsDebug) {
+                for (String msg : msgs) {
+                    Log.i(sTag + getClassName(), msg);
+                }
+            }
+            print(msgs);
+        }
+
+        public void e(Throwable thr) {
+            e(null, thr);
+        }
+
+        public void e(String msg, Throwable thr) {
+            msg = msg == null ? "msg = null" : msg;
+            if (sIsDebug) {
+                Log.e(sTag + getClassName(), msg, thr);
+            }
+            List<String> logs = new ArrayList<>();
+            logs.add("  ---------------------Throw an ERROR----------------  ");
+            if (thr == null) {
+                logs.add(msg);
+            } else {
+                logs.add(msg + " (##" + getClassName() + "##" + callMethodAndLine() + ")");
+                logs.add("Message = " + thr.getMessage());
+                StackTraceElement[] stackTrace = thr.getStackTrace();
+                for (StackTraceElement stack : stackTrace) {
+                    logs.add(stack.toString());
+                }
+                logs.add("\r\n");
+            }
+            print(logs);
+        }
+
+        private static void print(String... logs) {
+            print(Arrays.asList(logs));
+        }
+
+        private static void print(List<String> logs) {
+            if (!LshFileUtils.checkPermission()) return;
+
+            BufferedWriter bw = null;
+            try {
+                File file = new File(sLogFilePath);
+                if (file.exists()) {
+                    // 超过一个星期没有修改, 直接删除
+                    if (System.currentTimeMillis() - file.lastModified() > 1000L * 60 * 60 * 24 * 7) {
+                        file.delete();
+                    }
+                } else if (!LshFileUtils.makeParentDirs(file)) {
+                    return;
+                }
+
+                String curTime = "[" + LshTimeUtils.getCurrentTimeStringEN() + "] ";
+                bw = new BufferedWriter(new FileWriter(file, true));
+                for (String msg : logs) {
+                    bw.append(curTime).append(msg);
+                    bw.newLine();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                LshIOUtils.close(bw);
+            }
         }
     }
 
