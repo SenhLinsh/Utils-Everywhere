@@ -1,6 +1,11 @@
 package com.linsh.lshutils.utils;
 
+import android.os.Build;
 import android.os.Environment;
+import android.os.StatFs;
+
+import com.linsh.lshutils.module.unit.FileSize;
+import com.linsh.lshutils.module.unit.Unit;
 
 import java.io.File;
 
@@ -34,10 +39,47 @@ public class LshSDCardUtils {
 
     /**
      * 获取SD卡的根目录
+     *
      * @return null：不存在SD卡
      */
     public static File getRootDirectory() {
         return isAvailable() ? Environment.getExternalStorageDirectory() : null;
+    }
+
+    /**
+     * 获取 SD卡容量
+     */
+    public static long getSdCardSize() {
+        if (!isAvailable()) return 0;
+
+        StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return statFs.getBlockCountLong() * statFs.getBlockSizeLong();
+        } else {
+            return statFs.getBlockCount() * statFs.getBlockSize();
+        }
+    }
+
+    public static float getSdCardSize(@Unit.FileSizeDef int unit) {
+        return FileSize.formatByte(getSdCardSize(), unit);
+    }
+
+    /**
+     * 获取 SD卡可用容量
+     */
+    public static long getSdCardAvailableSize() {
+        if (!isAvailable()) return 0;
+
+        StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong();
+        } else {
+            return statFs.getAvailableBlocks() * statFs.getBlockSize();
+        }
+    }
+
+    public static float getSdCardAvailableSize(@Unit.FileSizeDef int unit) {
+        return FileSize.formatByte(getSdCardAvailableSize(), unit);
     }
 
 }
