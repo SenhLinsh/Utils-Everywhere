@@ -93,7 +93,7 @@ public class LshIntentUtils {
         if (data == null) return null;
 
         Uri uri = data.getData();
-        if ("file".equals(uri.getScheme())) {
+        if ("content".equals(uri.getScheme())) {
             Cursor cursor = null;
             final String column = "_data";
             final String[] projection = {column};
