@@ -3,6 +3,7 @@ package com.linsh.lshutils.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 
@@ -55,13 +56,40 @@ public class LshIntentUtils {
         activity.startActivityForResult(intent, requestCode);
     }
 
-    public void gotoTakePhoto(Activity activity, int requestCode, File outputFile) {
+    public static void gotoTakePhoto(Activity activity, int requestCode, File outputFile) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
         activity.startActivityForResult(intent, requestCode);
     }
 
-    public String getFilePathFromResult(Intent data) {
+    public static void gotoCropPhotoAsAvartar(Activity activity, int requestCode, File inputFile, File outputFile) {
+        gotoCropPhoto(activity, requestCode, inputFile, outputFile, 1, 1, 512, 512);
+    }
+
+    public static void gotoCropPhoto(Activity activity, int requestCode, File inputFile, File outputFile,
+                                     int aspectX, int aspectY, int outputX, int outputY) {
+        gotoCropPhoto(activity, requestCode, Uri.fromFile(inputFile), Uri.fromFile(outputFile), aspectX, aspectY, outputX, outputY);
+    }
+
+    public static void gotoCropPhoto(Activity activity, int requestCode, Uri inputUri, Uri outputUri,
+                                     int aspectX, int aspectY, int outputX, int outputY) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(inputUri, "image/*");
+        intent.putExtra("crop", "true");
+        // 指定输出宽高比
+        intent.putExtra("aspectX", aspectX);
+        intent.putExtra("aspectY", aspectY);
+        // 指定输出宽高
+        intent.putExtra("outputX", outputX);
+        intent.putExtra("outputY", outputY);
+        // 指定输出路径和文件类型
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra("return-data", false);
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+    public static String getFilePathFromResult(Intent data) {
         if (data == null) return null;
 
         Uri uri = data.getData();
