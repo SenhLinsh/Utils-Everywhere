@@ -62,8 +62,8 @@ public class LshIntentUtils {
         activity.startActivityForResult(intent, requestCode);
     }
 
-    public static void gotoCropPhotoAsAvartar(Activity activity, int requestCode, File inputFile, File outputFile) {
-        gotoCropPhoto(activity, requestCode, inputFile, outputFile, 1, 1, 512, 512);
+    public static void gotoCropPhotoAsAvatar(Activity activity, int requestCode, File inputFile, File outputFile) {
+        gotoCropPhoto(activity, requestCode, inputFile, outputFile, 1, 1, 1024, 1024);
     }
 
     public static void gotoCropPhoto(Activity activity, int requestCode, File inputFile, File outputFile,
