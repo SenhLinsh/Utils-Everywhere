@@ -1,7 +1,10 @@
 package com.linsh.lshutils.tools;
 
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
@@ -136,6 +139,41 @@ public class LshDownloadManager {
 
     public File getDownloadedFile() {
         return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), mFileName);
+    }
+
+    public static File getFileIfDownloaded(long requestId) {
+        File file = null;
+        DownloadManager manager = (DownloadManager) LshApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Query query = new DownloadManager.Query().setFilterById(requestId);
+        Cursor cursor = manager.query(query);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                int downloadedSize = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                int total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                if (downloadedSize == total) {
+                    String filename = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
+                    File localFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename);
+                    if (localFile.exists()) {
+                        file = localFile;
+                    }
+                }
+            }
+            cursor.close();
+        }
+        return file;
+    }
+
+    public void registerCompleteReceiver(BroadcastReceiver receiver) {
+        LshApplicationUtils.getContext().registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+            }
+        }, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+    }
+
+    public void unregisterReceiver(BroadcastReceiver receiver) {
+        LshApplicationUtils.getContext().unregisterReceiver(receiver);
     }
 
     //================================================ 构建 Request ================================================//
