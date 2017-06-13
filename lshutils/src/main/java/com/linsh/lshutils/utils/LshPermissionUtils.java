@@ -3,14 +3,12 @@ package com.linsh.lshutils.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Build;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -182,34 +180,5 @@ public class LshPermissionUtils {
         }
         requestPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         return false;
-    }
-
-    // 跳转到设置界面
-    public static void gotoSetting(Context context) {
-        Intent intent = new Intent(Settings.ACTION_SETTINGS);
-        startActivityWithNewTask(context, intent);
-    }
-
-    // 跳转应用程序列表界面
-    public static void gotoAppSetting(Context context) {
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_SETTINGS);
-        startActivityWithNewTask(context, intent);
-    }
-
-    // 跳转Wifi列表设置
-    public static void gotoWifiSetting(Context context) {
-        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-        startActivityWithNewTask(context, intent);
-    }
-
-    // 飞行模式，无线网和网络设置界面
-    public static void gotoWirelessSetting(Context context) {
-        Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-        startActivityWithNewTask(context, intent);
-    }
-
-    private static void startActivityWithNewTask(Context context, Intent intent) {
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
     }
 }

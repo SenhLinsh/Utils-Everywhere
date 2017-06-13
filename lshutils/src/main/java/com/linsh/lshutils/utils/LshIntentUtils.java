@@ -1,11 +1,13 @@
 package com.linsh.lshutils.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.provider.Settings;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 
@@ -111,5 +113,30 @@ public class LshIntentUtils {
             return uri.getPath();
         }
         return null;
+    }
+
+    // 跳转: 设置界面
+    public static void gotoSetting(Context context) {
+        Intent intent = new Intent(Settings.ACTION_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        LshApplicationUtils.getContext().startActivity(intent);
+    }
+
+    // 跳转: 应用程序列表界面
+    public static void gotoAppSetting(Context context) {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    // 跳转: Wifi列表设置
+    public static void gotoWifiSetting(Context context) {
+        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    // 跳转: 飞行模式，无线网和网络设置界面
+    public static void gotoWirelessSetting(Context context) {
+        Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 }
