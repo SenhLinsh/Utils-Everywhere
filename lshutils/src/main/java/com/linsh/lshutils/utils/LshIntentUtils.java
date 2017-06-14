@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.v4.content.FileProvider;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 import com.linsh.lshutils.utils.Basic.LshIOUtils;
@@ -64,24 +65,31 @@ public class LshIntentUtils {
         activity.startActivityForResult(intent, requestCode);
     }
 
-    public static void gotoTakePhoto(Activity activity, int requestCode, File outputFile) {
+    public static void gotoTakePhoto(Activity activity, int requestCode, String authority, File outputFile) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(activity, authority, outputFile));
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
+        }
         activity.startActivityForResult(intent, requestCode);
     }
 
-    public static void gotoCropPhotoAsAvatar(Activity activity, int requestCode, File inputFile, File outputFile) {
-        gotoCropPhoto(activity, requestCode, inputFile, outputFile, 1, 1, 1024, 1024);
+    public static void gotoCropPhotoAsAvatar(Activity activity, int requestCode, String authority, File inputFile, File outputFile) {
+        gotoCropPhoto(activity, requestCode, authority, inputFile, outputFile, 1, 1, 1024, 1024);
     }
 
-    public static void gotoCropPhoto(Activity activity, int requestCode, File inputFile, File outputFile,
-                                     int aspectX, int aspectY, int outputX, int outputY) {
-        gotoCropPhoto(activity, requestCode, Uri.fromFile(inputFile), Uri.fromFile(outputFile), aspectX, aspectY, outputX, outputY);
-    }
-
-    public static void gotoCropPhoto(Activity activity, int requestCode, Uri inputUri, Uri outputUri,
+    public static void gotoCropPhoto(Activity activity, int requestCode, String authority, File inputFile, File outputFile,
                                      int aspectX, int aspectY, int outputX, int outputY) {
         Intent intent = new Intent("com.android.camera.action.CROP");
+        Uri inputUri;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            inputUri = FileProvider.getUriForFile(activity, authority, inputFile);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            inputUri = Uri.fromFile(inputFile);
+        }
         intent.setDataAndType(inputUri, "image/*");
         intent.putExtra("crop", "true");
         // 指定输出宽高比
@@ -91,7 +99,7 @@ public class LshIntentUtils {
         intent.putExtra("outputX", outputX);
         intent.putExtra("outputY", outputY);
         // 指定输出路径和文件类型
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("return-data", false);
         activity.startActivityForResult(intent, requestCode);
