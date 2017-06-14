@@ -82,14 +82,18 @@ public class LshIntentUtils {
 
     public static void gotoCropPhoto(Activity activity, int requestCode, String authority, File inputFile, File outputFile,
                                      int aspectX, int aspectY, int outputX, int outputY) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
         Uri inputUri;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             inputUri = FileProvider.getUriForFile(activity, authority, inputFile);
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             inputUri = Uri.fromFile(inputFile);
         }
+        gotoCropPhoto(activity, requestCode, inputUri, Uri.fromFile(outputFile), aspectX, aspectY, outputX, outputY);
+    }
+
+    public static void gotoCropPhoto(Activity activity, int requestCode, Uri inputUri, Uri outputUri,
+                                     int aspectX, int aspectY, int outputX, int outputY) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(inputUri, "image/*");
         intent.putExtra("crop", "true");
         // 指定输出宽高比
@@ -99,7 +103,7 @@ public class LshIntentUtils {
         intent.putExtra("outputX", outputX);
         intent.putExtra("outputY", outputY);
         // 指定输出路径和文件类型
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("return-data", false);
         activity.startActivityForResult(intent, requestCode);
