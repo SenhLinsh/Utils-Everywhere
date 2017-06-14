@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresPermission;
-import android.support.v4.content.FileProvider;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 
@@ -134,11 +133,11 @@ public class LshAppUtils {
     /**
      * 安装APK
      */
-    public static void installApk(Activity activity, String authority, File apkFile) {
+    public static void installApk(Activity activity, File apkFile) {
         Intent intent = new Intent("android.intent.action.VIEW");
         Uri uri;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            uri = FileProvider.getUriForFile(activity, authority, apkFile);
+            uri = LshFileProviderUtils.getUriForFile(apkFile);
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             uri = Uri.fromFile(apkFile);

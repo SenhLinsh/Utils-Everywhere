@@ -4,4 +4,17 @@
     package="com.linsh.lshutils">
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
+    <application
+        android:allowBackup="true">
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.lshfileprovider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/lsh_file_paths" />
+        </provider>
+    </application>
 </manifest>
