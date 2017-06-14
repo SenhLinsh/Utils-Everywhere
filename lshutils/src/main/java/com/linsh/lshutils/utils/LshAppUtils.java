@@ -9,7 +9,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.RequiresPermission;
+import android.support.v4.content.FileProvider;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 
@@ -132,12 +134,17 @@ public class LshAppUtils {
     /**
      * 安装APK
      */
-    public static void installApk(Activity activity, File file) {
-        Intent intent = new Intent();
-        intent.setAction("android.intent.action.VIEW");
+    public static void installApk(Activity activity, String authority, File apkFile) {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        Uri uri;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            uri = FileProvider.getUriForFile(activity, authority, apkFile);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            uri = Uri.fromFile(apkFile);
+        }
         intent.addCategory("android.intent.category.DEFAULT");
-        intent.setDataAndType(Uri.fromFile(file),
-                "application/vnd.android.package-archive");
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
         // 避免用户在安装界面返回
         activity.startActivity(intent);
     }
