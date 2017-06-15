@@ -9,8 +9,10 @@ import com.linsh.lshutils.utils.LshTimeUtils;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -139,16 +141,19 @@ public class LshLogUtils {
     }
 
     public static class Tracer {
-
-        private static int maxCount = 30;
-        private List<String> traces;
+        private static int mainCount = 10;
+        private static int maxCount = 20;
+        private SoftReference<LinkedList<String>> extraTracesReference;
+        private LinkedList<String> traces;
 
         private Tracer() {
-            traces = new ArrayList<>();
+            traces = new LinkedList<>();
+            extraTracesReference = new SoftReference<>(new LinkedList<String>());
         }
 
-        public static void setMaxCount(int count) {
-            maxCount = count;
+        public static void init(int mainCount, int maxCount) {
+            Tracer.mainCount = mainCount;
+            Tracer.maxCount = maxCount;
         }
 
         public void i(String msg) {
@@ -156,13 +161,28 @@ public class LshLogUtils {
                 Log.i(sTag + getClassName(), msg);
             }
             traces.add(msg);
-            while (traces.size() > maxCount) {
-                traces.remove(0);
+            while (traces.size() > 10) {
+                String first = traces.removeFirst();
+                LinkedList<String> extraTraces = extraTracesReference.get();
+                if (extraTraces == null) {
+                    extraTraces = new LinkedList<>();
+                    extraTracesReference = new SoftReference<>(extraTraces);
+                }
+                extraTraces.add(first);
+                while (extraTraces.size() > 10) {
+                    extraTraces.removeFirst();
+                }
             }
         }
 
         public List<String> getTraces() {
-            return traces;
+            LinkedList<String> list = new LinkedList<>();
+            list.addAll(traces);
+            LinkedList<String> extraTraces = extraTracesReference.get();
+            if (extraTraces != null) {
+                list.addAll(extraTraces);
+            }
+            return list;
         }
     }
 
