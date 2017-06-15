@@ -15,24 +15,15 @@ import java.util.ArrayList;
 
 public abstract class LshCrashHandler {
 
-    public static final String KEY_LASTED_CRASH = "key_lasted_crash";
-
+    private static final String KEY_LASTED_CRASH = "key_lasted_crash";
     private static LshCrashHandler mHandler;
     private Thread.UncaughtExceptionHandler mOldHandler;
-    private String mRestartActivity;
-
-    public LshCrashHandler(Class<? extends Activity> restartActivity) {
-        if (restartActivity != null) {
-            this.mRestartActivity = restartActivity.getName();
-        }
-    }
 
     public static void install(Application application, LshCrashHandler handler) {
         if (mHandler != null) {
             return;
         }
         mHandler = handler;
-        // FbjyCrashHandler 不处理异常, 只是有异常的时候执行打印, 所有的异常使用之前的 DefaultUncaughtExceptionHandler 来处理
         Thread.UncaughtExceptionHandler oldHandler = Thread.getDefaultUncaughtExceptionHandler();
         if (handler != null && !handler.getClass().getName().equals(LshCrashHandler.class.getName())) {
             mHandler.mOldHandler = oldHandler;
@@ -44,7 +35,7 @@ public abstract class LshCrashHandler {
             public void uncaughtException(Thread thread, Throwable thr) {
                 mHandler.onCatchException(thread, thr);
 
-                if (isStackTraceLikelyConflictive(thr) && isCrashInLastSeconds()) {
+                if (mHandler.isHandleByDefaultHandler(thread, thr) || isStackTraceLikelyConflictive(thr) || isCrashInLastSeconds()) {
                     refreshCrashTime();
                     handleByDefaultHandler(thread, thr);
                     return;
@@ -59,24 +50,20 @@ public abstract class LshCrashHandler {
                             activity.finish();
                         }
                     }
-                    if (mHandler.mRestartActivity != null) {
+
+                    Class<? extends Activity> restartActivity = mHandler.onRestartAppIfNeeded();
+                    if (restartActivity != null) {
                         try {
-                            Class<?> clazz = Class.forName(mHandler.mRestartActivity);
-                            Intent intent = new Intent(LshApplicationUtils.getContext(), clazz);
-                            mHandler.onStartActivity(intent);
+                            Intent intent = new Intent(LshApplicationUtils.getContext(), restartActivity);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             LshApplicationUtils.getContext().startActivity(intent);
-                        } catch (ClassNotFoundException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                             handleByDefaultHandler(thread, thr);
                             return;
                         }
-                    } else {
-                        handleByDefaultHandler(thread, thr);
-                        return;
                     }
                 }
-                mHandler.onKillProcess();
                 LshAppUtils.killCurrentProcess();
             }
         });
@@ -84,9 +71,14 @@ public abstract class LshCrashHandler {
 
     protected abstract void onCatchException(Thread thread, Throwable thr);
 
-    protected abstract void onStartActivity(Intent intent);
+    protected abstract boolean isHandleByDefaultHandler(Thread thread, Throwable thr);
 
-    protected abstract void onKillProcess();
+    /**
+     * 是否重启应用
+     *
+     * @return 重启应用需要返回一个需要打开的界面, 如果返回 null 则不重启, 直接杀死进程
+     */
+    protected abstract Class<? extends Activity> onRestartAppIfNeeded();
 
     private static boolean isStackTraceLikelyConflictive(@NonNull Throwable throwable) {
         do {
@@ -116,6 +108,8 @@ public abstract class LshCrashHandler {
     private static void handleByDefaultHandler(Thread thread, Throwable thr) {
         if (mHandler != null) {
             mHandler.mOldHandler.uncaughtException(thread, thr);
+        } else {
+            LshAppUtils.killCurrentProcess();
         }
     }
 }
