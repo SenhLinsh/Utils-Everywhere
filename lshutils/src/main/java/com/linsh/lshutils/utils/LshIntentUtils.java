@@ -185,6 +185,10 @@ public class LshIntentUtils {
                     intent.setAction("miui.intent.action.APP_PERM_EDITOR");
                     intent.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
                     intent.putExtra("extra_pkgname", packageName);
+                } else if ("V8".equals(rom)) {
+                    intent.setAction("miui.intent.action.APP_PERM_EDITOR");
+                    intent.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity");
+                    intent.putExtra("extra_pkgname", packageName);
                 } else {
                     Uri packageURI = Uri.parse("package:" + packageName);
                     intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
