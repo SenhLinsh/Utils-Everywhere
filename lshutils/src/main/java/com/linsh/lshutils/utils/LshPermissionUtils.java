@@ -2,9 +2,7 @@ package com.linsh.lshutils.utils;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.hardware.Camera;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -94,91 +92,208 @@ public class LshPermissionUtils {
         public abstract void onNeverAsked(String permission);
     }
 
-    //================================================ 权限检查 ================================================//
+    //==================================== 权限组, 根据不同的权限组来自定义权限的获取 ======================================//
 
-    /**
-     * 检查相机硬件是否可用
-     */
-    public static boolean checkCameraHardware(Context context) {
-        return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
-    }
+    private static class Calendar {
 
-    /**
-     * 判断是是否有录音权限
-     */
-    public static boolean hasRecordPermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return hasRecordPermissionBeforeAndroidM();
-        } else {
-            return hasRecordPermissionAfterAndroidM();
+        public static boolean checkPermission() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return LshPermissionUtils.checkPermission(Manifest.permission.READ_CALENDAR)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.WRITE_CALENDAR);
+            } else {
+                return checkPermissionBeforeAndroidM();
+            }
+        }
+
+        public static boolean checkPermissionBeforeAndroidM() {
+            // TODO: 17/6/17
+            return false;
         }
     }
 
-    public static boolean hasRecordPermissionBeforeAndroidM() {
-        try {
-            boolean hasPermission = true;
+    public static class Camera {
 
-            AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                    RECORDER_SAMPLERATE, RECORDER_CHANNELS, RECORDER_AUDIO_ENCODING, 1024 * 2);
-            //开始录制音频
+        public static boolean checkPermission() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return LshPermissionUtils.checkPermission(Manifest.permission.CAMERA);
+            } else {
+                return checkPermissionBeforeAndroidM();
+            }
+        }
+
+        public static boolean checkPermissionBeforeAndroidM() {
+            android.hardware.Camera cam = null;
             try {
-                // 防止某些手机崩溃，例如联想
-                audioRecord.startRecording();
-            } catch (IllegalStateException e) {
+                cam = android.hardware.Camera.open();
+                cam.release();
+                return true;
+            } catch (Exception e) {
                 e.printStackTrace();
+                return false;
+            } finally {
+                try {
+                    if (cam != null) {
+                        cam.release();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                }
             }
-            // 根据开始录音判断是否有录音权限
-            if (audioRecord.getRecordingState() != AudioRecord.RECORDSTATE_RECORDING) {
-                hasPermission = false;
+        }
+    }
+
+    private static class Contacts {
+
+        public static boolean checkPermission() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return LshPermissionUtils.checkPermission(Manifest.permission.READ_CONTACTS)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.WRITE_CONTACTS)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.GET_ACCOUNTS);
+            } else {
+                return checkPermissionBeforeAndroidM();
             }
-            audioRecord.stop();
-            audioRecord.release();
-            return hasPermission;
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+
+        public static boolean checkPermissionBeforeAndroidM() {
+            // TODO: 17/6/17
             return false;
         }
     }
 
-    public static boolean hasRecordPermissionAfterAndroidM() {
-        return checkPermission(Manifest.permission.RECORD_AUDIO);
-    }
+    private static class Location {
 
-    public static boolean hasCameraPermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return hasCameraPermissionBeforeAndroidM();
-        } else {
-            return hasCameraPermissionAfterAndroidM();
+        public static boolean checkPermission() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return LshPermissionUtils.checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+            } else {
+                return checkPermissionBeforeAndroidM();
+            }
         }
-    }
 
-    public static boolean hasCameraPermissionBeforeAndroidM() {
-        try {
-            Camera cam = Camera.open();
-            cam.release();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        public static boolean checkPermissionBeforeAndroidM() {
+            // TODO: 17/6/17
             return false;
         }
     }
 
-    public static boolean hasCameraPermissionAfterAndroidM() {
-        return checkPermission(Manifest.permission.CAMERA);
-    }
+    public static class Microphone {
 
-    public static boolean hasStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        public static boolean checkPermission() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return LshPermissionUtils.checkPermission(Manifest.permission.RECORD_AUDIO);
+            } else {
+                return checkPermissionBeforeAndroidM();
+            }
         }
-        return true;
+
+        public static boolean checkPermissionBeforeAndroidM() {
+            try {
+                boolean hasPermission = true;
+
+                AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
+                        RECORDER_SAMPLERATE, RECORDER_CHANNELS, RECORDER_AUDIO_ENCODING, 1024 * 2);
+                //开始录制音频
+                try {
+                    // 防止某些手机崩溃
+                    audioRecord.startRecording();
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                }
+                // 根据开始录音判断是否有录音权限
+                if (audioRecord.getRecordingState() != AudioRecord.RECORDSTATE_RECORDING) {
+                    hasPermission = false;
+                }
+                audioRecord.stop();
+                audioRecord.release();
+                return hasPermission;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
     }
 
-    public static boolean checkAndRequestStoragePerssion(Activity activity) {
-        if (hasStoragePermission()) {
+    private static class Phone {
+
+        public static boolean checkPermission() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return LshPermissionUtils.checkPermission(Manifest.permission.READ_PHONE_STATE)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.CALL_PHONE)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.READ_CALL_LOG)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.WRITE_CALL_LOG)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.ADD_VOICEMAIL)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.USE_SIP)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.PROCESS_OUTGOING_CALLS);
+            } else {
+                return checkPermissionBeforeAndroidM();
+            }
+        }
+
+        public static boolean checkPermissionBeforeAndroidM() {
+            // TODO: 17/6/17
+            return false;
+        }
+    }
+
+    private static class Sensors {
+
+        public static boolean checkPermission() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return LshPermissionUtils.checkPermission(Manifest.permission.BODY_SENSORS);
+            } else {
+                return checkPermissionBeforeAndroidM();
+            }
+        }
+
+        public static boolean checkPermissionBeforeAndroidM() {
+            // TODO: 17/6/17
+            return false;
+        }
+
+        /**
+         * 检查相机硬件是否可用
+         */
+        public static boolean checkHardware() {
+            return LshApplicationUtils.getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        }
+    }
+
+    private static class Sms {
+
+        public static boolean checkPermission() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return LshPermissionUtils.checkPermission(Manifest.permission.SEND_SMS)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.RECEIVE_SMS)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.READ_SMS)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.RECEIVE_WAP_PUSH)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.RECEIVE_MMS);
+            } else {
+                return checkPermissionBeforeAndroidM();
+            }
+        }
+
+        public static boolean checkPermissionBeforeAndroidM() {
+            // TODO: 17/6/17
+            return false;
+        }
+    }
+
+    public static class Storage {
+
+        public static boolean checkPermission() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return LshPermissionUtils.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        || LshPermissionUtils.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            } else {
+                return checkPermissionBeforeAndroidM();
+            }
+        }
+
+        public static boolean checkPermissionBeforeAndroidM() {
             return true;
         }
-        requestPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        return false;
     }
+
 }
