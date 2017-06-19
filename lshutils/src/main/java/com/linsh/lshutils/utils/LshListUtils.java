@@ -44,4 +44,15 @@ public class LshListUtils {
         }
         return stringList;
     }
+
+    public static <T> String joint(List<T> list, String divider) {
+        String joint = "";
+        for (int i = 0; i < list.size(); i++) {
+            if (i != 0) {
+                joint += divider;
+            }
+            joint += list.get(i).toString();
+        }
+        return joint;
+    }
 }

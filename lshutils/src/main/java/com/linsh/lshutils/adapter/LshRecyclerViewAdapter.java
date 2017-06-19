@@ -16,12 +16,12 @@ public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolde
 
     @Override
     public H onCreateViewHolder(ViewGroup parent, int viewType) {
-        return getViewHolder(LayoutInflater.from(parent.getContext()).inflate(getLayout(), parent, false), viewType);
+        return createViewHolder(LayoutInflater.from(parent.getContext()).inflate(getLayout(), parent, false), viewType);
     }
 
     protected abstract int getLayout();
 
-    protected abstract H getViewHolder(View view, int viewType);
+    protected abstract H createViewHolder(View view, int viewType);
 
     @Override
     public void onBindViewHolder(H holder, int position) {

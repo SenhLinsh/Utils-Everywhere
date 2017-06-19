@@ -34,7 +34,7 @@ public class LshFileUtils {
     }
 
     public static boolean checkPermission() {
-        return LshPermissionUtils.hasStoragePermission();
+        return LshPermissionUtils.Storage.checkPermission();
     }
 
     /**
