@@ -13,6 +13,8 @@ import android.support.v4.content.ContextCompat;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by Senh Linsh on 16/7/9.
@@ -40,6 +42,30 @@ public class LshPermissionUtils {
                 == PackageManager.PERMISSION_GRANTED;
     }
 
+    public static void checkAndRequestPermission(Activity activity, String permission, PermissionListener listener) {
+        checkAndRequestPermissions(activity, new String[]{permission}, listener);
+    }
+
+    public static void checkAndRequestPermissions(Activity activity, String[] permissions, PermissionListener listener) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ArrayList<String> list = new ArrayList<>();
+            for (String permission : permissions) {
+                if (checkPermission(permission)) {
+                    listener.onGranted(permission);
+                } else if (isPermissionNeverAsked(activity, permission)) {
+                    listener.onDenied(permission, true);
+                } else {
+                    list.add(permission);
+                }
+            }
+            if (list.size() > 0) {
+                requestPermissions(activity, (String[]) list.toArray(), listener);
+            }
+        } else {
+            listener.onBeforeAndroidM();
+        }
+    }
+
     public static void requestPermission(Activity activity, String permission, PermissionListener listener) {
         requestPermissions(activity, new String[]{permission}, listener);
     }
@@ -48,7 +74,9 @@ public class LshPermissionUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ActivityCompat.requestPermissions(activity, permissions, REQUEST_CODE_PERMISSION);
         } else {
-            listener.onBeforeAndroidM();
+            if (listener != null) {
+                listener.onBeforeAndroidM();
+            }
         }
     }
 
