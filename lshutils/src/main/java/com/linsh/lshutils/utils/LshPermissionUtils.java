@@ -62,7 +62,9 @@ public class LshPermissionUtils {
                 requestPermissions(activity, (String[]) list.toArray(), listener);
             }
         } else {
-            listener.onBeforeAndroidM();
+            for (String permission : permissions) {
+                listener.onBeforeAndroidM(permission);
+            }
         }
     }
 
@@ -73,10 +75,6 @@ public class LshPermissionUtils {
     public static void requestPermissions(Activity activity, String[] permissions, PermissionListener listener) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ActivityCompat.requestPermissions(activity, permissions, REQUEST_CODE_PERMISSION);
-        } else {
-            if (listener != null) {
-                listener.onBeforeAndroidM();
-            }
         }
     }
 
@@ -99,13 +97,13 @@ public class LshPermissionUtils {
         }
     }
 
-    public static abstract class PermissionListener {
+    public interface PermissionListener {
 
-        public abstract void onGranted(String permission);
+        void onGranted(String permission);
 
-        public abstract void onDenied(String permission, boolean isNeverAsked);
+        void onDenied(String permission, boolean isNeverAsked);
 
-        public abstract void onBeforeAndroidM();
+        void onBeforeAndroidM(String permission);
     }
 
     //==================================== 权限组, 根据不同的权限组来自定义权限的获取 ======================================//
