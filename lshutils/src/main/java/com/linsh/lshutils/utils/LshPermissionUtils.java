@@ -18,9 +18,7 @@ import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
  * Created by Senh Linsh on 16/7/9.
  */
 public class LshPermissionUtils {
-    private static final int RECORDER_SAMPLERATE = 8000;
-    private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
-    private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+    private static final int REQUEST_CODE_PERMISSION = 101;
 
     //================================================ Android 6.0 权限申请 ================================================//
 
@@ -42,59 +40,49 @@ public class LshPermissionUtils {
                 == PackageManager.PERMISSION_GRANTED;
     }
 
-    public static void requestPermission(Activity activity, String permission) {
-        requestPermissions(activity, new String[]{permission}, 0, null);
+    public static void requestPermission(Activity activity, String permission, PermissionListener listener) {
+        requestPermissions(activity, new String[]{permission}, listener);
     }
 
-    public static void requestPermission(Activity activity, String permission, int code, PermissionRequestHandler handler) {
-        requestPermissions(activity, new String[]{permission}, code, handler);
-    }
-
-    public static void requestPermissions(Activity activity, String[] permissions, int code, PermissionRequestHandler handler) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return;
-
-        if (handler != null) {
-            handler.mCode = code;
-            handler.mPermissions = permissions;
+    public static void requestPermissions(Activity activity, String[] permissions, PermissionListener listener) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ActivityCompat.requestPermissions(activity, permissions, REQUEST_CODE_PERMISSION);
+        } else {
+            listener.onBeforeAndroidM();
         }
-
-        ActivityCompat.requestPermissions(activity, permissions, code);
     }
 
     public static boolean isPermissionNeverAsked(Activity activity, String permission) {
         return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
     }
 
-    public static abstract class PermissionRequestHandler {
-        protected int mCode;
-        protected String[] mPermissions;
-
-        public void onRequestPermissionsResult(Activity activity, int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            if (mCode == requestCode) {
-                for (int i = 0; i < permissions.length; i++) {
-                    if (i < mPermissions.length && permissions[i].equals(mPermissions[i])) {
-                        if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                            onGranted(mPermissions[i]);
-                        } else if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[i])) {
-                            onDenied(mPermissions[i]);
-                        } else {
-                            onNeverAsked(mPermissions[i]);
-                        }
-                    }
+    public static void onRequestPermissionsResult(Activity activity, int requestCode, @NonNull String[] permissions,
+                                                  @NonNull int[] grantResults, @NonNull PermissionListener listener) {
+        if (REQUEST_CODE_PERMISSION == requestCode) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    listener.onGranted(permissions[i]);
+                } else if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[i])) {
+                    listener.onDenied(permissions[i], false);
+                } else {
+                    listener.onDenied(permissions[i], true);
                 }
             }
         }
+    }
+
+    public static abstract class PermissionListener {
 
         public abstract void onGranted(String permission);
 
-        public abstract void onDenied(String permission);
+        public abstract void onDenied(String permission, boolean isNeverAsked);
 
-        public abstract void onNeverAsked(String permission);
+        public abstract void onBeforeAndroidM();
     }
 
     //==================================== 权限组, 根据不同的权限组来自定义权限的获取 ======================================//
 
-    private static class Calendar {
+    public static class Calendar {
 
         public static boolean checkPermission() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -105,9 +93,9 @@ public class LshPermissionUtils {
             }
         }
 
-        public static boolean checkPermissionBeforeAndroidM() {
+        private static boolean checkPermissionBeforeAndroidM() {
             // TODO: 17/6/17
-            return false;
+            return true;
         }
     }
 
@@ -121,11 +109,13 @@ public class LshPermissionUtils {
             }
         }
 
+        /**
+         * @return 返回 false 不一定是没有权限, 也有一定的可能是摄像头被占用的情况(可能性较低)
+         */
         public static boolean checkPermissionBeforeAndroidM() {
             android.hardware.Camera cam = null;
             try {
                 cam = android.hardware.Camera.open();
-                cam.release();
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -143,7 +133,7 @@ public class LshPermissionUtils {
         }
     }
 
-    private static class Contacts {
+    public static class Contacts {
 
         public static boolean checkPermission() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -155,13 +145,13 @@ public class LshPermissionUtils {
             }
         }
 
-        public static boolean checkPermissionBeforeAndroidM() {
+        private static boolean checkPermissionBeforeAndroidM() {
             // TODO: 17/6/17
-            return false;
+            return true;
         }
     }
 
-    private static class Location {
+    public static class Location {
 
         public static boolean checkPermission() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -172,13 +162,16 @@ public class LshPermissionUtils {
             }
         }
 
-        public static boolean checkPermissionBeforeAndroidM() {
+        private static boolean checkPermissionBeforeAndroidM() {
             // TODO: 17/6/17
-            return false;
+            return true;
         }
     }
 
     public static class Microphone {
+        private static final int RECORDER_SAMPLERATE = 8000;
+        private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
+        private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
         public static boolean checkPermission() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -188,6 +181,9 @@ public class LshPermissionUtils {
             }
         }
 
+        /**
+         * @return 返回 false 不一定是没有权限, 也有一定的可能是麦克风被占用的情况(可能性较低)
+         */
         public static boolean checkPermissionBeforeAndroidM() {
             try {
                 boolean hasPermission = true;
@@ -215,7 +211,7 @@ public class LshPermissionUtils {
         }
     }
 
-    private static class Phone {
+    public static class Phone {
 
         public static boolean checkPermission() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -231,13 +227,13 @@ public class LshPermissionUtils {
             }
         }
 
-        public static boolean checkPermissionBeforeAndroidM() {
+        private static boolean checkPermissionBeforeAndroidM() {
             // TODO: 17/6/17
-            return false;
+            return true;
         }
     }
 
-    private static class Sensors {
+    public static class Sensors {
 
         public static boolean checkPermission() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -247,9 +243,9 @@ public class LshPermissionUtils {
             }
         }
 
-        public static boolean checkPermissionBeforeAndroidM() {
+        private static boolean checkPermissionBeforeAndroidM() {
             // TODO: 17/6/17
-            return false;
+            return true;
         }
 
         /**
@@ -260,7 +256,7 @@ public class LshPermissionUtils {
         }
     }
 
-    private static class Sms {
+    public static class Sms {
 
         public static boolean checkPermission() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -274,9 +270,9 @@ public class LshPermissionUtils {
             }
         }
 
-        public static boolean checkPermissionBeforeAndroidM() {
+        private static boolean checkPermissionBeforeAndroidM() {
             // TODO: 17/6/17
-            return false;
+            return true;
         }
     }
 
