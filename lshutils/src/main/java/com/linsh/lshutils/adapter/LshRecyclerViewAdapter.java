@@ -37,6 +37,7 @@ public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolde
 
     public void setData(List<T> data) {
         this.data = data;
+        notifyDataSetChanged();
     }
 
     public List<T> getData() {
