@@ -59,7 +59,7 @@ public class LshPermissionUtils {
                 }
             }
             if (list.size() > 0) {
-                requestPermissions(activity, (String[]) list.toArray(), listener);
+                requestPermissions(activity, LshArrayUtils.toStringArray(list), listener);
             }
         } else {
             for (String permission : permissions) {

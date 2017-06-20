@@ -34,7 +34,7 @@ public class LshArrayUtils {
     }
 
     public static <T> List<T> asList(T[] array) {
-       return Arrays.asList(array);
+        return Arrays.asList(array);
     }
 
     public static <T> List<T> toList(T[] array) {
@@ -58,10 +58,19 @@ public class LshArrayUtils {
         }
     }
 
-    public static int[] toArray(List<Integer> list) {
+    public static int[] toIntArray(List<Integer> list) {
         if (list == null) return null;
 
         int[] array = new int[list.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    public static String[] toStringArray(List<String> list) {
+        if (list == null) return null;
+        String[] array = new String[list.size()];
         for (int i = 0; i < array.length; i++) {
             array[i] = list.get(i);
         }
