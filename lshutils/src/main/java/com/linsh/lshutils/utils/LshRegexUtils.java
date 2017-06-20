@@ -6,8 +6,8 @@ package com.linsh.lshutils.utils;
 public class LshRegexUtils {
     // 全网IP
     public static final String IP_REGEX = "^((?:(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(?:25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d))))$";
-    // 手机号码  (支持130——139、150——153、155——159、180、183、185、186、188、189号段)
-    public static final String PHONE_NUMBER_REGEX = "^1(3\\d|5[012356789]|8[035689])\\d{8}$";
+    // 手机号码
+    public static final String PHONE_NUMBER_REGEX = "^1\\d{10}$";
     // 邮箱 ("www."可省略不写)
     public static final String EMAIL_REGEX = "^(www\\.)?\\w+@\\w+(\\.\\w+)+$";
     // 汉字 (个数限制为一个或多个)
