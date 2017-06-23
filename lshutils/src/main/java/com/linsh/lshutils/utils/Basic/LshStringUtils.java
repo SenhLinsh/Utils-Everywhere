@@ -20,6 +20,10 @@ public class LshStringUtils {
         return (str == null || str.length() == 0);
     }
 
+    public static boolean notEmpty(CharSequence str) {
+        return str != null && str.length() > 0;
+    }
+
     public static boolean isAllEmpty(CharSequence... str) {
         if (str == null) return true;
         for (CharSequence charSequence : str) {
