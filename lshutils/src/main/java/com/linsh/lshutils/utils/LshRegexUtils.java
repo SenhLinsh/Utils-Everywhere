@@ -14,6 +14,8 @@ public class LshRegexUtils {
     public static final String CHINESE_REGEX = "^[\u4e00-\u9f5a]+$";
     // 身份证号
     public static final String ID_CARD = "^(^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$)|(^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[Xx])$)$";
+    // 网址
+    public static final String URL = "^(([hH][tT]{2}[pP][sS]?)|([fF][tT][pP]))://[\\w.-]+\\.\\w{2,4}((/.*)?|(\\?.+))$";
 
     /**
      * 匹配邮箱账号，"www."可省略不写
@@ -23,8 +25,7 @@ public class LshRegexUtils {
     }
 
     /**
-     * 匹配手机号码
-     * 支持130——139、150——153、155——159、180、183、185、186、188、189号段
+     * 匹配手机号码 (由于号码段资源非常丰富, 只对 1 开头 11 位数字作为限制条件)
      */
     public static boolean isMobilePhoneNumber(String string) {
         return string.matches(PHONE_NUMBER_REGEX);
@@ -49,5 +50,12 @@ public class LshRegexUtils {
      */
     public static boolean isIdCard(String string) {
         return string.matches(ID_CARD);
+    }
+
+    /**
+     * 验证给定的字符串是否是URL，仅支持http、https、ftp
+     */
+    public static boolean isURL(String string) {
+        return string.matches(URL);
     }
 }
