@@ -5,18 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.linsh.lshutils.R;
+
 import java.util.List;
 
 /**
  * Created by linsh on 17/4/30.
  */
-public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> {
+public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> implements View.OnClickListener {
 
     private List<T> data;
 
     @Override
     public H onCreateViewHolder(ViewGroup parent, int viewType) {
-        return createViewHolder(LayoutInflater.from(parent.getContext()).inflate(getLayout(), parent, false), viewType);
+        View view = LayoutInflater.from(parent.getContext()).inflate(getLayout(), parent, false);
+        view.setOnClickListener(this);
+        return createViewHolder(view, viewType);
     }
 
     protected abstract int getLayout();
@@ -25,6 +29,7 @@ public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(H holder, int position) {
+        holder.itemView.setTag(R.id.tag_item_view, position);
         onBindViewHolder(holder, data.get(position), position);
     }
 
@@ -44,4 +49,21 @@ public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolde
         return data;
     }
 
+    @Override
+    public void onClick(View v) {
+        Object tag = v.getTag(R.id.tag_item_view);
+        if (tag != null && mOnItemClickListener != null) {
+            mOnItemClickListener.onItemClick((Integer) tag);
+        }
+    }
+
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mOnItemClickListener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
 }
