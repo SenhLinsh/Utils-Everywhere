@@ -17,6 +17,13 @@ import static com.linsh.lshutils.utils.LshScreenUtils.Orientation.PORTRAIT;
 
 public class LshScreenUtils {
 
+    public static DisplayMetrics getScreenSize() {
+        WindowManager wm = (WindowManager) LshApplicationUtils.getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics;
+    }
+
     public static int getScreenWidth() {
         WindowManager wm = (WindowManager) LshApplicationUtils.getContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -46,7 +53,7 @@ public class LshScreenUtils {
         return wm.getDefaultDisplay().getRotation();
     }
 
-    public static Orientation getScreenOritation() {
+    public static Orientation getScreenOrientation() {
         int rotation = getScreenRotation();
         if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
             return PORTRAIT;
