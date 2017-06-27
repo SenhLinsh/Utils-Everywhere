@@ -164,12 +164,7 @@ public class LshDownloadManager {
     }
 
     public void registerCompleteReceiver(BroadcastReceiver receiver) {
-        LshApplicationUtils.getContext().registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-            }
-        }, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        LshApplicationUtils.getContext().registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
     public void unregisterReceiver(BroadcastReceiver receiver) {
