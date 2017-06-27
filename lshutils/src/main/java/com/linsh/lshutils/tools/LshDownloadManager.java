@@ -3,10 +3,10 @@ package com.linsh.lshutils.tools;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.webkit.MimeTypeMap;
 
@@ -151,11 +151,14 @@ public class LshDownloadManager {
                 int downloadedSize = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
                 int total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
                 if (downloadedSize == total) {
-                    String filename = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
-                    File localFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), filename);
-                    if (localFile.exists()) {
-                        file = localFile;
+                    String filePath;
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                        String fileUri = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+                        filePath = Uri.parse(fileUri).getPath();
+                    } else {
+                        filePath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME));
                     }
+                    file = new File(filePath);
                 }
             }
             cursor.close();
@@ -272,5 +275,4 @@ public class LshDownloadManager {
 
         void inProgress(float progress);
     }
-
 }
