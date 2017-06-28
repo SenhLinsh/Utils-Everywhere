@@ -33,4 +33,16 @@ public class LshUnitConverseUtils {
         final float fontScale = LshApplicationUtils.getContext().getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
+
+    public static String toHexString(int value) {
+        if (value < 0) return null;
+
+        char[] chars = "0123456789ABCDEF".toCharArray();
+        StringBuilder builder = new StringBuilder();
+        do {
+            builder.insert(0, chars[value % 16]);
+            value /= 16;
+        } while (value > 0);
+        return builder.toString();
+    }
 }
