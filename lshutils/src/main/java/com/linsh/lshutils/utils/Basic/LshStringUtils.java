@@ -81,9 +81,9 @@ public class LshStringUtils {
     /**
      * 格式化字符串, 用参数进行替换, 例子: format("I am {arg1}, {arg2}", arg1, arg2);
      */
-    public static String format(String format, String... args) {
-        for (String arg : args) {
-            format = format.replaceFirst("\\{[^\\}]+\\}", arg);
+    public static String format(String format, Object... args) {
+        for (Object arg : args) {
+            format = format.replaceFirst("\\{[^\\}]+\\}", arg.toString());
         }
         return format;
     }
