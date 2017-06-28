@@ -6,7 +6,6 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 
 import com.linsh.lshutils.utils.Basic.LshLogUtils;
 
@@ -65,24 +64,14 @@ public class LshSystemUtils {
             return;
         }
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        if (Build.VERSION.SDK_INT >= 21) {
-//            // 获取主题中 colorPrimaryDark 的颜色
-//            TypedValue typedValue = new TypedValue();
-//            TypedArray typedArray = activity.obtainStyledAttributes(typedValue.data, new int[]{R.attr.colorPrimaryDark});
-//            int color = typedArray.getColor(0, 0);
-//            typedArray.recycle();
-//            // 没有指定 colorPrimaryDark 时, 默认是黑色
-//            if (color != Color.BLACK) {
-//                return;
-//            }
-//        }
+        
         ViewGroup contentView = (ViewGroup) activity.getWindow().getDecorView();
         int statusBarHeight = LshScreenUtils.getStatusBarHeight();
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight);
         if (!insert) {
             View statusBarBg = new View(activity);
             statusBarBg.setBackgroundColor(statusBarColor);
-            contentView.addView(statusBarBg, 0, params);
+            contentView.addView(statusBarBg, params);
         } else {
             View statusBarBg = new View(activity);
             View statusBarFg = new View(activity);
