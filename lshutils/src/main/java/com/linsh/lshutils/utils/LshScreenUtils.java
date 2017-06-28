@@ -1,6 +1,7 @@
 package com.linsh.lshutils.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.view.Surface;
 import android.view.View;
@@ -74,6 +75,12 @@ public class LshScreenUtils {
 
     public static int getLocationYOnScreen(View view) {
         return getLocationOnScreen(view)[1];
+    }
+
+    public static int getStatusBarHeight() {
+        Resources resources = LshRecourseUtils.getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        return resources.getDimensionPixelSize(resourceId);
     }
 
     public enum Orientation {
