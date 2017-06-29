@@ -23,7 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-final class BitmapUtil {
+public final class BitmapUtil {
 
     private static final boolean DEBUG = false;
     private static final String TAG = BitmapUtil.class.getSimpleName();
