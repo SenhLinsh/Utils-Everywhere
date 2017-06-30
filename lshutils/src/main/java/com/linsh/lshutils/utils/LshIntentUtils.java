@@ -134,6 +134,7 @@ public class LshIntentUtils {
     private static void gotoCropPhoto(Activity activity, Fragment fragment, int requestCode, Uri inputUri, Uri outputUri,
                                       int aspectX, int aspectY, int outputX, int outputY) {
         Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setDataAndType(inputUri, "image/*");
         intent.putExtra("crop", "true");
         // 指定输出宽高比
