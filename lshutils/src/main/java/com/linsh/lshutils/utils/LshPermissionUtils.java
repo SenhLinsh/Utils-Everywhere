@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Created by Senh Linsh on 16/7/9.
  */
 public class LshPermissionUtils {
-    private static final int REQUEST_CODE_PERMISSION = 101;
+    public static final int REQUEST_CODE_PERMISSION = 101;
 
     //================================================ Android 6.0 权限申请 ================================================//
 
