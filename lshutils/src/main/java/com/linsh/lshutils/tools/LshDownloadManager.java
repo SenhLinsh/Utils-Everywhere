@@ -183,7 +183,7 @@ public class LshDownloadManager {
             mFileName = fileName;
             mRequest = new DownloadManager.Request(Uri.parse(downloadUrl));
             mRequest.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
-            mRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
+            mRequest.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI);
         }
 
         /**
