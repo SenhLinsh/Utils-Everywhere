@@ -3,13 +3,12 @@ package com.linsh.lshutils.utils;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.v4.content.FileProvider;
+import android.support.v4.app.Fragment;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 import com.linsh.lshutils.utils.Basic.LshIOUtils;
@@ -26,11 +25,12 @@ import java.io.InputStreamReader;
 
 public class LshIntentUtils {
 
-    public static void gotoPickFile(Activity activity, int requestCode) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("file/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        activity.startActivityForResult(intent, requestCode);
+    private static void gotoPickFile(Activity activity, int requestCode) {
+        gotoPickFile(activity, null, "file/*", requestCode);
+    }
+
+    private static void gotoPickFile(Fragment fragment, int requestCode) {
+        gotoPickFile(null, fragment, "file/*", requestCode);
     }
 
     public static void gotoPickFile(Activity activity, int requestCode, String fileExtension) {
@@ -38,61 +38,101 @@ public class LshIntentUtils {
         if (type == null) {
             return;
         }
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType(type);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        activity.startActivityForResult(intent, requestCode);
+        gotoPickFile(activity, null, type, requestCode);
     }
 
     public static void gotoPickPhoto(Activity activity, int requestCode) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        activity.startActivityForResult(intent, requestCode);
+        gotoPickFile(activity, null, "image/*", requestCode);
+    }
+
+    public static void gotoPickPhoto(Fragment fragment, int requestCode) {
+        gotoPickFile(null, fragment, "image/*", requestCode);
     }
 
     public static void gotoPickVideo(Activity activity, int requestCode) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("video/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        activity.startActivityForResult(intent, requestCode);
+        gotoPickFile(activity, null, "video/*", requestCode);
+    }
+
+    public static void gotoPickVideo(Fragment fragment, int requestCode) {
+        gotoPickFile(null, fragment, "video/*", requestCode);
     }
 
     public static void gotoPickAudio(Activity activity, int requestCode) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("audio/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        activity.startActivityForResult(intent, requestCode);
+        gotoPickFile(activity, null, "audio/*", requestCode);
     }
 
-    public static void gotoTakePhoto(Activity activity, int requestCode, String authority, File outputFile) {
+    public static void gotoPickAudio(Fragment fragment, int requestCode) {
+        gotoPickFile(null, fragment, "audio/*", requestCode);
+    }
+
+    /**
+     * 打开选择文件界面
+     */
+    private static void gotoPickFile(Activity activity, Fragment fragment, String type, int requestCode) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType(type);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(activity, fragment, intent, requestCode);
+    }
+
+    public static void gotoTakePhoto(Activity activity, int requestCode, File outputFile) {
+        gotoTakePhoto(activity, null, requestCode, outputFile);
+    }
+
+    public static void gotoTakePhoto(Fragment fragment, int requestCode, File outputFile) {
+        gotoTakePhoto(null, fragment, requestCode, outputFile);
+    }
+
+    /**
+     * 打开系统的拍照界面
+     */
+    private static void gotoTakePhoto(Activity activity, Fragment fragment, int requestCode, File outputFile) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(activity, authority, outputFile));
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, LshFileProviderUtils.getUriForFile(outputFile));
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
         }
-        activity.startActivityForResult(intent, requestCode);
+        startActivityForResult(activity, fragment, intent, requestCode);
     }
 
-    public static void gotoCropPhotoAsAvatar(Activity activity, int requestCode, String authority, File inputFile, File outputFile) {
-        gotoCropPhoto(activity, requestCode, authority, inputFile, outputFile, 1, 1, 1024, 1024);
+    public static void gotoCropPhoto(Activity activity, int requestCode, File inputFile, File outputFile,
+                                      int aspectX, int aspectY, int outputX, int outputY) {
+        gotoCropPhoto(activity, null, requestCode, inputFile, outputFile, aspectX, aspectY, outputX, outputY);
     }
 
-    public static void gotoCropPhoto(Activity activity, int requestCode, String authority, File inputFile, File outputFile,
-                                     int aspectX, int aspectY, int outputX, int outputY) {
+    public static void gotoCropPhoto(Fragment fragment, int requestCode, File inputFile, File outputFile,
+                                      int aspectX, int aspectY, int outputX, int outputY) {
+        gotoCropPhoto(null, fragment, requestCode, inputFile, outputFile, aspectX, aspectY, outputX, outputY);
+    }
+
+    private static void gotoCropPhoto(Activity activity, Fragment fragment, int requestCode, File inputFile, File outputFile,
+                                      int aspectX, int aspectY, int outputX, int outputY) {
         Uri inputUri;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            inputUri = FileProvider.getUriForFile(activity, authority, inputFile);
+            inputUri = LshFileProviderUtils.getUriForFile(inputFile);
         } else {
             inputUri = Uri.fromFile(inputFile);
         }
-        gotoCropPhoto(activity, requestCode, inputUri, Uri.fromFile(outputFile), aspectX, aspectY, outputX, outputY);
+        gotoCropPhoto(activity, fragment, requestCode, inputUri, Uri.fromFile(outputFile), aspectX, aspectY, outputX, outputY);
     }
 
     public static void gotoCropPhoto(Activity activity, int requestCode, Uri inputUri, Uri outputUri,
-                                     int aspectX, int aspectY, int outputX, int outputY) {
+                                      int aspectX, int aspectY, int outputX, int outputY) {
+        gotoCropPhoto(activity, null, requestCode, inputUri, outputUri, aspectX, aspectY, outputX, outputY);
+    }
+
+    public static void gotoCropPhoto(Fragment fragment, int requestCode, Uri inputUri, Uri outputUri,
+                                      int aspectX, int aspectY, int outputX, int outputY) {
+        gotoCropPhoto(null, fragment, requestCode, inputUri, outputUri, aspectX, aspectY, outputX, outputY);
+    }
+
+    /**
+     * 打开系统的剪裁界面
+     */
+    private static void gotoCropPhoto(Activity activity, Fragment fragment, int requestCode, Uri inputUri, Uri outputUri,
+                                      int aspectX, int aspectY, int outputX, int outputY) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(inputUri, "image/*");
         intent.putExtra("crop", "true");
@@ -106,56 +146,43 @@ public class LshIntentUtils {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("return-data", false);
-        activity.startActivityForResult(intent, requestCode);
+        startActivityForResult(activity, fragment, intent, requestCode);
     }
 
-    public static String getFilePathFromResult(Intent data) {
-        if (data == null) return null;
-
-        Uri uri = data.getData();
-        if ("content".equals(uri.getScheme())) {
-            Cursor cursor = null;
-            final String column = "_data";
-            final String[] projection = {column};
-            try {
-                cursor = LshApplicationUtils.getContext().getContentResolver().query(uri, projection, null, null, null);
-                if (cursor != null && cursor.moveToFirst()) {
-                    final int column_index = cursor.getColumnIndexOrThrow(column);
-                    return cursor.getString(column_index);
-                }
-            } finally {
-                if (cursor != null)
-                    cursor.close();
-            }
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-        return null;
-    }
-
-    // 跳转: 设置界面
+    /**
+     * 跳转: 设置界面
+     */
     public static void gotoSetting() {
         Intent intent = new Intent(Settings.ACTION_SETTINGS);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         LshApplicationUtils.getContext().startActivity(intent);
     }
 
-    // 跳转: 应用程序列表界面
+    /**
+     * 跳转: 应用程序列表界面
+     */
     public static void gotoAppsSetting() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_SETTINGS);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        LshApplicationUtils.getContext().startActivity(intent);
     }
 
-    // 跳转: Wifi列表设置
+    /**
+     * 跳转: Wifi列表设置
+     */
     public static void gotoWifiSetting() {
         Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        LshApplicationUtils.getContext().startActivity(intent);
     }
 
-    // 跳转: 飞行模式，无线网和网络设置界面
+    /**
+     * 跳转: 飞行模式，无线网和网络设置界面
+     */
     public static void gotoWirelessSetting() {
         Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        LshApplicationUtils.getContext().startActivity(intent);
     }
 
     /**
@@ -235,6 +262,22 @@ public class LshIntentUtils {
             LshLogUtils.i("无法跳转权限界面, 开始跳转普通设置界面");
         }
         return success;
+    }
+
+    private static void startActivity(Activity activity, Fragment fragment, Intent intent) {
+        if (activity != null) {
+            activity.startActivity(intent);
+        } else if (fragment != null) {
+            fragment.startActivity(intent);
+        }
+    }
+
+    private static void startActivityForResult(Activity activity, Fragment fragment, Intent intent, int requestCode) {
+        if (activity != null) {
+            activity.startActivityForResult(intent, requestCode);
+        } else if (fragment != null) {
+            fragment.startActivityForResult(intent, requestCode);
+        }
     }
 
     private static String getMiuiVersion() {
