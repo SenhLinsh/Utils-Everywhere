@@ -55,33 +55,45 @@ public class LshSystemUtils {
         setTranslucentStatusBar(activity, statusBarColor, false);
     }
 
-    public static void setTranslucentStatusBarWithInsertion(Activity activity, int statusBarColor) {
+    public static void setTranslucentStatusBarBehind(Activity activity, int statusBarColor) {
         setTranslucentStatusBar(activity, statusBarColor, true);
     }
 
-    private static void setTranslucentStatusBar(Activity activity, int statusBarColor, boolean insert) {
+    private static void setTranslucentStatusBar(Activity activity, int statusBarColor, boolean behind) {
         if (Build.VERSION.SDK_INT < 19) {
             return;
         }
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        
+
         ViewGroup contentView = (ViewGroup) activity.getWindow().getDecorView();
         int statusBarHeight = LshScreenUtils.getStatusBarHeight();
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight);
-        if (!insert) {
-            View statusBarBg = new View(activity);
-            statusBarBg.setBackgroundColor(statusBarColor);
-            contentView.addView(statusBarBg, params);
-        } else {
-            View statusBarBg = new View(activity);
-            View statusBarFg = new View(activity);
-            int translucentColor = Color.argb(0x33, 0, 0, 0);
-            int toolbarColor = LshColorUtils.extractColor(statusBarColor, translucentColor);
-            statusBarBg.setBackgroundColor(toolbarColor);
-            statusBarFg.setBackgroundColor(translucentColor);
+        View statusBarBg = new View(activity);
+        statusBarBg.setBackgroundColor(statusBarColor);
+        if (behind) {
             contentView.addView(statusBarBg, 0, params);
-            contentView.addView(statusBarFg, params);
+        } else {
+            contentView.addView(statusBarBg, params);
         }
+    }
+
+    public static void setTranslucentStatusBarWithInsertion(Activity activity, int statusBarColor) {
+        if (Build.VERSION.SDK_INT < 19) {
+            return;
+        }
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        ViewGroup contentView = (ViewGroup) activity.getWindow().getDecorView();
+        int statusBarHeight = LshScreenUtils.getStatusBarHeight();
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight);
+        View statusBarBg = new View(activity);
+        View statusBarFg = new View(activity);
+        int translucentColor = Color.argb(0x33, 0, 0, 0);
+        int toolbarColor = LshColorUtils.extractColor(statusBarColor, translucentColor);
+        statusBarBg.setBackgroundColor(toolbarColor);
+        statusBarFg.setBackgroundColor(translucentColor);
+        contentView.addView(statusBarBg, 0, params);
+        contentView.addView(statusBarFg, params);
     }
 
 }
