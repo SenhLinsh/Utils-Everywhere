@@ -14,13 +14,15 @@ import java.util.List;
 
 public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener {
 
+    public static final int VIEW_TYPE_FIRST_LEVEL = 1;
+    public static final int VIEW_TYPE_SECOND_LEVEL = 2;
     private List<F> firstLevelData;
     private List<S> secondLevelData;
     private int mLastFirstLevelClickPosition = -1;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == 2) {
+        if (viewType == VIEW_TYPE_SECOND_LEVEL) {
             return getSecondLevelHolder(parent);
         }
         return getFirstLevelHolder(parent);
@@ -42,9 +44,9 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
     @Override
     public int getItemViewType(int position) {
         if (getSecondPosition(position) >= 0) {
-            return 2;
+            return VIEW_TYPE_SECOND_LEVEL;
         }
-        return 1;
+        return VIEW_TYPE_FIRST_LEVEL;
     }
 
     protected int getFirstPosition(int position) {
