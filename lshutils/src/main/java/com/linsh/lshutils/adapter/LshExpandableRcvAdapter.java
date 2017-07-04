@@ -30,7 +30,6 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(this);
         holder.itemView.setOnLongClickListener(this);
         onBindExpandableViewHolder(holder, position);
@@ -67,10 +66,27 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
         return -1;
     }
 
+    public int getExpandedPosition() {
+        return mLastFirstLevelClickPosition;
+    }
+
+    public void setExpandedPosition(int position) {
+        mLastFirstLevelClickPosition = position;
+    }
+
     public void setData(List<F> firstLevelData) {
         this.firstLevelData = firstLevelData;
         this.secondLevelData = null;
-        notifyDataSetChanged();
+    }
+
+    public void setData(List<F> firstLevelData, int expandedPosition) {
+        this.firstLevelData = firstLevelData;
+        mLastFirstLevelClickPosition = expandedPosition;
+        if (expandedPosition >= 0) {
+            this.secondLevelData = getSecondData(expandedPosition);
+        } else {
+            this.secondLevelData = null;
+        }
     }
 
     public List<F> getData() {
@@ -97,29 +113,38 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
 
     @Override
     public void onClick(View v) {
-        int position = (int) v.getTag();
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) v.getLayoutParams();
+        int position = layoutParams.getViewAdapterPosition();
         int firstPosition = getFirstPosition(position);
         if (firstPosition >= 0) {
             boolean expand;
             if (position == mLastFirstLevelClickPosition) {
                 // 点击已经打开的分组, 清除二级分组数据, 清楚点击位置
+                int removeSize = secondLevelData == null ? 0 : secondLevelData.size();
+                int oldExpandedPosition = mLastFirstLevelClickPosition;
                 secondLevelData = null;
                 mLastFirstLevelClickPosition = -1;
                 expand = false;
+                if (removeSize > 0) {
+                    notifyItemRangeRemoved(oldExpandedPosition + 1, removeSize);
+                }
             } else {
                 // 点击没有打开过的分组, 先判断该分组是否有数据
                 List<S> secondData = getSecondData(firstPosition);
                 if (secondData != null && secondData.size() > 0) {
+                    if (secondLevelData != null && secondLevelData.size() > 0) {
+                        notifyItemRangeRemoved(mLastFirstLevelClickPosition + 1, secondLevelData.size());
+                    }
                     // 有数据则打开该分组, 设置其点击位置
                     mLastFirstLevelClickPosition = firstPosition;
                     secondLevelData = secondData;
                     expand = true;
+                    notifyItemRangeInserted(mLastFirstLevelClickPosition + 1, secondData.size());
                 } else {
                     // 没有数据则忽略
                     return;
                 }
             }
-            notifyDataSetChanged();
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onFirstLevelItemClick(firstLevelData.get(firstPosition), firstPosition, expand);
             }
@@ -134,7 +159,8 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
     @Override
     public boolean onLongClick(View v) {
         boolean consumed = false;
-        int position = (int) v.getTag();
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) v.getLayoutParams();
+        int position = layoutParams.getViewAdapterPosition();
         if (getFirstPosition(position) >= 0) {
             if (mOnItemLongClickListener != null) {
                 consumed = mOnItemLongClickListener.onFirstLevelItemLongClick(v, getFirstPosition(position));
