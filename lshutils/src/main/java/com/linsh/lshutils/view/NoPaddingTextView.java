@@ -71,7 +71,6 @@ public class NoPaddingTextView extends TextView {
         int measuredHeight = textView.getMeasuredHeight();
         if (measuredHeight - textSize > 0) {
             mAdditionalPadding = (int) (measuredHeight - textSize);
-            Log.v("NoPaddingTextView", "onMeasure: height=" + measuredHeight + " textSize=" + textSize + " mAdditionalPadding=" + mAdditionalPadding);
         }
         return mAdditionalPadding;
     }
