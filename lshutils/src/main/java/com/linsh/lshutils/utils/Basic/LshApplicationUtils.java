@@ -1,7 +1,5 @@
 package com.linsh.lshutils.utils.Basic;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Process;
@@ -15,18 +13,12 @@ public class LshApplicationUtils {
     private static int mainTid;
     private static Handler mainHandler;
 
-    public static void init(Application application) {
+    public static void init(Context context) {
         // 初始化context
-        appContext = application.getApplicationContext();
+        appContext = context.getApplicationContext();
         // 获取主线程id
-        mainTid = Process.myTid();
-        // 初始化handler
-        mainHandler = new Handler();
-    }
-
-    public static void init(Activity activity) {
-        if (appContext == null) appContext = activity.getApplicationContext();
         if (mainTid == 0) mainTid = Process.myTid();
+        // 初始化handler
         if (mainHandler == null) mainHandler = new Handler();
     }
 
