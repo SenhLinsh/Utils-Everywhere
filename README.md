@@ -1,4 +1,7 @@
 # LshUtils
+
+[![Release](https://jitpack.io/v/com.github.SenhLinsh/LshUtils.svg)](https://jitpack.io/#com.github.SenhLinsh/LshUtils)
+
 个人收集的常用工具类
 
 ## 添加依赖
