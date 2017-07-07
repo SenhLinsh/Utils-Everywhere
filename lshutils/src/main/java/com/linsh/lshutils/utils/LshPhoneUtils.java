@@ -1,11 +1,9 @@
 package com.linsh.lshutils.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
-
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
+import android.telephony.TelephonyManager;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -17,26 +15,44 @@ import java.util.List;
 
 public class LshPhoneUtils {
 
+    public static boolean isPhone() {
+        TelephonyManager tm = (TelephonyManager) LshContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
+        return tm != null && tm.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE;
+    }
+
+    /**
+     * 获取IMEI码
+     * <p>需添加权限 {@code <uses-permission android:name="android.permission.READ_PHONE_STATE"/>}</p>
+     */
+    @SuppressLint("HardwareIds")
+    public static String getIMEI() {
+        TelephonyManager tm = (TelephonyManager) LshContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
+        return tm != null ? tm.getDeviceId() : null;
+    }
+
+    /**
+     * 获取IMSI码
+     * <p>需添加权限 {@code <uses-permission android:name="android.permission.READ_PHONE_STATE"/>}</p>
+     */
+    @SuppressLint("HardwareIds")
+    public static String getIMSI() {
+        TelephonyManager tm = (TelephonyManager) LshContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
+        return tm != null ? tm.getSubscriberId() : null;
+    }
+
     /**
      * 获取ip地址
      */
     public static String getIp() {
-        Context context = LshApplicationUtils.getContext().getApplicationContext();
-        //获取wifi服务
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        // 获取IP
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        int ipAddress = wifiInfo.getIpAddress();
-        String ip = intToIp(ipAddress);
-        String no_ip = "";
-        if (no_ip.equals(ip)) {
-            ip = "0.0.0.0";
-        }
-        return ip;
+        return LshNetworkUtils.getIPAddress();
     }
 
-    private static String intToIp(int i) {
-        return (i & 0xFF) + "." + ((i >> 8) & 0xFF) + "." + ((i >> 16) & 0xFF) + "." + (i >> 24 & 0xFF);
+    /**
+     * 获取设备厂商, 如Xiaomi
+     */
+
+    public static String getManufacturer() {
+        return Build.MANUFACTURER;
     }
 
     /**
@@ -50,7 +66,13 @@ public class LshPhoneUtils {
      * 获取手机型号
      */
     public static String getMobileModel() {
-        return Build.MODEL;
+        String model = Build.MODEL;
+        if (model != null) {
+            model = model.trim();
+        } else {
+            model = "";
+        }
+        return model;
     }
 
     /**
