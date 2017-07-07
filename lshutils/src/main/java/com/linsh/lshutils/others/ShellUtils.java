@@ -2,87 +2,116 @@ package com.linsh.lshutils.others;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
-public class ShellUtils {
-
-    public static final String COMMAND_SU       = "su";
-    public static final String COMMAND_SH       = "sh";
-    public static final String COMMAND_EXIT     = "exit\n";
-    public static final String COMMAND_LINE_END = "\n";
+/**
+ * <pre>
+ *     author: Blankj
+ *     blog  : http://blankj.com
+ *     time  : 2016/08/07
+ *     desc  : Shell相关工具类
+ * </pre>
+ */
+public final class ShellUtils {
 
     private ShellUtils() {
-        throw new AssertionError();
+        throw new UnsupportedOperationException("u can't instantiate me...");
     }
-
-    /** 检查是否有root权限 */
-    public static boolean checkRootPermission() {
-        return execCommand("echo root", true, false).result == 0;
-    }
-
 
     /**
-     * 执行shell命令
-     * 
+     * 是否是在root下执行命令
+     *
      * @param command 命令
-     * @param isRoot whether need to run with root
-     * @param isNeedResultMsg 是否需要返回信息
-     * @return
-     * @see ShellUtils#execCommand(String[], boolean, boolean)
+     * @param isRoot  是否需要root权限执行
+     * @return CommandResult
      */
-    public static CommandResult execCommand(String command, boolean isRoot, boolean isNeedResultMsg) {
-        return execCommand(new String[] {command}, isRoot, isNeedResultMsg);
+    public static CommandResult execCmd(final String command, final boolean isRoot) {
+        return execCmd(new String[]{command}, isRoot, true);
     }
 
     /**
-     * 执行shell命令
-     * 
-     * @param commands 命令数组
-     * @param isRoot whether need to run with root
-     * @param isNeedResultMsg 是否需要返回信息
-     * @return <ul>
-     *         <li>if isNeedResultMsg is false, {@link CommandResult#successMsg} is null and
-     *         {@link CommandResult#errorMsg} is null.</li>
-     *         <li>if {@link CommandResult#result} is -1, there maybe some excepiton.</li>
-     *         </ul>
+     * 是否是在root下执行命令
+     *
+     * @param commands 多条命令链表
+     * @param isRoot   是否需要root权限执行
+     * @return CommandResult
      */
-    public static CommandResult execCommand(String[] commands, boolean isRoot, boolean isNeedResultMsg) {
+    public static CommandResult execCmd(final List<String> commands, final boolean isRoot) {
+        return execCmd(commands == null ? null : commands.toArray(new String[]{}), isRoot, true);
+    }
+
+    /**
+     * 是否是在root下执行命令
+     *
+     * @param commands 多条命令数组
+     * @param isRoot   是否需要root权限执行
+     * @return CommandResult
+     */
+    public static CommandResult execCmd(final String[] commands, final boolean isRoot) {
+        return execCmd(commands, isRoot, true);
+    }
+
+    /**
+     * 是否是在root下执行命令
+     *
+     * @param command         命令
+     * @param isRoot          是否需要root权限执行
+     * @param isNeedResultMsg 是否需要结果消息
+     * @return CommandResult
+     */
+    public static CommandResult execCmd(final String command, final boolean isRoot, final boolean isNeedResultMsg) {
+        return execCmd(new String[]{command}, isRoot, isNeedResultMsg);
+    }
+
+    /**
+     * 是否是在root下执行命令
+     *
+     * @param commands        命令链表
+     * @param isRoot          是否需要root权限执行
+     * @param isNeedResultMsg 是否需要结果消息
+     * @return CommandResult
+     */
+    public static CommandResult execCmd(final List<String> commands, final boolean isRoot, final boolean isNeedResultMsg) {
+        return execCmd(commands == null ? null : commands.toArray(new String[]{}), isRoot, isNeedResultMsg);
+    }
+
+    /**
+     * 是否是在root下执行命令
+     *
+     * @param commands        命令数组
+     * @param isRoot          是否需要root权限执行
+     * @param isNeedResultMsg 是否需要结果消息
+     * @return CommandResult
+     */
+    public static CommandResult execCmd(final String[] commands, final boolean isRoot, final boolean isNeedResultMsg) {
         int result = -1;
         if (commands == null || commands.length == 0) {
             return new CommandResult(result, null, null);
         }
-
         Process process = null;
         BufferedReader successResult = null;
         BufferedReader errorResult = null;
         StringBuilder successMsg = null;
         StringBuilder errorMsg = null;
-
         DataOutputStream os = null;
         try {
-            process = Runtime.getRuntime().exec(isRoot ? COMMAND_SU : COMMAND_SH);
+            process = Runtime.getRuntime().exec(isRoot ? "su" : "sh");
             os = new DataOutputStream(process.getOutputStream());
             for (String command : commands) {
-                if (command == null) {
-                    continue;
-                }
-
-                // donnot use os.writeBytes(commmand), avoid chinese charset error
+                if (command == null) continue;
                 os.write(command.getBytes());
-                os.writeBytes(COMMAND_LINE_END);
+                os.writeBytes("\n");
                 os.flush();
             }
-            os.writeBytes(COMMAND_EXIT);
+            os.writeBytes("exit\n");
             os.flush();
-
             result = process.waitFor();
-            // get command result
             if (isNeedResultMsg) {
                 successMsg = new StringBuilder();
                 errorMsg = new StringBuilder();
-                successResult = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                successResult = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
+                errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream(), "UTF-8"));
                 String s;
                 while ((s = successResult.readLine()) != null) {
                     successMsg.append(s);
@@ -91,58 +120,39 @@ public class ShellUtils {
                     errorMsg.append(s);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (os != null) {
-                    os.close();
-                }
-                if (successResult != null) {
-                    successResult.close();
-                }
-                if (errorResult != null) {
-                    errorResult.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            CloseUtils.closeIO(os, successResult, errorResult);
             if (process != null) {
                 process.destroy();
             }
         }
-        return new CommandResult(result, successMsg == null ? null : successMsg.toString(), errorMsg == null ? null
-                : errorMsg.toString());
+        return new CommandResult(
+                result,
+                successMsg == null ? null : successMsg.toString(),
+                errorMsg == null ? null : errorMsg.toString()
+        );
     }
 
     /**
-     * result of command
-     * <ul>
-     * <li>{@link CommandResult#result} means result of command, 0 means normal, else means error, same to excute in
-     * linux shell</li>
-     * <li>{@link CommandResult#successMsg} means success message of command result</li>
-     * <li>{@link CommandResult#errorMsg} means error message of command result</li>
-     * </ul>
-     * 
-     * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-5-16
+     * 返回的命令结果
      */
     public static class CommandResult {
-
-        /** result of command **/
+        /**
+         * 结果码
+         **/
         public int    result;
-        /** success message of command result **/
+        /**
+         * 成功信息
+         **/
         public String successMsg;
-        /** error message of command result **/
+        /**
+         * 错误信息
+         **/
         public String errorMsg;
 
-        public CommandResult(int result) {
-            this.result = result;
-        }
-
-        public CommandResult(int result, String successMsg, String errorMsg) {
+        public CommandResult(final int result, final String successMsg, final String errorMsg) {
             this.result = result;
             this.successMsg = successMsg;
             this.errorMsg = errorMsg;
