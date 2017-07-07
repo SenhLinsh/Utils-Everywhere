@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 import com.linsh.lshutils.utils.Basic.LshIOUtils;
 import com.linsh.lshutils.utils.Basic.LshLogUtils;
+import com.linsh.lshutils.utils.Basic.LshStringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,68 +26,68 @@ import java.io.InputStreamReader;
 
 public class LshIntentUtils {
 
-    private static void gotoPickFile(Activity activity, int requestCode) {
-        gotoPickFile(activity, null, "file/*", requestCode);
+    /**
+     * 获取分享文本的意图
+     */
+    public static Intent getShareTextIntent(String content) {
+        return new Intent(Intent.ACTION_SEND)
+                .setType("text/plain")
+                .putExtra(Intent.EXTRA_TEXT, content)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
-    private static void gotoPickFile(Fragment fragment, int requestCode) {
-        gotoPickFile(null, fragment, "file/*", requestCode);
+    /**
+     * 获取跳转「选择文件」的意图
+     */
+    public static Intent getPickFileIntent() {
+        return getPickIntent("file/*");
     }
 
-    public static void gotoPickFile(Activity activity, int requestCode, String fileExtension) {
+    /**
+     * 获取跳转「选择文件」的意图
+     */
+    public static Intent getPickFileIntent(String fileExtension) {
         String type = LshMimeTypeUtils.getMimeTypeFromExtension(fileExtension);
         if (type == null) {
-            return;
+            return null;
         }
-        gotoPickFile(activity, null, type, requestCode);
-    }
-
-    public static void gotoPickPhoto(Activity activity, int requestCode) {
-        gotoPickFile(activity, null, "image/*", requestCode);
-    }
-
-    public static void gotoPickPhoto(Fragment fragment, int requestCode) {
-        gotoPickFile(null, fragment, "image/*", requestCode);
-    }
-
-    public static void gotoPickVideo(Activity activity, int requestCode) {
-        gotoPickFile(activity, null, "video/*", requestCode);
-    }
-
-    public static void gotoPickVideo(Fragment fragment, int requestCode) {
-        gotoPickFile(null, fragment, "video/*", requestCode);
-    }
-
-    public static void gotoPickAudio(Activity activity, int requestCode) {
-        gotoPickFile(activity, null, "audio/*", requestCode);
-    }
-
-    public static void gotoPickAudio(Fragment fragment, int requestCode) {
-        gotoPickFile(null, fragment, "audio/*", requestCode);
+        return getPickIntent(type);
     }
 
     /**
-     * 打开选择文件界面
+     * 获取跳转「选择图片」的意图
      */
-    private static void gotoPickFile(Activity activity, Fragment fragment, String type, int requestCode) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType(type);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(activity, fragment, intent, requestCode);
-    }
-
-    public static void gotoTakePhoto(Activity activity, int requestCode, File outputFile) {
-        gotoTakePhoto(activity, null, requestCode, outputFile);
-    }
-
-    public static void gotoTakePhoto(Fragment fragment, int requestCode, File outputFile) {
-        gotoTakePhoto(null, fragment, requestCode, outputFile);
+    public static Intent getPickPhotoIntent() {
+        return getPickIntent("image/*");
     }
 
     /**
-     * 打开系统的拍照界面
+     * 获取跳转「选择视频」的意图
      */
-    private static void gotoTakePhoto(Activity activity, Fragment fragment, int requestCode, File outputFile) {
+    public static Intent getPickVideoIntent() {
+        return getPickIntent("video/*");
+    }
+
+    /**
+     * 获取跳转「选择音频」的意图
+     */
+    public static Intent getPickAudioIntent() {
+        return getPickIntent("audio/*");
+    }
+
+    /**
+     * 获取跳转「选择...」的意图
+     */
+    public static Intent getPickIntent(String type) {
+        return new Intent(Intent.ACTION_GET_CONTENT)
+                .setType(type)
+                .addCategory(Intent.CATEGORY_OPENABLE);
+    }
+
+    /**
+     * 获取跳转「系统相机」的意图
+     */
+    public static Intent getTakePhotoIntent(File outputFile) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, LshFileProviderUtils.getUriForFile(outputFile));
@@ -94,45 +95,26 @@ public class LshIntentUtils {
         } else {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
         }
-        startActivityForResult(activity, fragment, intent, requestCode);
+        return intent;
     }
 
-    public static void gotoCropPhoto(Activity activity, int requestCode, File inputFile, File outputFile,
-                                      int aspectX, int aspectY, int outputX, int outputY) {
-        gotoCropPhoto(activity, null, requestCode, inputFile, outputFile, aspectX, aspectY, outputX, outputY);
-    }
-
-    public static void gotoCropPhoto(Fragment fragment, int requestCode, File inputFile, File outputFile,
-                                      int aspectX, int aspectY, int outputX, int outputY) {
-        gotoCropPhoto(null, fragment, requestCode, inputFile, outputFile, aspectX, aspectY, outputX, outputY);
-    }
-
-    private static void gotoCropPhoto(Activity activity, Fragment fragment, int requestCode, File inputFile, File outputFile,
-                                      int aspectX, int aspectY, int outputX, int outputY) {
+    /**
+     * 获取跳转「系统剪裁」的意图
+     */
+    public static Intent getCropPhotoIntent(File inputFile, File outputFile, int aspectX, int aspectY, int outputX, int outputY) {
         Uri inputUri;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             inputUri = LshFileProviderUtils.getUriForFile(inputFile);
         } else {
             inputUri = Uri.fromFile(inputFile);
         }
-        gotoCropPhoto(activity, fragment, requestCode, inputUri, Uri.fromFile(outputFile), aspectX, aspectY, outputX, outputY);
-    }
-
-    public static void gotoCropPhoto(Activity activity, int requestCode, Uri inputUri, Uri outputUri,
-                                      int aspectX, int aspectY, int outputX, int outputY) {
-        gotoCropPhoto(activity, null, requestCode, inputUri, outputUri, aspectX, aspectY, outputX, outputY);
-    }
-
-    public static void gotoCropPhoto(Fragment fragment, int requestCode, Uri inputUri, Uri outputUri,
-                                      int aspectX, int aspectY, int outputX, int outputY) {
-        gotoCropPhoto(null, fragment, requestCode, inputUri, outputUri, aspectX, aspectY, outputX, outputY);
+        return getCropPhotoIntent(inputUri, Uri.fromFile(outputFile), aspectX, aspectY, outputX, outputY);
     }
 
     /**
-     * 打开系统的剪裁界面
+     * 获取跳转「系统剪裁」的意图
      */
-    private static void gotoCropPhoto(Activity activity, Fragment fragment, int requestCode, Uri inputUri, Uri outputUri,
-                                      int aspectX, int aspectY, int outputX, int outputY) {
+    public static Intent getCropPhotoIntent(Uri inputUri, Uri outputUri, int aspectX, int aspectY, int outputX, int outputY) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setDataAndType(inputUri, "image/*");
@@ -147,46 +129,287 @@ public class LshIntentUtils {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("return-data", false);
-        startActivityForResult(activity, fragment, intent, requestCode);
+        return intent;
+    }
+
+    /**
+     * 获取跳转「安装应用」的意图
+     */
+    public static Intent getInstallAppIntent(File apkFile) {
+        if (apkFile == null || !apkFile.exists() || !apkFile.isFile())
+            return null;
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            uri = LshFileProviderUtils.getUriForFile(apkFile);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            uri = Uri.fromFile(apkFile);
+        }
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        return intent;
+    }
+
+    /**
+     * 获取跳转「卸载应用」的意图
+     */
+    public static Intent getUninstallAppIntent(String packageName) {
+        if (LshStringUtils.isEmpty(packageName)) return null;
+
+        Intent intent = new Intent(Intent.ACTION_DELETE);
+        intent.setData(Uri.parse("package:" + packageName));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
+    }
+
+    /**
+     * 获取跳转「应用」的意图
+     */
+    public static Intent getLaunchAppIntent(String packageName) {
+        return LshContextUtils.getPackageManager().getLaunchIntentForPackage(packageName);
+    }
+
+
+    /**
+     * 获取跳转「应用组件」的意图
+     */
+    public static Intent getComponentIntent(final String packageName, final String className) {
+        return new Intent(Intent.ACTION_VIEW)
+                .setComponent(new ComponentName(packageName, className))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    /**
+     * 获取跳转「拨号界面」的意图
+     */
+    public static Intent getDialIntent(String phoneNumber) {
+        return new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    /**
+     * 获取跳转「拨打电话」的意图
+     * <p>需添加权限 {@code <uses-permission android:name="android.permission.CALL_PHONE"/>}</p>
+     */
+    public static Intent getCallIntent(String phoneNumber) {
+        return new Intent("android.intent.action.CALL", Uri.parse("tel:" + phoneNumber))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    /**
+     * 获取跳转「发送短信」的意图
+     */
+    public static Intent getSendSmsIntent(String phoneNumber, String content) {
+        return new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phoneNumber))
+                .putExtra("sms_body", content)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    /**
+     * 获取跳转「设置界面」的意图
+     */
+    public static Intent getSettingIntent() {
+        return new Intent(Settings.ACTION_SETTINGS)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    /**
+     * 获取跳转「应用详情」的意图
+     */
+    public static Intent getAppDetailsSettingsIntent(String packageName) {
+        return new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                .setData(Uri.parse("package:" + packageName))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    /**
+     * 获取跳转「应用列表」的意图
+     */
+    public static Intent getAppsIntent() {
+        return new Intent(Settings.ACTION_APPLICATION_SETTINGS)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    /**
+     * 获取跳转「 Wifi 设置」的意图
+     */
+    public static Intent getWifiSettingIntent() {
+        return new Intent(Settings.ACTION_WIFI_SETTINGS)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    /**
+     * 获取跳转「网络设置」的意图
+     */
+    public static Intent getWirelessSettingIntent() {
+        return new Intent(Settings.ACTION_WIRELESS_SETTINGS)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    //================================================ goto ================================================//
+
+    public static void gotoInstallApp(File apkFile) {
+        startActivity(getInstallAppIntent(apkFile));
+    }
+
+    public static void gotoUninstallApp(String packageName) {
+        startActivity(getUninstallAppIntent(packageName));
+    }
+
+    public static void gotoApp(String packageName) {
+        if (LshStringUtils.isEmpty(packageName))
+            return;
+        startActivity(getLaunchAppIntent(packageName));
+    }
+
+    /**
+     * 跳转: 系统选择文件界面
+     */
+    public static void gotoPickFile(Activity activity, int requestCode) {
+        startActivityForResult(activity, null, getPickFileIntent(), requestCode);
+    }
+
+    /**
+     * 跳转: 系统选择文件界面
+     */
+    public static void gotoPickFile(Fragment fragment, int requestCode) {
+        startActivityForResult(null, fragment, getPickFileIntent(), requestCode);
+    }
+
+    /**
+     * 跳转: 系统选择文件界面
+     */
+    public static void gotoPickFile(Activity activity, int requestCode, String fileExtension) {
+        startActivityForResult(activity, null, getPickFileIntent(fileExtension), requestCode);
+    }
+
+    /**
+     * 跳转: 系统选择图片界面
+     */
+    public static void gotoPickPhoto(Activity activity, int requestCode) {
+        startActivityForResult(activity, null, getPickPhotoIntent(), requestCode);
+    }
+
+    /**
+     * 跳转: 系统选择图片界面
+     */
+    public static void gotoPickPhoto(Fragment fragment, int requestCode) {
+        startActivityForResult(null, fragment, getPickPhotoIntent(), requestCode);
+    }
+
+    /**
+     * 跳转: 系统选择视频界面
+     */
+    public static void gotoPickVideo(Activity activity, int requestCode) {
+        startActivityForResult(activity, null, getPickVideoIntent(), requestCode);
+    }
+
+    /**
+     * 跳转: 系统选择视频界面
+     */
+    public static void gotoPickVideo(Fragment fragment, int requestCode) {
+        startActivityForResult(null, fragment, getPickVideoIntent(), requestCode);
+    }
+
+    /**
+     * 跳转: 系统选择音频界面
+     */
+    public static void gotoPickAudio(Activity activity, int requestCode) {
+        startActivityForResult(activity, null, getPickAudioIntent(), requestCode);
+    }
+
+    /**
+     * 跳转: 系统选择音频界面
+     */
+    public static void gotoPickAudio(Fragment fragment, int requestCode) {
+        startActivityForResult(null, fragment, getPickAudioIntent(), requestCode);
+    }
+
+    /**
+     * 跳转: 系统拍照界面
+     */
+    public static void gotoTakePhoto(Activity activity, int requestCode, File outputFile) {
+        startActivityForResult(activity, null, getTakePhotoIntent(outputFile), requestCode);
+    }
+
+    /**
+     * 跳转: 系统拍照界面
+     */
+    public static void gotoTakePhoto(Fragment fragment, int requestCode, File outputFile) {
+        startActivityForResult(null, fragment, getTakePhotoIntent(outputFile), requestCode);
+    }
+
+    /**
+     * 跳转: 系统剪裁界面
+     */
+    public static void gotoCropPhoto(Activity activity, int requestCode, File inputFile, File outputFile,
+                                     int aspectX, int aspectY, int outputX, int outputY) {
+        Intent intent = getCropPhotoIntent(inputFile, outputFile, aspectX, aspectY, outputX, outputY);
+        startActivityForResult(activity, null, intent, requestCode);
+    }
+
+    /**
+     * 跳转: 系统剪裁界面
+     */
+    public static void gotoCropPhoto(Fragment fragment, int requestCode, File inputFile, File outputFile,
+                                     int aspectX, int aspectY, int outputX, int outputY) {
+        Intent intent = getCropPhotoIntent(inputFile, outputFile, aspectX, aspectY, outputX, outputY);
+        startActivityForResult(null, fragment, intent, requestCode);
+    }
+
+    /**
+     * 跳转: 系统剪裁界面
+     */
+    public static void gotoCropPhoto(Activity activity, int requestCode, Uri inputUri, Uri outputUri,
+                                     int aspectX, int aspectY, int outputX, int outputY) {
+        Intent intent = getCropPhotoIntent(inputUri, outputUri, aspectX, aspectY, outputX, outputY);
+        startActivityForResult(activity, null, intent, requestCode);
+    }
+
+    /**
+     * 跳转: 系统剪裁界面
+     */
+    public static void gotoCropPhoto(Fragment fragment, int requestCode, Uri inputUri, Uri outputUri,
+                                     int aspectX, int aspectY, int outputX, int outputY) {
+        Intent intent = getCropPhotoIntent(inputUri, outputUri, aspectX, aspectY, outputX, outputY);
+        startActivityForResult(null, fragment, intent, requestCode);
     }
 
     /**
      * 跳转: 设置界面
      */
     public static void gotoSetting() {
-        Intent intent = new Intent(Settings.ACTION_SETTINGS);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        LshApplicationUtils.getContext().startActivity(intent);
+        LshContextUtils.startActivity(getSettingIntent());
     }
 
     /**
      * 跳转: 应用程序列表界面
      */
     public static void gotoAppsSetting() {
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_SETTINGS);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        LshApplicationUtils.getContext().startActivity(intent);
+        LshContextUtils.startActivity(getAppsIntent());
     }
 
     /**
      * 跳转: Wifi列表设置
      */
     public static void gotoWifiSetting() {
-        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        LshApplicationUtils.getContext().startActivity(intent);
+        LshContextUtils.startActivity(getWifiSettingIntent());
     }
+
 
     /**
      * 跳转: 飞行模式，无线网和网络设置界面
      */
     public static void gotoWirelessSetting() {
-        Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        LshApplicationUtils.getContext().startActivity(intent);
+        LshContextUtils.startActivity(getWirelessSettingIntent());
     }
 
+
     /**
+     * 跳转: 权限设置界面
+     * <p>
      * 根据各大厂商的不同定制而跳转至其权限设置
      * 目前已测试成功机型: 小米V7V8, 华为, 三星, 魅族; 测试失败: OPPO
      *
@@ -265,7 +488,14 @@ public class LshIntentUtils {
         return success;
     }
 
+    private static void startActivity(Intent intent) {
+        if (intent != null) {
+            LshContextUtils.startActivity(intent);
+        }
+    }
+
     private static void startActivity(Activity activity, Fragment fragment, Intent intent) {
+        if (intent == null) return;
         if (activity != null) {
             activity.startActivity(intent);
         } else if (fragment != null) {
@@ -274,6 +504,7 @@ public class LshIntentUtils {
     }
 
     private static void startActivityForResult(Activity activity, Fragment fragment, Intent intent, int requestCode) {
+        if (intent == null) return;
         if (activity != null) {
             activity.startActivityForResult(intent, requestCode);
         } else if (fragment != null) {
