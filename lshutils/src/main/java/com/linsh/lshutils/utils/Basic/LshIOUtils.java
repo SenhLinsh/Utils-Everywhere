@@ -24,7 +24,7 @@ public class LshIOUtils {
     }
 
     /**
-     * 关闭多个流对象的重载形式
+     * 关闭多个流对象
      */
     public static void close(Closeable... streams) {
         for (Closeable stream : streams) {
@@ -32,4 +32,24 @@ public class LshIOUtils {
         }
     }
 
+    /**
+     * 关闭流对象, 不打印关闭时抛出的异常
+     */
+    public static void closeQuietly(Closeable stream) {
+        if (stream != null) {
+            try {
+                stream.close();
+            } catch (IOException ignored) {
+            }
+        }
+    }
+
+    /**
+     * 关闭多个流对象, 不打印关闭时抛出的异常
+     */
+    public static void closeQuietly(Closeable... streams) {
+        for (Closeable stream : streams) {
+            close(stream);
+        }
+    }
 }
