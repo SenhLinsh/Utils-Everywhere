@@ -10,12 +10,9 @@ import java.util.regex.Pattern;
  */
 public class LshStringUtils {
 
-    // null & 空字符串 & 空格字符串 : 返回true
-    public static boolean isBlank(String str) {
-        return (str == null || str.trim().length() == 0);
-    }
-
-    // null & 空字符串 : 返回true
+    /**
+     * null & 空字符串 : 返回true
+     */
     public static boolean isEmpty(CharSequence str) {
         return (str == null || str.length() == 0);
     }
@@ -32,12 +29,35 @@ public class LshStringUtils {
         return true;
     }
 
-    // 避免了空指针异常
-    public static boolean isEquals(String actual, String expected) {
-        return actual == expected || (actual == null ? expected == null : actual.equals(expected));
+    /**
+     * null & 空字符串 & 空格字符串 : 返回true
+     */
+    public static boolean isTrimEmpty(String str) {
+        return (str == null || str.trim().length() == 0);
     }
 
-    // null 返回空串
+
+    /**
+     * null & 空白字符串 : 返回true
+     */
+    public static boolean isBlank(String str) {
+        if (str == null) return true;
+        for (int i = 0, len = str.length(); i < len; ++i) {
+            if (!Character.isWhitespace(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 避免了空指针异常
+    public static boolean isEquals(String actual, String expected) {
+        return actual == expected || (actual != null && actual.equals(expected));
+    }
+
+    /**
+     * null 返回空串
+     */
     public static String nullStrToEmpty(Object str) {
         return (str == null ? "" : (str instanceof String ? (String) str : str.toString()));
     }
