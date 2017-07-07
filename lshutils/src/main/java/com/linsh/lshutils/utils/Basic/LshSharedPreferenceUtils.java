@@ -73,4 +73,8 @@ public class LshSharedPreferenceUtils {
     public static void remove(String key) {
         getSharedPreferences().edit().remove(key).apply();
     }
+
+    public boolean contains(String key) {
+        return getSharedPreferences().contains(key);
+    }
 }
