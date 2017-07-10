@@ -19,9 +19,9 @@ public class LshBackgroundUtils {
 
     /**
      * 判断App是否在后台运行
-     * 注意: 该方法通过Activity状态判断, 关闭屏幕时返回true
+     * <p>注意: 该方法通过Activity状态判断, 关闭屏幕时返回true</p>
      */
-    public static boolean isBackGround() {
+    public static boolean isBackground() {
         return LshActivityLifecycleUtils.isBackGround();
     }
 }

@@ -84,7 +84,13 @@ public class LshActivityLifecycleUtils {
     }
 
     public static Activity getTopActivity() {
-        return sCreatedActivities.get(sCreatedActivities.size() - 1).get();
+        check();
+        int size = sCreatedActivities.size();
+        if (size > 0) {
+            return sCreatedActivities.get(size - 1).get();
+        } else {
+            return null;
+        }
     }
 
     private static void check() {
