@@ -47,7 +47,7 @@ public class PhotoSelectView extends BasePhotoView<SelectableImage> implements A
         boolean selected = image.isSelected();
         if (selected) {
             if (selectedCount >= selectedLimit) {
-                LshToastUtils.showToast(String.format("最多能选 %d 张", selectedLimit));
+                LshToastUtils.show(String.format("最多能选 %d 张", selectedLimit));
                 return;
             }
             selectedCount++;
