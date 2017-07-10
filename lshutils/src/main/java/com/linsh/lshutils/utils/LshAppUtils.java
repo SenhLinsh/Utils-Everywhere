@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.support.annotation.RequiresPermission;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
@@ -37,18 +35,22 @@ public class LshAppUtils {
         return false;
     }
 
+    @RequiresPermission(Manifest.permission.GET_TASKS)
+    public static boolean isAppOnForeground() {
+        return isAppOnForeground(getPackageName());
+    }
+
     /**
      * 判断App是否在前台运行
      * 注意: 该方法是判断APP是否处于栈顶, 处于栈顶但是是关闭屏幕的情况下依然返回true
      */
     @RequiresPermission(Manifest.permission.GET_TASKS)
-    public boolean isAppOnForeground() {
+    public static boolean isAppOnForeground(String packageName) {
         ActivityManager activityManager = (ActivityManager) LshApplicationUtils.getContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> tasksInfo = activityManager.getRunningTasks(1);
         if (tasksInfo.size() > 0) {
             // 应用程序位于堆栈的顶层
-            if (getPackageName().equals(tasksInfo.get(0).topActivity
-                    .getPackageName())) {
+            if (tasksInfo.get(0).topActivity.getPackageName().equals(packageName)) {
                 return true;
             }
         }
@@ -104,7 +106,6 @@ public class LshAppUtils {
      * 获取应用名称
      */
     public String getAppName() {
-        //包管理操作管理类
         PackageManager pm = LshApplicationUtils.getContext().getPackageManager();
         try {
             ApplicationInfo info = pm.getApplicationInfo(getPackageName(), 0);
@@ -129,23 +130,18 @@ public class LshAppUtils {
         return null;
     }
 
+    /**
+     * 安装 APK
+     */
+    public static void installApk(File apkFile) {
+        LshIntentUtils.gotoInstallApp(apkFile);
+    }
 
     /**
-     * 安装APK
+     * 卸载 APP
      */
-    public static void installApk(Activity activity, File apkFile) {
-        Intent intent = new Intent("android.intent.action.VIEW");
-        Uri uri;
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-            uri = LshFileProviderUtils.getUriForFile(apkFile);
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        } else {
-            uri = Uri.fromFile(apkFile);
-        }
-        intent.addCategory("android.intent.category.DEFAULT");
-        intent.setDataAndType(uri, "application/vnd.android.package-archive");
-        // 避免用户在安装界面返回
-        activity.startActivity(intent);
+    public static void uninstallApp(String packageName) {
+        LshIntentUtils.gotoUninstallApp(packageName);
     }
 
     /**
@@ -161,6 +157,21 @@ public class LshAppUtils {
     }
 
     /**
+     * 打开 APP
+     */
+    public static void launchApp(String packageName) {
+        LshIntentUtils.gotoApp(packageName);
+    }
+
+    /**
+     * 打开 APP
+     */
+    public static void launchApp(Activity activity, String packageName, int requestCode) {
+        Intent launchIntent = LshContextUtils.getPackageManager().getLaunchIntentForPackage(packageName);
+        activity.startActivityForResult(launchIntent, requestCode);
+    }
+
+    /**
      * 检测某个应用是否安装, 如果一安装则启动跳转该应用
      */
     public static boolean checkAndStartInstalledApp(Activity activity, String packageName) {
@@ -169,6 +180,24 @@ public class LshAppUtils {
             activity.startActivity(intent);
             return true;
         } else {
+            return false;
+        }
+    }
+
+    public static boolean isAppDebug() {
+        return isAppDebug(getPackageName());
+    }
+
+    /**
+     * 判断App是否是Debug版本
+     */
+    public static boolean isAppDebug(String packageName) {
+        try {
+            PackageManager pm = LshContextUtils.getPackageManager();
+            ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
+            return ai != null && (ai.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
             return false;
         }
     }
