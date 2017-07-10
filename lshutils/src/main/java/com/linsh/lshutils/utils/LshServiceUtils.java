@@ -3,6 +3,7 @@ package com.linsh.lshutils.utils;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import java.util.List;
@@ -28,5 +29,20 @@ public class LshServiceUtils {
             }
         }
         return false;
+    }
+
+
+    /**
+     * 启动服务
+     */
+    public static void startService(Class<?> clazz) {
+        LshContextUtils.startService(new Intent(LshContextUtils.get(), clazz));
+    }
+
+    /**
+     * 停止服务
+     */
+    public static boolean stopService(Class<?> clazz) {
+        return LshContextUtils.stopService(new Intent(LshContextUtils.get(), clazz));
     }
 }
