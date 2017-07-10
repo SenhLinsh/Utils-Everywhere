@@ -1,4 +1,4 @@
-package com.linsh.lshutils.view.PhotoView;
+package com.linsh.lshutils.view.albumview;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -20,22 +20,22 @@ import java.util.List;
  * Created by Senh Linsh on 17/6/26.
  */
 
-public abstract class BasePhotoView<T extends Image> extends GridView {
+public abstract class BaseAlbumView<T extends Image> extends GridView {
 
     protected int itemSize;
     protected CustomImageSelectAdapter mAdapter;
 
-    public BasePhotoView(Context context) {
+    public BaseAlbumView(Context context) {
         super(context);
         initParent();
     }
 
-    public BasePhotoView(Context context, AttributeSet attrs) {
+    public BaseAlbumView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initParent();
     }
 
-    public BasePhotoView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BaseAlbumView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initParent();
     }

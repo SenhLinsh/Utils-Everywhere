@@ -1,4 +1,4 @@
-package com.linsh.lshutils.view.PhotoView;
+package com.linsh.lshutils.view.albumview;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -17,22 +17,22 @@ import java.util.List;
  * Created by Senh Linsh on 17/6/26.
  */
 
-public class PhotoSelectView extends BasePhotoView<SelectableImage> implements AdapterView.OnItemClickListener {
+public class AlbumSelectView extends BaseAlbumView<SelectableImage> implements AdapterView.OnItemClickListener {
 
     private int selectedCount;
     private int selectedLimit;
 
-    public PhotoSelectView(Context context) {
+    public AlbumSelectView(Context context) {
         super(context);
         init();
     }
 
-    public PhotoSelectView(Context context, AttributeSet attrs) {
+    public AlbumSelectView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public PhotoSelectView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AlbumSelectView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }

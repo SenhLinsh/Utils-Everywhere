@@ -1,4 +1,4 @@
-package com.linsh.lshutils.view.PhotoView;
+package com.linsh.lshutils.view.albumview;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,17 +9,17 @@ import com.linsh.lshutils.module.Image;
  * Created by Senh Linsh on 17/6/26.
  */
 
-public class PhotoView extends BasePhotoView<Image> {
+public class AlbumView extends BaseAlbumView<Image> {
 
-    public PhotoView(Context context) {
+    public AlbumView(Context context) {
         super(context);
     }
 
-    public PhotoView(Context context, AttributeSet attrs) {
+    public AlbumView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public PhotoView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AlbumView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
