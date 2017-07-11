@@ -12,6 +12,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 
+import com.linsh.lshutils.utils.Basic.LshLogUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -508,7 +510,7 @@ public final class FragmentUtils {
                                             final SharedElement... sharedElements) {
         if (srcFragment == destFragment) return null;
         if (srcFragment != null && srcFragment.isRemoving()) {
-            LogUtils.e(srcFragment.getClass().getName() + " is isRemoving");
+            LshLogUtils.e(srcFragment.getClass().getName() + " is isRemoving");
             return null;
         }
         String name = destFragment.getClass().getName();

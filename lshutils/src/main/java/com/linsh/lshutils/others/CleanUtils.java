@@ -2,6 +2,8 @@ package com.linsh.lshutils.others;
 
 import android.os.Environment;
 
+import com.linsh.lshutils.utils.LshContextUtils;
+
 import java.io.File;
 
 /**
@@ -25,7 +27,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanInternalCache() {
-        return deleteFilesInDir(Utils.getContext().getCacheDir());
+        return deleteFilesInDir(LshContextUtils.getCacheDir());
     }
 
     /**
@@ -35,7 +37,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanInternalFiles() {
-        return deleteFilesInDir(Utils.getContext().getFilesDir());
+        return deleteFilesInDir(LshContextUtils.getFilesDir());
     }
 
     /**
@@ -45,7 +47,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanInternalDbs() {
-        return deleteFilesInDir(Utils.getContext().getFilesDir().getParent() + File.separator + "databases");
+        return deleteFilesInDir(LshContextUtils.getFilesDir().getParent() + File.separator + "databases");
     }
 
     /**
@@ -56,7 +58,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanInternalDbByName(final String dbName) {
-        return Utils.getContext().deleteDatabase(dbName);
+        return LshContextUtils.get().deleteDatabase(dbName);
     }
 
     /**
@@ -66,7 +68,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanInternalSP() {
-        return deleteFilesInDir(Utils.getContext().getFilesDir().getParent() + File.separator + "shared_prefs");
+        return deleteFilesInDir(LshContextUtils.getFilesDir().getParent() + File.separator + "shared_prefs");
     }
 
     /**
@@ -76,7 +78,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanExternalCache() {
-        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && deleteFilesInDir(Utils.getContext().getExternalCacheDir());
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && deleteFilesInDir(LshContextUtils.getExternalCacheDir());
     }
 
     /**

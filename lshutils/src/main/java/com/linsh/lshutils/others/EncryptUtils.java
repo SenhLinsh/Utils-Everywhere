@@ -2,6 +2,8 @@ package com.linsh.lshutils.others;
 
 import android.util.Base64;
 
+import com.linsh.lshutils.utils.Basic.LshIOUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -175,7 +177,7 @@ public final class EncryptUtils {
             e.printStackTrace();
             return null;
         } finally {
-            CloseUtils.closeIO(fis);
+            LshIOUtils.close(fis);
         }
     }
 

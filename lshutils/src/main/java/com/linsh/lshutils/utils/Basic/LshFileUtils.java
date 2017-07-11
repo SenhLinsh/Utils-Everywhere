@@ -37,7 +37,7 @@ public class LshFileUtils {
         return !isStorageFile || LshSDCardUtils.isAvailable() && checkPermission();
     }
 
-    private static boolean checkFileAndMakeDirs(File file) {
+    public static boolean checkFileAndMakeDirs(File file) {
         if (!checkFile(file)) return false;
         if (!file.exists()) {
             File dir = file.getParentFile();
@@ -46,7 +46,7 @@ public class LshFileUtils {
         return !file.isDirectory();
     }
 
-    private static boolean checkDirAndMakeDirs(File file) {
+    public static boolean checkDirAndMakeDirs(File file) {
         if (!checkFile(file))
             return false;
         if (file.exists()) {

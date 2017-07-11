@@ -1,5 +1,9 @@
 package com.linsh.lshutils.others;
 
+import com.linsh.lshutils.utils.Basic.LshFileUtils;
+import com.linsh.lshutils.utils.Basic.LshIOUtils;
+import com.linsh.lshutils.utils.Basic.LshStringUtils;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -56,7 +60,7 @@ public final class ZipUtils {
      */
     public static boolean zipFiles(final Collection<File> resFiles, final String zipFilePath, final String comment)
             throws IOException {
-        return zipFiles(resFiles, FileUtils.getFileByPath(zipFilePath), comment);
+        return zipFiles(resFiles, new File(zipFilePath), comment);
     }
 
     /**
@@ -94,7 +98,7 @@ public final class ZipUtils {
         } finally {
             if (zos != null) {
                 zos.finish();
-                CloseUtils.closeIO(zos);
+                LshIOUtils.close(zos);
             }
         }
     }
@@ -123,7 +127,7 @@ public final class ZipUtils {
      */
     public static boolean zipFile(final String resFilePath, final String zipFilePath, final String comment)
             throws IOException {
-        return zipFile(FileUtils.getFileByPath(resFilePath), FileUtils.getFileByPath(zipFilePath), comment);
+        return zipFile(new File(resFilePath), new File(zipFilePath), comment);
     }
 
     /**
@@ -157,7 +161,7 @@ public final class ZipUtils {
             return zipFile(resFile, "", zos, comment);
         } finally {
             if (zos != null) {
-                CloseUtils.closeIO(zos);
+                LshIOUtils.close(zos);
             }
         }
     }
@@ -180,7 +184,7 @@ public final class ZipUtils {
             // 如果是空文件夹那么创建它，我把'/'换为File.separator测试就不成功，eggPain
             if (fileList == null || fileList.length <= 0) {
                 ZipEntry entry = new ZipEntry(rootPath + '/');
-                if (!StringUtils.isEmpty(comment)) entry.setComment(comment);
+                if (!LshStringUtils.isEmpty(comment)) entry.setComment(comment);
                 zos.putNextEntry(entry);
                 zos.closeEntry();
             } else {
@@ -194,7 +198,7 @@ public final class ZipUtils {
             try {
                 is = new BufferedInputStream(new FileInputStream(resFile));
                 ZipEntry entry = new ZipEntry(rootPath);
-                if (!StringUtils.isEmpty(comment)) entry.setComment(comment);
+                if (!LshStringUtils.isEmpty(comment)) entry.setComment(comment);
                 zos.putNextEntry(entry);
                 byte buffer[] = new byte[KB];
                 int len;
@@ -203,7 +207,7 @@ public final class ZipUtils {
                 }
                 zos.closeEntry();
             } finally {
-                CloseUtils.closeIO(is);
+                LshIOUtils.close(is);
             }
         }
         return true;
@@ -219,7 +223,7 @@ public final class ZipUtils {
      */
     public static boolean unzipFiles(final Collection<File> zipFiles, final String destDirPath)
             throws IOException {
-        return unzipFiles(zipFiles, FileUtils.getFileByPath(destDirPath));
+        return unzipFiles(zipFiles, new File(destDirPath));
     }
 
     /**
@@ -249,7 +253,7 @@ public final class ZipUtils {
      */
     public static boolean unzipFile(final String zipFilePath, final String destDirPath)
             throws IOException {
-        return unzipFile(FileUtils.getFileByPath(zipFilePath), FileUtils.getFileByPath(destDirPath));
+        return unzipFile(new File(zipFilePath), new File(destDirPath));
     }
 
     /**
@@ -276,8 +280,8 @@ public final class ZipUtils {
      */
     public static List<File> unzipFileByKeyword(final String zipFilePath, final String destDirPath, final String keyword)
             throws IOException {
-        return unzipFileByKeyword(FileUtils.getFileByPath(zipFilePath),
-                FileUtils.getFileByPath(destDirPath), keyword);
+        return unzipFileByKeyword(new File(zipFilePath),
+                new File(destDirPath), keyword);
     }
 
     /**
@@ -298,14 +302,14 @@ public final class ZipUtils {
         while (entries.hasMoreElements()) {
             ZipEntry entry = ((ZipEntry) entries.nextElement());
             String entryName = entry.getName();
-            if (StringUtils.isEmpty(keyword) || FileUtils.getFileName(entryName).toLowerCase().contains(keyword.toLowerCase())) {
+            if (LshStringUtils.isEmpty(keyword) || LshFileUtils.getFileName(entryName).toLowerCase().contains(keyword.toLowerCase())) {
                 String filePath = destDir + File.separator + entryName;
                 File file = new File(filePath);
                 files.add(file);
                 if (entry.isDirectory()) {
-                    if (!FileUtils.createOrExistsDir(file)) return null;
+                    if (!LshFileUtils.checkDirAndMakeDirs(file)) return null;
                 } else {
-                    if (!FileUtils.createOrExistsFile(file)) return null;
+                    if (!LshFileUtils.checkFileAndMakeDirs(file)) return null;
                     InputStream in = null;
                     OutputStream out = null;
                     try {
@@ -317,7 +321,7 @@ public final class ZipUtils {
                             out.write(buffer, 0, len);
                         }
                     } finally {
-                        CloseUtils.closeIO(in, out);
+                        LshIOUtils.close(in, out);
                     }
                 }
             }
@@ -334,7 +338,7 @@ public final class ZipUtils {
      */
     public static List<String> getFilesPath(final String zipFilePath)
             throws IOException {
-        return getFilesPath(FileUtils.getFileByPath(zipFilePath));
+        return getFilesPath(new File(zipFilePath));
     }
 
     /**
@@ -364,7 +368,7 @@ public final class ZipUtils {
      */
     public static List<String> getComments(final String zipFilePath)
             throws IOException {
-        return getComments(FileUtils.getFileByPath(zipFilePath));
+        return getComments(new File(zipFilePath));
     }
 
     /**
@@ -395,7 +399,7 @@ public final class ZipUtils {
      */
     public static Enumeration<?> getEntries(final String zipFilePath)
             throws IOException {
-        return getEntries(FileUtils.getFileByPath(zipFilePath));
+        return getEntries(new File(zipFilePath));
     }
 
     /**

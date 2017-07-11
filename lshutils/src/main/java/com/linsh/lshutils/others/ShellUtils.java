@@ -1,5 +1,7 @@
 package com.linsh.lshutils.others;
 
+import com.linsh.lshutils.utils.Basic.LshIOUtils;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -123,7 +125,7 @@ public final class ShellUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            CloseUtils.closeIO(os, successResult, errorResult);
+            LshIOUtils.close(os, successResult, errorResult);
             if (process != null) {
                 process.destroy();
             }
