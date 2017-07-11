@@ -7,6 +7,8 @@ import android.content.res.Resources;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 
+import java.io.File;
+
 /**
  * Created by Senh Linsh on 17/7/6.
  */
@@ -39,5 +41,17 @@ public class LshContextUtils {
 
     public static boolean stopService(Intent intent) {
         return get().stopService(intent);
+    }
+
+    public static File getCacheDir() {
+        return get().getCacheDir();
+    }
+
+    public static File getFilesDir() {
+        return get().getFilesDir();
+    }
+
+    public static File getExternalCacheDir() {
+        return get().getExternalCacheDir();
     }
 }
