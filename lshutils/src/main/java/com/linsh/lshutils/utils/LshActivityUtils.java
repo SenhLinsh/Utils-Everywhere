@@ -176,6 +176,11 @@ public class LshActivityUtils {
             return this;
         }
 
+        public IntentBuilder putExtra(String[] values, String key) {
+            intent.putExtra(key, values);
+            return this;
+        }
+
         public IntentBuilder putExtra(JsonBean bean) {
             intent.putExtra(INTENT_EXTRA_PREFIX + "_" + bean.getClass().getSimpleName(), new Gson().toJson(bean));
             return this;
