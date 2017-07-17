@@ -70,7 +70,7 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
         return mLastFirstLevelClickPosition;
     }
 
-    public void setExpandedPosition(int position) {
+    protected void setExpandedPosition(int position) {
         mLastFirstLevelClickPosition = position;
     }
 
@@ -80,6 +80,12 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
     }
 
     public void setData(List<F> firstLevelData, int expandedPosition) {
+        if (firstLevelData == null) {
+            this.firstLevelData = null;
+            this.secondLevelData = null;
+            return;
+        }
+
         this.firstLevelData = firstLevelData;
         mLastFirstLevelClickPosition = expandedPosition;
         if (expandedPosition >= 0) {
@@ -119,31 +125,11 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
         if (firstPosition >= 0) {
             boolean expand;
             if (position == mLastFirstLevelClickPosition) {
-                // 点击已经打开的分组, 清除二级分组数据, 清楚点击位置
-                int removeSize = secondLevelData == null ? 0 : secondLevelData.size();
-                int oldExpandedPosition = mLastFirstLevelClickPosition;
-                secondLevelData = null;
-                mLastFirstLevelClickPosition = -1;
+                close();
                 expand = false;
-                if (removeSize > 0) {
-                    notifyItemRangeRemoved(oldExpandedPosition + 1, removeSize);
-                }
             } else {
-                // 点击没有打开过的分组, 先判断该分组是否有数据
-                List<S> secondData = getSecondData(firstPosition);
-                if (secondData != null && secondData.size() > 0) {
-                    if (secondLevelData != null && secondLevelData.size() > 0) {
-                        notifyItemRangeRemoved(mLastFirstLevelClickPosition + 1, secondLevelData.size());
-                    }
-                    // 有数据则打开该分组, 设置其点击位置
-                    mLastFirstLevelClickPosition = firstPosition;
-                    secondLevelData = secondData;
-                    expand = true;
-                    notifyItemRangeInserted(mLastFirstLevelClickPosition + 1, secondData.size());
-                } else {
-                    // 没有数据则忽略
-                    return;
-                }
+                expand(firstPosition);
+                expand = true;
             }
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onFirstLevelItemClick(firstLevelData.get(firstPosition), firstPosition, expand);
@@ -153,6 +139,35 @@ public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter
                 int secondPosition = getSecondPosition(position);
                 mOnItemClickListener.onSecondLevelItemClick(secondLevelData.get(secondPosition), mLastFirstLevelClickPosition, secondPosition);
             }
+        }
+    }
+
+    // 关闭分组
+    public void close() {
+        // 清除二级分组数据, 清除点击位置
+        int removeSize = secondLevelData == null ? 0 : secondLevelData.size();
+        int oldExpandedPosition = mLastFirstLevelClickPosition;
+        secondLevelData = null;
+        mLastFirstLevelClickPosition = -1;
+        if (removeSize > 0) {
+            notifyItemRangeRemoved(oldExpandedPosition + 1, removeSize);
+        }
+    }
+
+    public void expand(int firstPosition) {
+        // 点击没有打开过的分组, 先判断该分组是否有数据
+        List<S> secondData = getSecondData(firstPosition);
+        if (secondData != null && secondData.size() > 0) {
+            if (secondLevelData != null && secondLevelData.size() > 0) {
+                notifyItemRangeRemoved(mLastFirstLevelClickPosition + 1, secondLevelData.size());
+            }
+            // 有数据则打开该分组, 设置其点击位置
+            mLastFirstLevelClickPosition = firstPosition;
+            secondLevelData = secondData;
+            notifyItemRangeInserted(mLastFirstLevelClickPosition + 1, secondData.size());
+        } else {
+            // 没有数据则忽略
+            return;
         }
     }
 
