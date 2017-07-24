@@ -29,6 +29,10 @@ public class LshApplicationUtils {
         return appContext;
     }
 
+    public static Context getContextSafely() {
+        return appContext;
+    }
+
     public static boolean isMainThread(int tid) {
         return mainTid == tid;
     }
