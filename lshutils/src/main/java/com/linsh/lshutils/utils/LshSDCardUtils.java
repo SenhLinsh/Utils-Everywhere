@@ -47,6 +47,13 @@ public class LshSDCardUtils {
     }
 
     /**
+     * 获取 Download 文件夹
+     */
+    public static File getDownloadDir() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+    }
+
+    /**
      * 获取 SD卡容量
      */
     public static long getSdCardSize() {
