@@ -37,6 +37,14 @@ public class LshIntentUtils {
     }
 
     /**
+     * 获取跳转「桌面主页」的意图
+     */
+    public static Intent getHomeIntent() {
+        return new Intent(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_HOME);
+    }
+
+    /**
      * 获取跳转「选择文件」的意图
      */
     public static Intent getPickFileIntent() {
@@ -249,6 +257,10 @@ public class LshIntentUtils {
     }
 
     //================================================ goto ================================================//
+
+    public static void gotoHome() {
+        startActivity(getHomeIntent());
+    }
 
     public static void gotoInstallApp(File apkFile) {
         startActivity(getInstallAppIntent(apkFile));
