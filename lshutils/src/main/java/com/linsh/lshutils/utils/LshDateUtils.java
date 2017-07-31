@@ -15,32 +15,7 @@ public class LshDateUtils {
      * @param prefix 前缀 如:需返回"周一"则传入"周", 返回"星期几"则传入"星期"
      */
     public static String getWeekDayString(Date date, String prefix) {
-        if (date == null || prefix == null) return "";
-
-        switch (date.getDay()) {
-            case 0:
-                prefix += "日";
-                break;
-            case 1:
-                prefix += "一";
-                break;
-            case 2:
-                prefix += "二";
-                break;
-            case 3:
-                prefix += "三";
-                break;
-            case 4:
-                prefix += "四";
-                break;
-            case 5:
-                prefix += "五";
-                break;
-            case 6:
-                prefix += "六";
-                break;
-        }
-        return prefix;
+        return LshTimeUtils.getWeekDayString(date, prefix);
     }
 
     public static String getLunarDate(Date date) {
