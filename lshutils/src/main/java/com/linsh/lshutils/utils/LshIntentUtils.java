@@ -396,6 +396,10 @@ public class LshIntentUtils {
         LshContextUtils.startActivity(getSettingIntent());
     }
 
+    public static void gotoAppDetailSetting(String packageName) {
+        LshContextUtils.startActivity(getAppDetailsSettingsIntent(packageName));
+    }
+
     /**
      * 跳转: 应用程序列表界面
      */
@@ -477,9 +481,7 @@ public class LshIntentUtils {
                 intent.setComponent(comp);
                 break;
             case Manufacturer.SAMSUNG:
-                Uri packageURI = Uri.parse("package:" + packageName);
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(packageURI);
+                gotoAppDetailSetting(packageName);
                 break;
             default:
                 intent.setAction(Settings.ACTION_SETTINGS);
