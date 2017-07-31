@@ -457,9 +457,7 @@ public class LshIntentUtils {
                     intent.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity");
                     intent.putExtra("extra_pkgname", packageName);
                 } else {
-                    Uri packageURI = Uri.parse("package:" + packageName);
-                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    intent.setData(packageURI);
+                    gotoAppDetailSetting(packageName);
                 }
                 break;
             case Manufacturer.SONY:
@@ -481,6 +479,7 @@ public class LshIntentUtils {
                 intent.setComponent(comp);
                 break;
             case Manufacturer.SAMSUNG:
+            case Manufacturer.SMARTISAN:
                 gotoAppDetailSetting(packageName);
                 break;
             default:
@@ -559,5 +558,6 @@ public class LshIntentUtils {
         String LG = "lg";            // LG
         String OPPO = "oppo";        // oppo
         String VIVO = "vivo";        // vivo
+        String SMARTISAN = "smartisan";        // 锤子
     }
 }
