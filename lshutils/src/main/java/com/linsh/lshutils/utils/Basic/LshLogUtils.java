@@ -121,6 +121,10 @@ public class LshLogUtils {
         }
     }
 
+    public static String getStackTraceString(Throwable tr) {
+        return Log.getStackTraceString(tr);
+    }
+
     private static boolean checkDebugMode() {
         ApplicationInfo applicationInfo = LshApplicationUtils.getContext().getApplicationInfo();
         boolean debug = applicationInfo != null && (applicationInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
