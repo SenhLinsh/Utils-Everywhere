@@ -1,7 +1,11 @@
 package com.linsh.lshutils.utils;
 
+import android.text.format.DateUtils;
+
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Formatter;
+import java.util.Locale;
 
 /**
  * Created by Senh Linsh on 16/11/12.
@@ -49,5 +53,21 @@ public class LshDateUtils {
             builder.append(chineseDayPres[day / 10]).append(chineseDays[day % 10]);
         }
         return builder.toString();
+    }
+
+    protected static String formatDateTime(long millis, int flags) {
+        return DateUtils.formatDateTime(LshContextUtils.get(), millis, flags);
+    }
+
+    protected static String formatDateTime(long millis, int flags, Locale locale) {
+        return DateUtils.formatDateRange(LshContextUtils.get(), new Formatter(new StringBuilder(50), locale), millis, millis, flags).toString();
+    }
+
+    public static String getWeekDayStringCN(long millis) {
+        return formatDateTime(millis, DateUtils.FORMAT_SHOW_WEEKDAY, Locale.CHINA);
+    }
+
+    public static String getWeekDayString(long millis, Locale locale) {
+        return formatDateTime(millis, DateUtils.FORMAT_SHOW_WEEKDAY, locale);
     }
 }
