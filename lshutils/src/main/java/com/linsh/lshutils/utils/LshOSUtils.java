@@ -112,9 +112,9 @@ public class LshOSUtils {
                 rom = ROM.MIUI;
                 if (buildProperties.containsKey(KEY_MIUI_VERSION_NANE)) {
                     String versionName = buildProperties.getProperty(KEY_MIUI_VERSION_NANE);
-                    if (LshStringUtils.notEmpty(versionName) && versionName.matches("[Vv]\\d")) { // V8
+                    if (LshStringUtils.notEmpty(versionName) && versionName.matches("[Vv]\\d+")) { // V8
                         try {
-                            rom.setBaseVersion(Integer.parseInt(versionName.split("[Vv]")[0]));
+                            rom.setBaseVersion(Integer.parseInt(versionName.split("[Vv]")[1]));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
