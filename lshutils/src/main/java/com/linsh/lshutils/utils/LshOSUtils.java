@@ -148,7 +148,7 @@ public class LshOSUtils {
                 rom = ROM.Flyme;
                 if (buildProperties.containsKey(KEY_DISPLAY_ID)) {
                     String versionStr = buildProperties.getProperty(KEY_DISPLAY_ID);
-                    Matcher matcher = Pattern.compile("Flyme.*([\\d.]+)[a-zA-Z]*").matcher(versionStr); // Flyme OS 4.5.4.2U
+                    Matcher matcher = Pattern.compile("Flyme[^\\d]*([\\d.]+)[^\\d]*").matcher(versionStr); // Flyme OS 4.5.4.2U
                     if (LshStringUtils.notEmpty(versionStr) && matcher.find()) {
                         try {
                             String version = matcher.group(1);
@@ -197,7 +197,7 @@ public class LshOSUtils {
                 rom = ROM.EUI;
                 if (buildProperties.containsKey(KEY_EUI_VERSION)) {
                     String versionStr = buildProperties.getProperty(KEY_EUI_VERSION);
-                    Matcher matcher = Pattern.compile("([\\d.]+)[a-zA-Z]*").matcher(versionStr); // 5.9.023S
+                    Matcher matcher = Pattern.compile("([\\d.]+)[^\\d]*").matcher(versionStr); // 5.9.023S
                     if (LshStringUtils.notEmpty(versionStr) && matcher.find()) {
                         try {
                             String version = matcher.group(1);
