@@ -13,7 +13,7 @@ public class LshManufacturerUtils {
         String device = Build.MANUFACTURER;
         Manufacturer curManufacturer = Manufacturer.OTHER;
         for (Manufacturer manufacturer : Manufacturer.values()) {
-            if (manufacturer.getName().equalsIgnoreCase(device)) {
+            if (manufacturer.isIt(device)) {
                 curManufacturer = manufacturer;
                 break;
             }
@@ -24,34 +24,45 @@ public class LshManufacturerUtils {
     public enum Manufacturer {
 
         HUAWEI("华为", "HUAWEI"),
-        MEIZU("魅族", "Meizu"),
         XIAOMI("小米", "Xiaomi"),
-        SONY("索尼", "Sony"),
         SAMSUNG("三星", "samsung"),
+        SONY("索尼", "Sony"),
+        MEIZU("魅族", "Meizu"),
+        OPPO("OPPO", "OPPO"),
+        VIVO("vivo", "vivo"),
         LETV("乐视", "Letv"),
         ZTE("中兴", "ZTE"),
-        YULONG("酷派", "YuLong"),
+        YULONG("酷派", "Coolpad", "YuLong"),
         LENOVO("联想", "LENOVO"),
-        LG("LG", "LG"),
-        OPPO("oppo", "OPPO"),
-        VIVO("vivo", "vivo"),
+        LG("LG", "LG", "LGE"),
         SMARTISAN("锤子", "smartisan"),
+        HTC("HTC", "HTC"),
+        GIONEE("金立", "GIONEE"),
+        _360("奇酷", "360"),
+        MOTOROLA("摩托罗拉", "motorola"),
+        NUBIA("努比亚", "nubia"),
+        ONEPLUS("一加", "OnePlus"),
         OTHER("其他", "other");
 
         private String mName;
-        private String mManufacturer;
+        private String[] mManufacturers;
 
-        Manufacturer(String name, String manufacturer) {
+        Manufacturer(String name, String... manufacturers) {
             mName = name;
-            mManufacturer = manufacturer;
+            mManufacturers = manufacturers;
         }
 
         public String getName() {
             return mName;
         }
 
-        public String getManufacturer() {
-            return mManufacturer;
+        public boolean isIt(String manufacturer) {
+            for (String manu : mManufacturers) {
+                if (manu.equalsIgnoreCase(manufacturer)) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
