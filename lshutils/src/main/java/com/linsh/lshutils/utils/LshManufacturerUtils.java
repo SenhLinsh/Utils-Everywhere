@@ -42,6 +42,8 @@ public class LshManufacturerUtils {
         MOTOROLA("摩托罗拉", "motorola"),
         NUBIA("努比亚", "nubia"),
         ONEPLUS("一加", "OnePlus"),
+
+        Google("谷歌", "Google"),
         OTHER("其他", "other");
 
         private String mName;
