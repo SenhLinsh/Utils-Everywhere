@@ -8,8 +8,9 @@ import android.os.Build;
 
 public class LshManufacturerUtils {
 
+    private static final Manufacturer CUR_MANUFACTURER = initManufacturer();
 
-    public Manufacturer getManufacturer() {
+    private static Manufacturer initManufacturer() {
         String device = Build.MANUFACTURER;
         Manufacturer curManufacturer = Manufacturer.OTHER;
         for (Manufacturer manufacturer : Manufacturer.values()) {
@@ -19,6 +20,10 @@ public class LshManufacturerUtils {
             }
         }
         return curManufacturer;
+    }
+
+    public static Manufacturer getManufacturer() {
+        return CUR_MANUFACTURER;
     }
 
     public enum Manufacturer {
