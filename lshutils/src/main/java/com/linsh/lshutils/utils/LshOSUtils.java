@@ -263,7 +263,7 @@ public class LshOSUtils {
                 String clientIdBase = buildProperties.getProperty(KEY_CLIENT_ID_BASE);
                 switch (clientIdBase) {
                     case VALUE_MIUI_CLIENT_ID_BASE:
-                        return ROM.EMUI;
+                        return ROM.MIUI;
                     case VALUE_COLOROS_CLIENT_ID_BASE:
                         return ROM.ColorOS;
                     case VALUE_FUNTOUCHOS_CLIENT_ID_BASE:
