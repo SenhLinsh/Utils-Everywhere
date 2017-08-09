@@ -17,7 +17,7 @@ allprojects {
 2. 在module里面添加依赖
 ```
 dependencies {
-    compile 'com.github.SenhLinsh:LshUtils:1.1.2'
+    compile 'com.github.SenhLinsh:LshUtils:1.2.0'
 }
  ```
 
@@ -59,5 +59,6 @@ utils文件夹下的Utils, 大都是我的心血总结, 可以挑自己喜欢的
 整理自己的工具类之前, 我也是在GitHub上面去找别人用的工具类拿来用. 但别人的始终是别人的, 你没有自己去动手完善过始终不能很好地去运用.
 至今的工具类里面还保留着一些直接引用的别人的工具类, 在此表示感谢, 喜欢收集工具类的可以戳戳:
 
-* [https://github.com/l123456789jy/Lazy](https://github.com/l123456789jy/Lazy)
+* [https://github.com/Blankj/AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode)
 * [https://github.com/litesuits/android-common](https://github.com/litesuits/android-common)
+* [https://github.com/l123456789jy/Lazy](https://github.com/l123456789jy/Lazy)
