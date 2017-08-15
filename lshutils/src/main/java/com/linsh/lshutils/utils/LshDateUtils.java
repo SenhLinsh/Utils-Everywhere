@@ -31,7 +31,7 @@ public class LshDateUtils {
 
         String[] chineseMonths = {"正", "二", "三", "四", "五", "六", "七", "八", "九", "十", "冬", "腊"};
         String[] chineseDayPres = {"初", "十", "廿", "三十"};
-        String[] chineseDays = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十"};
+        String[] chineseDays = {"", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"};
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         if (hasYear) {
