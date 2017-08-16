@@ -1,5 +1,7 @@
 package com.linsh.lshutils.utils.Basic;
 
+import android.database.Cursor;
+
 import java.io.Closeable;
 import java.io.IOException;
 
@@ -20,6 +22,12 @@ public class LshIOUtils {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static void close(Cursor cursor) {
+        if (cursor != null) {
+            cursor.close();
         }
     }
 
