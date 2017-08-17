@@ -11,6 +11,10 @@ import java.util.List;
 
 public class LshArrayUtils {
 
+    public static <T> boolean isEmpty(T[] arr) {
+        return arr == null || arr.length == 0;
+    }
+
     public static String joint(Object[] arr, String divider) {
         String joint = "";
         for (int i = 0; i < arr.length; i++) {
