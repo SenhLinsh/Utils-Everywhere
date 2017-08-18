@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 
 import com.linsh.lshutils.utils.Basic.LshIOUtils;
+import com.linsh.lshutils.utils.LshArrayUtils;
 import com.linsh.lshutils.utils.LshContextUtils;
 import com.linsh.lshutils.utils.LshOSUtils;
 
@@ -39,7 +40,8 @@ public class LshContactsEditor {
     }
 
     private void putContactId(int contactId) {
-        mValues.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, contactId);
+        mValues.clear();
+        mValues.put(ContactsContract.RawContacts.CONTACT_ID, contactId);
         mResolver.insert(ContactsContract.RawContacts.CONTENT_URI, mValues);
     }
 
@@ -69,43 +71,166 @@ public class LshContactsEditor {
             mContactId = contactId;
         }
 
-        public ContactBuilder putDisplayName(String displayName) {
+        public int getContactId() {
+            return mContactId;
+        }
+
+        public ContactBuilder insert(String mimeType, String column, String columnValue) {
             mValues.clear();
             mValues.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId);
-            mValues.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
-            mValues.put(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, displayName);
+            mValues.put(ContactsContract.Contacts.Data.MIMETYPE, mimeType);
+            mValues.put(column, columnValue);
             mResolver.insert(ContactsContract.Data.CONTENT_URI, mValues);
             return this;
         }
 
-        public ContactBuilder putPhoneNumber(String phoneNumber) {
+        public ContactBuilder insert(String mimeType, String[] columns, String[] columnValues) {
             mValues.clear();
             mValues.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId);
-            mValues.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-            mValues.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber);
+            mValues.put(ContactsContract.Contacts.Data.MIMETYPE, mimeType);
+            if (!LshArrayUtils.isEmpty(columns) && !LshArrayUtils.isEmpty(columnValues)) {
+                for (int i = 0; i < columns.length; i++) {
+                    if (i < columnValues.length) {
+                        mValues.put(columns[i], columnValues[i]);
+                    }
+                }
+            }
             mResolver.insert(ContactsContract.Data.CONTENT_URI, mValues);
             return this;
         }
 
-        public ContactBuilder putBirthday(String birthday) {
+
+        public ContactBuilder insert(String mimeType, ContentValues values) {
             mValues.clear();
             mValues.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId);
-            mValues.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE);
-            mValues.put(ContactsContract.CommonDataKinds.Event.START_DATE, birthday);
-            mValues.put(ContactsContract.CommonDataKinds.Event.TYPE, 3);
+            mValues.put(ContactsContract.Contacts.Data.MIMETYPE, mimeType);
+            mValues.putAll(values);
             mResolver.insert(ContactsContract.Data.CONTENT_URI, mValues);
             return this;
         }
 
-        public ContactBuilder putLunarBirthday(String lunarBirthday) {
+        public ContactBuilder update(String mimeType, String column, String columnValue) {
             mValues.clear();
-            mValues.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId);
+            mValues.put(column, columnValue);
+
+            String where = new LshWhereBuilder().equalTo(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId)
+                    .and().equalTo(ContactsContract.Contacts.Data.MIMETYPE, mimeType)
+                    .toString();
+            mResolver.update(ContactsContract.Data.CONTENT_URI, mValues, where, null);
+            return this;
+        }
+
+        public ContactBuilder update(String mimeType, String[] whereColumns, String[] whereColumnValues, String[] updateColumns, String[] updateColumnValues) {
+            mValues.clear();
+            if (!LshArrayUtils.isEmpty(updateColumns) && !LshArrayUtils.isEmpty(updateColumnValues)) {
+                for (int i = 0; i < updateColumns.length; i++) {
+                    if (i < updateColumnValues.length) {
+                        mValues.put(updateColumns[i], updateColumnValues[i]);
+                    }
+                }
+            }
+            LshWhereBuilder.Where where = new LshWhereBuilder().equalTo(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId)
+                    .and().equalTo(ContactsContract.Contacts.Data.MIMETYPE, mimeType);
+            if (!LshArrayUtils.isEmpty(whereColumns) && !LshArrayUtils.isEmpty(whereColumnValues)) {
+                for (int i = 0; i < whereColumnValues.length; i++) {
+                    if (i < whereColumnValues.length) {
+                        where.and().equalTo(whereColumnValues[i], whereColumnValues[i]);
+                    }
+                }
+            }
+            mResolver.update(ContactsContract.Data.CONTENT_URI, mValues, where.toString(), null);
+            return this;
+        }
+
+        public ContactBuilder update(String mimeType, ContentValues values) {
+            mValues.clear();
+            mValues.putAll(values);
+
+            String where = new LshWhereBuilder().equalTo(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId)
+                    .and().equalTo(ContactsContract.Contacts.Data.MIMETYPE, mimeType)
+                    .toString();
+            mResolver.update(ContactsContract.Data.CONTENT_URI, mValues, where, null);
+            return this;
+        }
+
+        public ContactBuilder delete(String mimeType) {
+            String where = new LshWhereBuilder().equalTo(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId)
+                    .and().equalTo(ContactsContract.Contacts.Data.MIMETYPE, mimeType)
+                    .toString();
+            mResolver.delete(ContactsContract.Data.CONTENT_URI, where, null);
+            return this;
+        }
+
+        public ContactBuilder delete(String mimeType, String[] whereColumns, String[] whereColumnValues) {
+            LshWhereBuilder.Where where = new LshWhereBuilder().equalTo(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId)
+                    .and().equalTo(ContactsContract.Contacts.Data.MIMETYPE, mimeType);
+            if (!LshArrayUtils.isEmpty(whereColumns) && !LshArrayUtils.isEmpty(whereColumnValues)) {
+                for (int i = 0; i < whereColumnValues.length; i++) {
+                    if (i < whereColumnValues.length) {
+                        where.and().equalTo(whereColumnValues[i], whereColumnValues[i]);
+                    }
+                }
+            }
+            mResolver.delete(ContactsContract.Data.CONTENT_URI, where.toString(), null);
+            return this;
+        }
+
+        public ContactBuilder insertDisplayName(String displayName) {
+            return insert(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE,
+                    ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, displayName);
+        }
+
+        public ContactBuilder updateDisplayName(String displayName) {
+            return update(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE,
+                    ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, displayName);
+        }
+
+        public ContactBuilder deleteDisplayName() {
+            return delete(ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
+        }
+
+        public ContactBuilder insertPhoneNumber(String phoneNumber) {
+            return insert(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE,
+                    ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber);
+        }
+
+        public ContactBuilder updatePhoneNumber(String oldNumber, String newNumber) {
+            return update(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE,
+                    new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER}, new String[]{oldNumber},
+                    new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER}, new String[]{newNumber});
+        }
+
+        public ContactBuilder deletePhoneNumber(String phoneNumber) {
+            return delete(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE,
+                    new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER}, new String[]{phoneNumber});
+        }
+
+        public ContactBuilder deleteAllPhoneNumbers() {
+            return delete(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+        }
+
+        public ContactBuilder insertBirthday(String birthday) {
+            return insert(ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
+                    new String[]{ContactsContract.CommonDataKinds.Event.START_DATE, ContactsContract.CommonDataKinds.Event.TYPE},
+                    new String[]{birthday, String.valueOf(3)});
+        }
+
+        public ContactBuilder updateBirthday(String birthday) {
+            return update(ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
+                    new String[]{ContactsContract.CommonDataKinds.Event.TYPE}, new String[]{String.valueOf(3)},
+                    new String[]{ContactsContract.CommonDataKinds.Event.START_DATE}, new String[]{birthday});
+        }
+
+        public ContactBuilder deleteBirthday() {
+            return delete(ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
+                    new String[]{ContactsContract.CommonDataKinds.Event.TYPE}, new String[]{String.valueOf(3)});
+        }
+
+        public ContactBuilder insertLunarBirthday(String lunarBirthday) {
             // TODO: 17/8/15 完善定制系统的农历添加功能
             switch (LshOSUtils.getRomType()) {
                 case MIUI:
-                    mValues.put(ContactsContract.Contacts.Data.MIMETYPE, "vnd.com.miui.cursor.item/lunarBirthday");
-                    mValues.put(ContactsContract.Contacts.Data.DATA1, lunarBirthday);
-                    mResolver.insert(ContactsContract.Data.CONTENT_URI, mValues);
+                    insert("vnd.com.miui.cursor.item/lunarBirthday", "data1", lunarBirthday);
                     break;
                 default:
                     break;
@@ -113,22 +238,56 @@ public class LshContactsEditor {
             return this;
         }
 
-        public ContactBuilder putNote(String note) {
-            mValues.clear();
-            mValues.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId);
-            mValues.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE);
-            mValues.put(ContactsContract.CommonDataKinds.Note.NOTE, note);
-            mResolver.insert(ContactsContract.Data.CONTENT_URI, mValues);
+        public ContactBuilder updateLunarBirthday(String lunarBirthday) {
+            switch (LshOSUtils.getRomType()) {
+                case MIUI:
+                    update("vnd.com.miui.cursor.item/lunarBirthday", "data1", lunarBirthday);
+                    break;
+                default:
+                    break;
+            }
             return this;
         }
 
-        public ContactBuilder putPhoto(byte[] photo) {
-            mValues.clear();
-            mValues.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId);
-            mValues.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE);
-            mValues.put(ContactsContract.CommonDataKinds.Photo.PHOTO, photo);
-            mResolver.insert(ContactsContract.Data.CONTENT_URI, mValues);
+        public ContactBuilder deleteLunarBirthday() {
+            switch (LshOSUtils.getRomType()) {
+                case MIUI:
+                    delete("vnd.com.miui.cursor.item/lunarBirthday");
+                    break;
+                default:
+                    break;
+            }
             return this;
+        }
+
+        public ContactBuilder insertNote(String note) {
+            return insert(ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE,
+                    ContactsContract.CommonDataKinds.Note.NOTE, note);
+        }
+
+        public ContactBuilder updateNote(String note) {
+            return update(ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE,
+                    ContactsContract.CommonDataKinds.Note.NOTE, note);
+        }
+
+        public ContactBuilder deleteNote() {
+            return delete(ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE);
+        }
+
+        public ContactBuilder insertPhoto(byte[] photo) {
+            ContentValues values = new ContentValues();
+            values.put(ContactsContract.CommonDataKinds.Photo.PHOTO, photo);
+            return insert(ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE, values);
+        }
+
+        public ContactBuilder updatePhoto(byte[] photo) {
+            ContentValues values = new ContentValues();
+            values.put(ContactsContract.CommonDataKinds.Photo.PHOTO, photo);
+            return update(ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE, values);
+        }
+
+        public ContactBuilder deletePhoto() {
+            return delete(ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE);
         }
     }
 }
