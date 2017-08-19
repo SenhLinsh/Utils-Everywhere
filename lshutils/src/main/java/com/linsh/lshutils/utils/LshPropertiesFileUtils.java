@@ -1,11 +1,10 @@
 package com.linsh.lshutils.utils;
 
-import android.os.Environment;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.linsh.lshutils.utils.Basic.LshFileUtils;
 import com.linsh.lshutils.base.JsonBean;
+import com.linsh.lshutils.utils.Basic.LshFileUtils;
 
 import java.io.File;
 
@@ -17,8 +16,13 @@ import java.io.File;
  */
 public class LshPropertiesFileUtils {
 
-    private static final String PropertyDir = Environment.getExternalStorageDirectory().toString()
-            + "/" + LshAppUtils.getPackageName() + "/properties";
+    private static File getPropertyDir() {
+        return LshFileManagerUtils.getDir("properties");
+    }
+
+    public static File getPropertyFile(String fileName) {
+        return LshFileManagerUtils.getFile(getPropertyDir(), fileName);
+    }
 
     public static <T extends JsonBean> void putObject(T jsonBean) {
         if (jsonBean == null) return;
@@ -27,7 +31,7 @@ public class LshPropertiesFileUtils {
     }
 
     public static void putString(String fileName, String content) {
-        File file = new File(PropertyDir, fileName);
+        File file = getPropertyFile(fileName);
         if (content != null && content.length() > 0) {
             try {
                 LshFileUtils.writeFile(file, content, false);
@@ -51,7 +55,7 @@ public class LshPropertiesFileUtils {
     }
 
     public static String getString(String fileName) {
-        File file = new File(PropertyDir, fileName);
+        File file = getPropertyFile(fileName);
         if (!file.exists()) return null;
         StringBuilder stringBuilder = LshFileUtils.readFile(file);
         return stringBuilder.toString();
