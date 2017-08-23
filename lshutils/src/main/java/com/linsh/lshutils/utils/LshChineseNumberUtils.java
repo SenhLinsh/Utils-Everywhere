@@ -8,6 +8,30 @@ public class LshChineseNumberUtils {
 
     private static char[] sCnNums = new char[]{'一', '二', '三', '四', '五', '六', '七', '八', '九'};
 
+    public static int parseChar(char chineseNumber) {
+        for (int j = 0; j < sCnNums.length; j++) {
+
+            if (sCnNums[j] == chineseNumber) {
+                return j + 1;
+            }
+        }
+        switch (chineseNumber) {
+            case '零':
+                return 0;
+            case '十':
+                return 10;
+            case '百':
+                return 100;
+            case '千':
+                return 1000;
+            case '万':
+                return 10000;
+            case '亿':
+                return 100000000;
+        }
+        throw new NumberFormatException(String.format("无法解析字符 \"%s\"", chineseNumber));
+    }
+
     public static int parseNumber(String chineseNumber) {
         int[] result = new int[5];
         int unit = 1;
