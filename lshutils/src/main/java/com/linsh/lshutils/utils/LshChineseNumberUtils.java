@@ -208,6 +208,30 @@ public class LshChineseNumberUtils {
         return result[5] * figures[5] + result[4] * figures[4] + result[3] * figures[3] + result[2] * figures[2] + result[1] * figures[1] + result[0] * figures[unit] / 10;
     }
 
+    /**
+     * 解析农历年份, 例: 一九九二(1992), 九二年(1992), 零八(2008), 一七年(2017), 二零(1920)
+     *
+     * @param lunarYear 农历年份, 简写时默认为过去的年份
+     * @return
+     */
+    public static int parseLunarYear(String lunarYear) {
+        String year = lunarYear;
+        if (year.charAt(year.length() - 1) == '年') {
+            year = year.substring(0, year.length() - 1);
+        }
+        if (year.length() > 4 || year.length() == 0) {
+            throw new NumberFormatException("无法解析输入的年份 \"" + lunarYear + "\"");
+        }
+        int result = parseNumberWithoutUnit(year);
+        if (year.length() <= 2) {
+            if (result <= 17) {
+                result += 2000;
+            } else {
+                result += 1900;
+            }
+        }
+        return result;
+    }
 
     /**
      * 解析农历月份, 例: 一月(1), 正月(1), 二(2), 冬(11), 腊月(12)等
