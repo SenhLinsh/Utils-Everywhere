@@ -63,6 +63,7 @@ public class LshChineseNumberUtils {
             }
             // 零
             if ((methods & 0x1000) > 0 && zero == cnChar) {
+                result[0] = 0;
                 methods = 0x1001;
                 continue;
             }
@@ -131,6 +132,7 @@ public class LshChineseNumberUtils {
             }
             // 零
             if ((methods & 0x1000) > 0 && zero == cnChar) {
+                result[0] = 0;
                 methods = 0x1001;
                 continue;
             }
