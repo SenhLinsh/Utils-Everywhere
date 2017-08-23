@@ -38,6 +38,34 @@ public class LshChineseNumberUtils {
     }
 
     /**
+     * 解析不带单位的中文数字, 如: 一九九二, 二零零二, 二〇〇二
+     *
+     * @param cnNumber 不带单位的中文数字
+     * @return
+     */
+    public static int parseNumberWithoutUnit(String cnNumber) {
+        int result = 0;
+
+        outside:
+        for (int i = 0; i < cnNumber.length(); i++) {
+            char cnChar = cnNumber.charAt(i);
+
+            for (int j = 0; j < sCnNums.length; j++) {
+                if (sCnNums[j] == cnChar) {
+                    result = result * 10 + (j + 1);
+                    continue outside;
+                }
+            }
+            if ('零' == cnChar || '〇' == cnChar) {
+                result *= 10;
+                continue;
+            }
+            throw new NumberFormatException(String.format("无法解析字符 \"%s\"", cnChar));
+        }
+        return result;
+    }
+
+    /**
      * 解析中文数字, 如: 一万八千零八(18008), 一百八(180), 十八(18)
      *
      * @param cnNumber 中文数字, 一亿以内
