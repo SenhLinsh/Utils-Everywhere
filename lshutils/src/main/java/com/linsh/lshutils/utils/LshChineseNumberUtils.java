@@ -8,9 +8,14 @@ public class LshChineseNumberUtils {
 
     private static char[] sCnNums = new char[]{'一', '二', '三', '四', '五', '六', '七', '八', '九'};
 
+    /**
+     * 解析单个常规中文数字字符, 如: 零(0), 一(1), 十(10) 等
+     *
+     * @param cnChar
+     * @return
+     */
     public static int parseChar(char cnChar) {
         for (int j = 0; j < sCnNums.length; j++) {
-
             if (sCnNums[j] == cnChar) {
                 return j + 1;
             }
@@ -32,6 +37,11 @@ public class LshChineseNumberUtils {
         throw new NumberFormatException(String.format("无法解析字符 \"%s\"", cnChar));
     }
 
+    /**
+     * 解析中文数字, 如: 一万八千零八(18008), 一百八(180), 十八(18)
+     *
+     * @param cnNumber 中文数字, 一亿以内
+     */
     public static int parseNumber(String cnNumber) {
         int[] result = new int[5];
         int unit = 1;
@@ -97,6 +107,11 @@ public class LshChineseNumberUtils {
         return result[4] * figures[4] + result[3] * figures[3] + result[2] * figures[2] + result[1] * figures[1] + result[0] * figures[unit] / 10;
     }
 
+    /**
+     * 解析中文数字, 如: 一万八千零八(18008), 一百八(180), 十八(18)
+     *
+     * @param cnNumber 中文数字, 接受一亿及以上的大数字
+     */
     public static long parseNumberAsLong(String cnNumber) {
         long[] result = new long[6];
         int unit = 1;
@@ -166,6 +181,12 @@ public class LshChineseNumberUtils {
     }
 
 
+    /**
+     * 解析农历月份, 例: 一月(1), 正月(1), 二(2), 冬(11), 腊月(12)等
+     *
+     * @param lunarMonth 农历月份, 末尾可带可不带 '月' 字
+     * @return
+     */
     public static int parseLunarMonth(String lunarMonth) {
         if (lunarMonth.charAt(lunarMonth.length() - 1) == '月') {
             lunarMonth = lunarMonth.substring(0, lunarMonth.length() - 1);
@@ -202,6 +223,12 @@ public class LshChineseNumberUtils {
         return 0;
     }
 
+    /**
+     * 解析农历日期中的日, 如: 初一(1), 一(1), 十三(13), 廿二(22), 二十二(22), 卅(30), 三十(30)
+     *
+     * @param lunarDay 农历日期中的日, 末尾可带可不带 '日' 字
+     * @return
+     */
     public static int parseLunarDay(String lunarDay) {
         if (lunarDay.charAt(lunarDay.length() - 1) == '日') {
             lunarDay = lunarDay.substring(0, lunarDay.length() - 1);
