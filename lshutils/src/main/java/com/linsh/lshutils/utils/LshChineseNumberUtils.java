@@ -307,6 +307,20 @@ public class LshChineseNumberUtils {
     }
 
     /**
+     * 格式化数字为农历月份
+     *
+     * @param month 1 - 12 代表月份
+     * @return 农历月份字符
+     */
+    public static char formatLunarMonth(int month) {
+        int index = month % 12 - 1;
+        if (index >= 0) {
+            return sCnMonths[index];
+        }
+        return sCnMonths[12 + index];
+    }
+
+    /**
      * 解析农历日期中的日, 如: 初一(1), 一(1), 十三(13), 廿二(22), 二十二(22), 卅(30), 三十(30)
      *
      * @param lunarDay 农历日期中的日, 末尾可带可不带 '日' 字
@@ -362,6 +376,22 @@ public class LshChineseNumberUtils {
             throw new NumberFormatException(error);
         }
         return result + temp;
+    }
+
+    public static String formatLunarDay(int day) {
+        if (day <= 0 || day > 31) {
+            throw new IllegalArgumentException("无法接收 1 - 31 以外的数值");
+        }
+        if (day == 10) {
+            return "初十";
+        } else if (day == 20) {
+            return "二十";
+        } else if (day == 30) {
+            return "三十";
+        } else {
+            char[] cnFigures = {'初', '十', '廿', '卅'};
+            return String.valueOf(cnFigures[day / 10]) + String.valueOf(sCnNums[day % 10 - 1]);
+        }
     }
 
 }
