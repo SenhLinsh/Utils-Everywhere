@@ -7,6 +7,7 @@ package com.linsh.lshutils.utils;
 public class LshChineseNumberUtils {
 
     private static char[] sCnNums = new char[]{'一', '二', '三', '四', '五', '六', '七', '八', '九'};
+    private static char[] sCnMonths = {'正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'};
 
     /**
      * 解析单个常规中文数字字符, 如: 零(0), 一(1), 十(10) 等
@@ -38,6 +39,24 @@ public class LshChineseNumberUtils {
     }
 
     /**
+     * 将 0 - 10 的数字格式化为中文数字字符
+     *
+     * @param number 0 - 10 的数字
+     */
+    public static char formatChar(int number) {
+        if (number < 0 || number > 10) {
+            throw new NumberFormatException("不接收 0 - 10 以外的数字");
+        }
+        if (number == 0) {
+            return '零';
+        }
+        if (number == 10) {
+            return '十';
+        }
+        return sCnNums[number - 1];
+    }
+
+    /**
      * 解析不带单位的中文数字, 如: 一九九二, 二零零二, 二〇〇二
      *
      * @param cnNumber 不带单位的中文数字
@@ -63,6 +82,18 @@ public class LshChineseNumberUtils {
             throw new NumberFormatException(String.format("无法解析字符 \"%s\"", cnChar));
         }
         return result;
+    }
+
+    /**
+     * 格式化数字为不带单位的中文数字, 如: 二零二三四五
+     */
+    public static String formatNumberWithoutUnit(int number) {
+        StringBuilder builder = new StringBuilder();
+        while (number > 0) {
+            builder.insert(0, formatChar(number % 10));
+            number /= 10;
+        }
+        return builder.toString();
     }
 
     /**
