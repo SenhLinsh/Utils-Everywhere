@@ -8,7 +8,7 @@ import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 /**
  * Created by Senh Linsh on 17/1/11.
  */
-public class LshRecourseUtils {
+public class LshResourceUtils {
 
     public static Resources getResources() {
         return LshApplicationUtils.getContext().getResources();
