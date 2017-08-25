@@ -94,7 +94,7 @@ public class LshScreenUtils {
     }
 
     public static int getStatusBarHeight() {
-        Resources resources = LshRecourseUtils.getResources();
+        Resources resources = LshResourceUtils.getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
     }
