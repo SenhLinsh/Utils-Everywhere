@@ -48,6 +48,8 @@ public class LshContactsEditor {
     public ContactBuilder buildContact() {
         if (mBuilder == null) {
             mBuilder = new ContactBuilder();
+        } else {
+            mBuilder.mContactId = getNewContactId();
         }
         return mBuilder;
     }
@@ -55,6 +57,8 @@ public class LshContactsEditor {
     public ContactBuilder buildContact(long contactId) {
         if (mBuilder == null) {
             mBuilder = new ContactBuilder(contactId);
+        } else {
+            mBuilder.mContactId = contactId;
         }
         return mBuilder;
     }
