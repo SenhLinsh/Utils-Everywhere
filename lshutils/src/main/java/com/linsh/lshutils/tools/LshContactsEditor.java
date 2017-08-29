@@ -25,8 +25,8 @@ public class LshContactsEditor {
         mValues = new ContentValues();
     }
 
-    public int getNewContactId() {
-        int contactId = -1;
+    public long getNewContactId() {
+        long contactId = -1;
         ContentResolver resolver = LshContextUtils.get().getContentResolver();
         Cursor cursor = resolver.query(ContactsContract.RawContacts.CONTENT_URI,
                 new String[]{ContactsContract.Contacts.Data._ID}, null, null, null);
@@ -39,7 +39,7 @@ public class LshContactsEditor {
         return contactId;
     }
 
-    private void putContactId(int contactId) {
+    private void putContactId(long contactId) {
         mValues.clear();
         mValues.put(ContactsContract.RawContacts.CONTACT_ID, contactId);
         mResolver.insert(ContactsContract.RawContacts.CONTENT_URI, mValues);
@@ -52,7 +52,7 @@ public class LshContactsEditor {
         return mBuilder;
     }
 
-    public ContactBuilder buildContact(int contactId) {
+    public ContactBuilder buildContact(long contactId) {
         if (mBuilder == null) {
             mBuilder = new ContactBuilder(contactId);
         }
@@ -61,17 +61,17 @@ public class LshContactsEditor {
 
     public class ContactBuilder {
 
-        private int mContactId;
+        private long mContactId;
 
         private ContactBuilder() {
             this(getNewContactId());
         }
 
-        private ContactBuilder(int contactId) {
+        private ContactBuilder(long contactId) {
             mContactId = contactId;
         }
 
-        public int getContactId() {
+        public long getContactId() {
             return mContactId;
         }
 
