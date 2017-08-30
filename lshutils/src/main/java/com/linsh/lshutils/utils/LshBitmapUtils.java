@@ -53,10 +53,7 @@ public class LshBitmapUtils {
     }
 
     public static Bitmap bytes2Bitmap(byte[] bytes) {
-        if (bytes == null || bytes.length == 0)
-            return null;
-
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        return LshImageUtils.bytes2Bitmap(bytes);
     }
 
     public static Bitmap drawable2Bitmap(Drawable drawable) {
@@ -867,6 +864,27 @@ public class LshBitmapUtils {
         if (actualOutBitmap != scaledBitmap)
             scaledBitmap.recycle();
         return saveBitmap(actualOutBitmap, output, maxFileSize, true);
+    }
+
+    /**
+     * 合并 Bitmap
+    */
+    public static Bitmap combineBitmaps(Bitmap background, Bitmap foreground) {
+        Bitmap bmp;
+
+        int width = background.getWidth() > foreground.getWidth() ? background.getWidth() : foreground
+                .getWidth();
+        int height = background.getHeight() > foreground.getHeight() ? background.getHeight() : foreground
+                .getHeight();
+        bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Paint paint = new Paint();
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+
+        Canvas canvas = new Canvas(bmp);
+        canvas.drawBitmap(background, 0, 0, null);
+        canvas.drawBitmap(foreground, 0, 0, paint);
+
+        return bmp;
     }
 
     /**
