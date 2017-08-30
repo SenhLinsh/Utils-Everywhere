@@ -29,6 +29,14 @@ public class LshStringUtils {
         return true;
     }
 
+    public static boolean isAllNotEmpty(CharSequence... str) {
+        if (str == null) return false;
+        for (CharSequence charSequence : str) {
+            if (isEmpty(charSequence)) return false;
+        }
+        return true;
+    }
+
     /**
      * null & 空字符串 & 空格字符串 : 返回true
      */
