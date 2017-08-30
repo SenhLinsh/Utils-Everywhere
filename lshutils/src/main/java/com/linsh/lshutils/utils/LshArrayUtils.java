@@ -107,4 +107,16 @@ public class LshArrayUtils {
         }
         return destArray;
     }
+
+    @SafeVarargs
+    public static <T> void addArrays(T[] newArray, T[]... oldArrays) {
+        int index = 0;
+        for (T[] oldArray : oldArrays) {
+            for (T t : oldArray) {
+                if (index >= newArray.length)
+                    return;
+                newArray[index++] = t;
+            }
+        }
+    }
 }
