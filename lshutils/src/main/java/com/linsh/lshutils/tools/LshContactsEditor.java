@@ -171,7 +171,7 @@ public class LshContactsEditor {
             if (!LshArrayUtils.isEmpty(whereColumns) && !LshArrayUtils.isEmpty(whereColumnValues)) {
                 for (int i = 0; i < whereColumnValues.length; i++) {
                     if (i < whereColumnValues.length) {
-                        where.and().equalTo(whereColumnValues[i], whereColumnValues[i]);
+                        where.and().equalTo(whereColumns[i], whereColumnValues[i]);
                     }
                 }
             }
