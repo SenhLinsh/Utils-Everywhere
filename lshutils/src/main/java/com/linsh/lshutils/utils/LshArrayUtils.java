@@ -49,17 +49,18 @@ public class LshArrayUtils {
         return list;
     }
 
-    public static <T> void toArray(List<T> src, T[] dest) {
+    public static <T> T[] toArray(List<T> src, T[] dest) {
         if (dest == null) {
-            return;
+            return null;
         }
         if (src == null) {
             dest = null;
-            return;
+            return null;
         }
         for (int i = 0; i < dest.length; i++) {
             dest[i] = i < src.size() ? src.get(i) : null;
         }
+        return dest;
     }
 
     public static int[] toIntArray(List<Integer> list) {
