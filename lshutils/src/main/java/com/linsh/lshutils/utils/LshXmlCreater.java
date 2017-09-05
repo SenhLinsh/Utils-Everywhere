@@ -108,7 +108,7 @@ public class LshXmlCreater {
     }
 
     public static StateListDrawable createSelectedSelector(int selectedColor, int normalColor) {
-        return createPressedSelector(new ColorDrawable(selectedColor), new ColorDrawable(normalColor));
+        return createSelectedSelector(new ColorDrawable(selectedColor), new ColorDrawable(normalColor));
     }
 
     /**
