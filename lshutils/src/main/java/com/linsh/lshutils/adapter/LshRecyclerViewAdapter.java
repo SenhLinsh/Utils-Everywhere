@@ -12,7 +12,8 @@ import java.util.List;
 /**
  * Created by linsh on 17/4/30.
  */
-public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> implements View.OnClickListener {
+public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H>
+        implements View.OnClickListener {
 
     private List<T> data;
 
@@ -52,7 +53,7 @@ public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolde
     @Override
     public void onClick(View v) {
         Object tag = v.getTag(R.id.tag_item_view);
-        if (tag != null && mOnItemClickListener != null) {
+        if (mOnItemClickListener != null && tag != null && tag instanceof Integer) {
             mOnItemClickListener.onItemClick((Integer) tag);
         }
     }
