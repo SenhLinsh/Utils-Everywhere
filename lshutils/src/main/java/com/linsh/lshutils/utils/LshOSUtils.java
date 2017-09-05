@@ -69,31 +69,31 @@ public class LshOSUtils {
     private static final String KEY_EUI_NAME = "ro.product.letv_name"; // "乐1s"
     private static final String KEY_EUI_MODEL = "ro.product.letv_model"; // "Letv X500"
     // 金立 : amigo
-    private static final String KEY_﻿AMIGO_ROM_VERSION = "ro.gn.gnromvernumber"; // "GIONEE ROM5.0.16"
-    private static final String KEY_﻿AMIGO_SYSTEM_UI_SUPPORT = "ro.gn.amigo.systemui.support"; // "yes"
+    private static final String KEY_AMIGO_ROM_VERSION = "ro.gn.gnromvernumber"; // "GIONEE ROM5.0.16"
+    private static final String KEY_AMIGO_SYSTEM_UI_SUPPORT = "ro.gn.amigo.systemui.support"; // "yes"
 
     private static final String VALUE_AMIGO_DISPLAY_ID_CONTAIN = "amigo"; // "amigo3.5.1"
-    private static final String VALUE_﻿AMIGO_CLIENT_ID_BASE = "android-gionee";
+    private static final String VALUE_AMIGO_CLIENT_ID_BASE = "android-gionee";
     // 酷派 : yulong
     private static final String KEY_YULONG_VERSION_RELEASE = "ro.yulong.version.release"; // "5.1.046.P1.150921.8676_M01"
     private static final String KEY_YULONG_VERSION_TAG = "ro.yulong.version.tag"; // "LC"
 
-    private static final String VALUE_﻿YULONG_CLIENT_ID_BASE = "android-coolpad";
+    private static final String VALUE_YULONG_CLIENT_ID_BASE = "android-coolpad";
     // HTC : Sense
     private static final String KEY_SENSE_BUILD_STAGE = "htc.build.stage"; // "2"
     private static final String KEY_SENSE_BLUETOOTH_SAP = "ro.htc.bluetooth.sap"; // "true"
 
-    private static final String VALUE_﻿SENSE_CLIENT_ID_BASE = "android-htc-rev";
+    private static final String VALUE_SENSE_CLIENT_ID_BASE = "android-htc-rev";
     // LG : LG
     private static final String KEY_LG_SW_VERSION = "ro.lge.swversion"; // "D85720b"
     private static final String KEY_LG_SW_VERSION_SHORT = "ro.lge.swversion_short"; // "V20b"
     private static final String KEY_LG_FACTORY_VERSION = "ro.lge.factoryversion"; // "LGD857AT-00-V20b-CUO-CN-FEB-17-2015+0"
     // 联想
-    private static final String KEY_﻿LENOVO_DEVICE = "ro.lenovo.device"; // "phone"
-    private static final String KEY_﻿LENOVO_PLATFORM = "ro.lenovo.platform"; // "qualcomm"
-    private static final String KEY_﻿LENOVO_ADB = "ro.lenovo.adb"; // "apkctl,speedup"
+    private static final String KEY_LENOVO_DEVICE = "ro.lenovo.device"; // "phone"
+    private static final String KEY_LENOVO_PLATFORM = "ro.lenovo.platform"; // "qualcomm"
+    private static final String KEY_LENOVO_ADB = "ro.lenovo.adb"; // "apkctl,speedup"
 
-    private static final String VALUE_﻿LENOVO_CLIENT_ID_BASE = "android-lenovo";
+    private static final String VALUE_LENOVO_CLIENT_ID_BASE = "android-lenovo";
 
     public static ROM getRomType() {
         return ROM_TYPE;
@@ -208,7 +208,7 @@ public class LshOSUtils {
                         }
                     }
                 }
-            } else if (buildProperties.containsKey(KEY_﻿AMIGO_ROM_VERSION) || buildProperties.containsKey(KEY_﻿AMIGO_SYSTEM_UI_SUPPORT)) {
+            } else if (buildProperties.containsKey(KEY_AMIGO_ROM_VERSION) || buildProperties.containsKey(KEY_AMIGO_SYSTEM_UI_SUPPORT)) {
                 // amigo
                 rom = ROM.AmigoOS;
                 if (buildProperties.containsKey(KEY_DISPLAY_ID)) {
@@ -237,8 +237,8 @@ public class LshOSUtils {
                     || buildProperties.containsKey(KEY_LG_FACTORY_VERSION)) {
                 // LG
                 rom = ROM.LG;
-            } else if (buildProperties.containsKey(KEY_﻿LENOVO_DEVICE) || buildProperties.containsKey(KEY_﻿LENOVO_PLATFORM)
-                    || buildProperties.containsKey(KEY_﻿LENOVO_ADB)) {
+            } else if (buildProperties.containsKey(KEY_LENOVO_DEVICE) || buildProperties.containsKey(KEY_LENOVO_PLATFORM)
+                    || buildProperties.containsKey(KEY_LENOVO_ADB)) {
                 // Lenovo
                 rom = ROM.Lenovo;
             } else if (buildProperties.containsKey(KEY_DISPLAY_ID)) {
@@ -272,13 +272,13 @@ public class LshOSUtils {
                         return ROM.SamSung;
                     case VALUE_SONY_CLIENT_ID_BASE:
                         return ROM.Sony;
-                    case VALUE_﻿YULONG_CLIENT_ID_BASE:
+                    case VALUE_YULONG_CLIENT_ID_BASE:
                         return ROM.YuLong;
-                    case VALUE_﻿SENSE_CLIENT_ID_BASE:
+                    case VALUE_SENSE_CLIENT_ID_BASE:
                         return ROM.Sense;
-                    case VALUE_﻿LENOVO_CLIENT_ID_BASE:
+                    case VALUE_LENOVO_CLIENT_ID_BASE:
                         return ROM.Lenovo;
-                    case VALUE_﻿AMIGO_CLIENT_ID_BASE:
+                    case VALUE_AMIGO_CLIENT_ID_BASE:
                         return ROM.AmigoOS;
                     default:
                         break;
