@@ -47,6 +47,8 @@ public class LshLunarCalendarUtils {
      * @return 常规日期字符串, 如: 2000-01-01, 12-23, 11-21
      */
     public static String lunarStr2NormalStr(String lunarStr) {
+        if (lunarStr == null) return null;
+
         Matcher matcher = Pattern.compile("(([\\u4e00-\\u9fa5]{2,4})年)?([\\u4e00-\\u9fa5]{1,2})月([\\u4e00-\\u9fa5]{1,3})日?").matcher(lunarStr);
         if (matcher.find()) {
             String yearStr = matcher.group(2);
