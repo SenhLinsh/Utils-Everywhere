@@ -781,6 +781,15 @@ public class LshBitmapUtils {
         return ret;
     }
 
+    public static Bitmap addColorMark(Bitmap src, int color, final boolean recycle) {
+        if (isEmptyBitmap(src)) return null;
+        Bitmap ret = src.copy(src.getConfig(), true);
+        Canvas canvas = new Canvas(ret);
+        canvas.drawColor(color);
+        if (recycle && !src.isRecycled()) src.recycle();
+        return ret;
+    }
+
     /**
      * 转为灰度图片
      *
