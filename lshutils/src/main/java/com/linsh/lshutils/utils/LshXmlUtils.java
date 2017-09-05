@@ -13,7 +13,7 @@ import android.os.Build;
  * <p/>
  * 代码生成XML文件或属性的辅助类
  */
-public class LshXmlCreater {
+public class LshXmlUtils {
 
     /**
      * 代码生成矩形

@@ -8,7 +8,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.linsh.lshutils.utils.LshXmlCreater;
+import com.linsh.lshutils.utils.LshXmlUtils;
 
 /**
  * Created by Senh Linsh on 16/12/21.
@@ -67,11 +67,11 @@ public class CountDownView extends TextView {
 
     private void setColor() {
         // 设置字体颜色
-        setTextColor(LshXmlCreater.createEnabledColorSelector(enabledColor, disabledColor));
+        setTextColor(LshXmlUtils.createEnabledColorSelector(enabledColor, disabledColor));
         // 设置背景
-        Drawable enabledDrawable = LshXmlCreater.createRectangleBorder(roundRadius, strokeWidth, enabledColor);
-        Drawable disabledDrawable = LshXmlCreater.createRectangleBorder(roundRadius, strokeWidth, disabledColor);
-        StateListDrawable background = LshXmlCreater.createEnabledSelector(enabledDrawable, disabledDrawable);
+        Drawable enabledDrawable = LshXmlUtils.createRectangleBorder(roundRadius, strokeWidth, enabledColor);
+        Drawable disabledDrawable = LshXmlUtils.createRectangleBorder(roundRadius, strokeWidth, disabledColor);
+        StateListDrawable background = LshXmlUtils.createEnabledSelector(enabledDrawable, disabledDrawable);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             setBackground(background);
         } else {

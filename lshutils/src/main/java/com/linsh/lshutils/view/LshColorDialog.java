@@ -25,7 +25,7 @@ import com.linsh.lshutils.R;
 import com.linsh.lshutils.adapter.LshSimplifiedRcvAdapter;
 import com.linsh.lshutils.utils.LshArrayUtils;
 import com.linsh.lshutils.utils.LshUnitConverseUtils;
-import com.linsh.lshutils.utils.LshXmlCreater;
+import com.linsh.lshutils.utils.LshXmlUtils;
 
 import java.util.List;
 
@@ -606,7 +606,7 @@ public class LshColorDialog extends Dialog {
 
     private void setBgContent(View view, int color) {
         int dp10 = dp2px(10);
-        GradientDrawable bgContent = LshXmlCreater.createRectangleCorner(new float[]{dp10, dp10, dp10, dp10, 0, 0, 0, 0}, color);
+        GradientDrawable bgContent = LshXmlUtils.createRectangleCorner(new float[]{dp10, dp10, dp10, dp10, 0, 0, 0, 0}, color);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             view.setBackground(bgContent);
         } else {
@@ -615,9 +615,9 @@ public class LshColorDialog extends Dialog {
     }
 
     private void setBgBtn(View view, float[] radii) {
-        GradientDrawable bgContentWhite = LshXmlCreater.createRectangleCorner(radii, Color.WHITE);
-        GradientDrawable bgContentGray = LshXmlCreater.createRectangleCorner(radii, 0xFFEDEDF3);
-        StateListDrawable pressedSelector = LshXmlCreater.createPressedSelector(bgContentGray, bgContentWhite);
+        GradientDrawable bgContentWhite = LshXmlUtils.createRectangleCorner(radii, Color.WHITE);
+        GradientDrawable bgContentGray = LshXmlUtils.createRectangleCorner(radii, 0xFFEDEDF3);
+        StateListDrawable pressedSelector = LshXmlUtils.createPressedSelector(bgContentGray, bgContentWhite);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             view.setBackground(pressedSelector);
         } else {
