@@ -109,4 +109,36 @@ public class LshLunarCalendarUtils {
         return builder.toString();
     }
 
+    public static String[] getLunarMonths() {
+        return getLunarMonths(true);
+    }
+
+    public static String[] getLunarMonths(boolean hasMonthChar) {
+        String[] months = new String[12];
+        for (int i = 0; i < 12; i++) {
+            if (hasMonthChar) {
+                months[i] = LshChineseNumberUtils.sCnMonths[i] + "月";
+            } else {
+                months[i] = String.valueOf(LshChineseNumberUtils.sCnMonths[i]);
+            }
+        }
+        return months;
+    }
+
+    public static String[] getLunarDays() {
+        String[] days = new String[30];
+        for (int i = 0; i < 9; i++) {
+            days[i] = "初" + LshChineseNumberUtils.sCnNums[i];
+        }
+        days[9] = "初十";
+        for (int i = 10; i < 19; i++) {
+            days[i] = "十" + LshChineseNumberUtils.sCnNums[i - 10];
+        }
+        days[19] = "二十";
+        for (int i = 20; i < 29; i++) {
+            days[i] = "廿" + LshChineseNumberUtils.sCnNums[i - 20];
+        }
+        days[29] = "三十";
+        return days;
+    }
 }
