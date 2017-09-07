@@ -13,7 +13,7 @@ import java.util.List;
  * Created by linsh on 17/4/30.
  */
 public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H>
-        implements View.OnClickListener {
+        implements View.OnClickListener, View.OnLongClickListener {
 
     private List<T> data;
 
@@ -21,6 +21,7 @@ public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolde
     public H onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(getLayout(), parent, false);
         view.setOnClickListener(this);
+        view.setOnLongClickListener(this);
         return createViewHolder(view, viewType);
     }
 
@@ -66,5 +67,25 @@ public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolde
 
     public interface OnItemClickListener {
         void onItemClick(int position);
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        Object tag = v.getTag(R.id.tag_item_view);
+        if (mOnItemLongClickListener != null && tag != null && tag instanceof Integer) {
+            mOnItemLongClickListener.onItemLongClick((Integer) tag);
+            return true;
+        }
+        return false;
+    }
+
+    private OnItemLongClickListener mOnItemLongClickListener;
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        mOnItemLongClickListener = listener;
+    }
+
+    public interface OnItemLongClickListener {
+        void onItemLongClick(int position);
     }
 }
