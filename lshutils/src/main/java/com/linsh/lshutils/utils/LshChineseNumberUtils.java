@@ -6,8 +6,8 @@ package com.linsh.lshutils.utils;
 
 public class LshChineseNumberUtils {
 
-    private static char[] sCnNums = new char[]{'一', '二', '三', '四', '五', '六', '七', '八', '九'};
-    private static char[] sCnMonths = {'正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'};
+    static final char[] sCnNums = new char[]{'一', '二', '三', '四', '五', '六', '七', '八', '九'};
+    static final char[] sCnMonths = {'正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'};
 
     /**
      * 解析单个常规中文数字字符, 如: 零(0), 一(1), 十(10) 等
