@@ -1,5 +1,6 @@
 package com.linsh.lshutils.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.RequiresPermission;
 import android.support.v4.app.Fragment;
 
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
@@ -201,6 +203,7 @@ public class LshIntentUtils {
      * 获取跳转「拨打电话」的意图
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.CALL_PHONE"/>}</p>
      */
+    @RequiresPermission(value = Manifest.permission.CALL_PHONE)
     public static Intent getCallIntent(String phoneNumber) {
         return new Intent("android.intent.action.CALL", Uri.parse("tel:" + phoneNumber))
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -258,18 +261,23 @@ public class LshIntentUtils {
 
     //================================================ goto ================================================//
 
-    public static void gotoHome() {
-        startActivity(getHomeIntent());
-    }
-
+    /**
+     * 跳转:「安装应用」界面
+     */
     public static void gotoInstallApp(File apkFile) {
         startActivity(getInstallAppIntent(apkFile));
     }
 
+    /**
+     * 跳转:「卸载应用」界面
+     */
     public static void gotoUninstallApp(String packageName) {
         startActivity(getUninstallAppIntent(packageName));
     }
 
+    /**
+     * 跳转: 某APP
+     */
     public static void gotoApp(String packageName) {
         if (LshStringUtils.isEmpty(packageName))
             return;
@@ -277,84 +285,114 @@ public class LshIntentUtils {
     }
 
     /**
-     * 跳转: 系统选择文件界面
+     * 跳转:「系统桌面」
+     */
+    public static void gotoHome() {
+        startActivity(getHomeIntent());
+    }
+
+    /**
+     * 跳转:「拨号」界面
+     */
+    public static void gotoDial(String phoneNumber) {
+        startActivity(getDialIntent(phoneNumber));
+    }
+
+    /**
+     * 「打电话」
+     * <p>需添加权限 {@code <uses-permission android:name="android.permission.CALL_PHONE"/>}</p>
+     */
+    @RequiresPermission(value = Manifest.permission.CALL_PHONE)
+    public static void gotoCallPhone(String phoneNumber) {
+        startActivity(getCallIntent(phoneNumber));
+    }
+
+    /**
+     * 跳转:「发送短信」界面
+     */
+    public static void gotoSendSms(String phoneNumber, String content) {
+        startActivity(getSendSmsIntent(phoneNumber, content));
+    }
+
+    /**
+     * 跳转:「系统选择文件」界面
      */
     public static void gotoPickFile(Activity activity, int requestCode) {
         startActivityForResult(activity, null, getPickFileIntent(), requestCode);
     }
 
     /**
-     * 跳转: 系统选择文件界面
+     * 跳转:「系统选择文件」界面
      */
     public static void gotoPickFile(Fragment fragment, int requestCode) {
         startActivityForResult(null, fragment, getPickFileIntent(), requestCode);
     }
 
     /**
-     * 跳转: 系统选择文件界面
+     * 跳转:「系统选择文件」界面
      */
     public static void gotoPickFile(Activity activity, int requestCode, String fileExtension) {
         startActivityForResult(activity, null, getPickFileIntent(fileExtension), requestCode);
     }
 
     /**
-     * 跳转: 系统选择图片界面
+     * 跳转:「系统选择图片」界面
      */
     public static void gotoPickPhoto(Activity activity, int requestCode) {
         startActivityForResult(activity, null, getPickPhotoIntent(), requestCode);
     }
 
     /**
-     * 跳转: 系统选择图片界面
+     * 跳转:「系统选择图片」界面
      */
     public static void gotoPickPhoto(Fragment fragment, int requestCode) {
         startActivityForResult(null, fragment, getPickPhotoIntent(), requestCode);
     }
 
     /**
-     * 跳转: 系统选择视频界面
+     * 跳转:「系统选择视频」界面
      */
     public static void gotoPickVideo(Activity activity, int requestCode) {
         startActivityForResult(activity, null, getPickVideoIntent(), requestCode);
     }
 
     /**
-     * 跳转: 系统选择视频界面
+     * 跳转:「系统选择视频」界面
      */
     public static void gotoPickVideo(Fragment fragment, int requestCode) {
         startActivityForResult(null, fragment, getPickVideoIntent(), requestCode);
     }
 
     /**
-     * 跳转: 系统选择音频界面
+     * 跳转:「系统选择音频」界面
      */
     public static void gotoPickAudio(Activity activity, int requestCode) {
         startActivityForResult(activity, null, getPickAudioIntent(), requestCode);
     }
 
     /**
-     * 跳转: 系统选择音频界面
+     * 跳转:「系统选择音频」界面
      */
     public static void gotoPickAudio(Fragment fragment, int requestCode) {
         startActivityForResult(null, fragment, getPickAudioIntent(), requestCode);
     }
 
     /**
-     * 跳转: 系统拍照界面
+     * 跳转:「系统拍照」界面
      */
     public static void gotoTakePhoto(Activity activity, int requestCode, File outputFile) {
         startActivityForResult(activity, null, getTakePhotoIntent(outputFile), requestCode);
     }
 
     /**
-     * 跳转: 系统拍照界面
+     * 跳转:「系统拍照」界面
      */
     public static void gotoTakePhoto(Fragment fragment, int requestCode, File outputFile) {
         startActivityForResult(null, fragment, getTakePhotoIntent(outputFile), requestCode);
     }
 
     /**
-     * 跳转: 系统剪裁界面
+     * 跳转:「系统剪裁」界面
      */
     public static void gotoCropPhoto(Activity activity, int requestCode, File inputFile, File outputFile,
                                      int aspectX, int aspectY, int outputX, int outputY) {
@@ -363,7 +401,7 @@ public class LshIntentUtils {
     }
 
     /**
-     * 跳转: 系统剪裁界面
+     * 跳转:「系统剪裁」界面
      */
     public static void gotoCropPhoto(Fragment fragment, int requestCode, File inputFile, File outputFile,
                                      int aspectX, int aspectY, int outputX, int outputY) {
@@ -372,7 +410,7 @@ public class LshIntentUtils {
     }
 
     /**
-     * 跳转: 系统剪裁界面
+     * 跳转:「系统剪裁」界面
      */
     public static void gotoCropPhoto(Activity activity, int requestCode, Uri inputUri, Uri outputUri,
                                      int aspectX, int aspectY, int outputX, int outputY) {
@@ -381,7 +419,7 @@ public class LshIntentUtils {
     }
 
     /**
-     * 跳转: 系统剪裁界面
+     * 跳转:「系统剪裁」界面
      */
     public static void gotoCropPhoto(Fragment fragment, int requestCode, Uri inputUri, Uri outputUri,
                                      int aspectX, int aspectY, int outputX, int outputY) {
@@ -390,7 +428,7 @@ public class LshIntentUtils {
     }
 
     /**
-     * 跳转: 设置界面
+     * 跳转:「设置」界面
      */
     public static void gotoSetting() {
         LshContextUtils.startActivity(getSettingIntent());
@@ -401,14 +439,14 @@ public class LshIntentUtils {
     }
 
     /**
-     * 跳转: 应用程序列表界面
+     * 跳转:「应用程序列表」界面
      */
     public static void gotoAppsSetting() {
         LshContextUtils.startActivity(getAppsIntent());
     }
 
     /**
-     * 跳转: Wifi列表设置
+     * 跳转:「Wifi列表」设置
      */
     public static void gotoWifiSetting() {
         LshContextUtils.startActivity(getWifiSettingIntent());
@@ -416,7 +454,7 @@ public class LshIntentUtils {
 
 
     /**
-     * 跳转: 飞行模式，无线网和网络设置界面
+     * 跳转:「飞行模式，无线网和网络设置」界面
      */
     public static void gotoWirelessSetting() {
         LshContextUtils.startActivity(getWirelessSettingIntent());
@@ -424,7 +462,7 @@ public class LshIntentUtils {
 
 
     /**
-     * 跳转: 权限设置界面
+     * 跳转: 「权限设置」界面
      * <p>
      * 根据各大厂商的不同定制而跳转至其权限设置
      * 目前已测试成功机型: 小米V7V8, 华为, 三星, 魅族; 测试失败: OPPO
