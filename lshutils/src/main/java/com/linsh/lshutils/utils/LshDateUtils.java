@@ -2,6 +2,7 @@ package com.linsh.lshutils.utils;
 
 import android.text.format.DateUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
@@ -43,5 +44,17 @@ public class LshDateUtils {
 
     public static String getWeekDayString(long millis, Locale locale) {
         return formatDateTime(millis, DateUtils.FORMAT_SHOW_WEEKDAY, locale);
+    }
+
+    public static int getCurYear() {
+        return Calendar.getInstance().get(Calendar.YEAR);
+    }
+
+    public static int getCurMonth() {
+        return Calendar.getInstance().get(Calendar.MONTH) + 1;
+    }
+
+    public static int getCurDay() {
+        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     }
 }
