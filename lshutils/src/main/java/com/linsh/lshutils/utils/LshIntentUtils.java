@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.RequiresPermission;
@@ -219,6 +220,23 @@ public class LshIntentUtils {
     }
 
     /**
+     * 获取跳转「联系人」的意图
+     */
+    public static Intent getContactsIntent() {
+        return new Intent(Intent.ACTION_VIEW)
+                .setData(ContactsContract.Contacts.CONTENT_URI);
+    }
+
+    /**
+     * 获取跳转「联系人详情」的意图
+     */
+    public static Intent getContactDetailIntent(long contactId, String lookupKey) {
+        Uri data = ContactsContract.Contacts.getLookupUri(contactId, lookupKey);
+        return new Intent(Intent.ACTION_VIEW)
+                .setDataAndType(data, ContactsContract.Contacts.CONTENT_ITEM_TYPE);
+    }
+
+    /**
      * 获取跳转「设置界面」的意图
      */
     public static Intent getSettingIntent() {
@@ -312,6 +330,20 @@ public class LshIntentUtils {
      */
     public static void gotoSendSms(String phoneNumber, String content) {
         startActivity(getSendSmsIntent(phoneNumber, content));
+    }
+
+    /**
+     * 跳转:「联系人」界面
+     */
+    public static void gotoContacts() {
+        startActivity(getContactsIntent());
+    }
+
+    /**
+     * 跳转:「联系人详情」界面
+     */
+    public static void gotoContactDetail(long contactId, String lookupKey) {
+        startActivity(getContactDetailIntent(contactId, lookupKey));
     }
 
     /**
