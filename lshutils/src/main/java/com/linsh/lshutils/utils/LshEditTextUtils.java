@@ -28,4 +28,23 @@ public class LshEditTextUtils {
             }
         });
     }
+
+    public static void moveCursorToLast(EditText editText) {
+        editText.setSelection(editText.getText().length());
+    }
+
+    public static void enableEditState(EditText editText, boolean focusNeeded) {
+        editText.setFocusableInTouchMode(true);
+        editText.setFocusable(true);
+        if (focusNeeded) {
+            editText.requestFocus();
+            moveCursorToLast(editText);
+        }
+    }
+
+    public static void disableEditState(EditText editText) {
+        editText.clearFocus();
+        editText.setFocusable(false);
+        editText.setFocusableInTouchMode(false);
+    }
 }
