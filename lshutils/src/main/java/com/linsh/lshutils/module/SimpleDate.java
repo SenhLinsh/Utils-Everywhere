@@ -89,7 +89,7 @@ public class SimpleDate {
 
     public String getDisplayString(boolean hasYear) {
         if (mIsLunar) {
-            LshLunarCalendarUtils.getLunarStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
+            return LshLunarCalendarUtils.getLunarStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
         }
         return LshDateUtils.getDisplayStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
     }
