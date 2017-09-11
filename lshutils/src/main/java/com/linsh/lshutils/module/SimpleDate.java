@@ -1,11 +1,9 @@
 package com.linsh.lshutils.module;
 
-import com.linsh.lshutils.utils.LshChineseNumberUtils;
+import com.linsh.lshutils.utils.LshDateUtils;
 import com.linsh.lshutils.utils.LshLunarCalendarUtils;
 
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Senh Linsh on 17/9/8.
@@ -16,11 +14,6 @@ public class SimpleDate {
     private int[] mDate;
 
     private boolean mIsLunar;
-
-    public SimpleDate(String date) throws Exception {
-        mDate = new int[3];
-        parseDateString(date);
-    }
 
     public SimpleDate(long date) {
         this(new Date(date));
@@ -50,8 +43,8 @@ public class SimpleDate {
         return mIsLunar;
     }
 
-    public void setLunar(boolean lunar) {
-        mIsLunar = lunar;
+    public void setLunar(boolean isLunar) {
+        mIsLunar = isLunar;
     }
 
     public int getYear() {
@@ -87,19 +80,7 @@ public class SimpleDate {
     }
 
     public String getNormalizedString(boolean hasYear) {
-        StringBuilder builder = new StringBuilder();
-        if (mDate[0] > 0 && hasYear) {
-            builder.append(mDate[0]).append('-');
-        }
-        if (mDate[1] < 10) {
-            builder.append('0');
-        }
-        builder.append(mDate[0]).append('-');
-        if (mDate[2] < 10) {
-            builder.append('0');
-        }
-        builder.append(mDate[2]);
-        return builder.toString();
+        return LshDateUtils.getNormalizedStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
     }
 
     public String getDisplayString() {
@@ -107,55 +88,17 @@ public class SimpleDate {
     }
 
     public String getDisplayString(boolean hasYear) {
-        StringBuilder builder = new StringBuilder();
-        if (mDate[0] > 0 && hasYear) {
-            builder.append(mDate[0]).append('年');
+        if (mIsLunar) {
+            LshLunarCalendarUtils.getLunarStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
         }
-        if (!mIsLunar) {
-            builder.append(mDate[1]).append('月')
-                    .append(mDate[2]).append('日');
-        } else {
-            builder.append(LshLunarCalendarUtils.getLunarDate(getDate(), false));
-        }
-        return builder.toString();
+        return LshDateUtils.getDisplayStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
     }
 
-    private void parseDateString(String date) throws Exception {
-        Matcher matcher = Pattern.compile("^((\\d{2,4})[年-])?(\\d{1,2})[月-](\\d{1,2})日?$").matcher(date);
-        if (matcher.find()) {
-            String year = matcher.group(2);
-            String month = matcher.group(3);
-            String day = matcher.group(4);
-
-            if (year != null) {
-                mDate[0] = Integer.parseInt(year);
-            }
-            mDate[1] = Integer.parseInt(month);
-            mDate[2] = Integer.parseInt(day);
-            return;
+    public static SimpleDate parseDateString(String date) {
+        SimpleDate simpleDate = LshLunarCalendarUtils.parseNormalizedStr(date);
+        if (simpleDate == null) {
+            simpleDate = LshLunarCalendarUtils.parseLunarStr(date);
         }
-        matcher = Pattern.compile("^(((\\d{2,4})|([\\u4e00-\\u9fa5]{2,4}))年)?([\\u4e00-\\u9fa5]{1,2})月([\\u4e00-\\u9fa5]{1,3})日?$").matcher(date);
-        if (matcher.find()) {
-            String yearAr = matcher.group(3);
-            String yearCn = matcher.group(4);
-            String month = matcher.group(5);
-            String day = matcher.group(6);
-
-            try {
-                if (yearAr != null) {
-                    mDate[0] = Integer.parseInt(yearAr);
-                }
-                if (yearCn != null) {
-                    mDate[0] = LshChineseNumberUtils.parseLunarYear(yearCn);
-                }
-                mDate[1] = LshChineseNumberUtils.parseLunarMonth(month);
-                mDate[2] = LshChineseNumberUtils.parseLunarDay(day);
-                mIsLunar = true;
-            } catch (Exception e) {
-                throw new Exception(e);
-            }
-            return;
-        }
-        throw new Exception("无法解析当前日期");
+        return simpleDate;
     }
 }
