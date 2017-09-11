@@ -1,7 +1,8 @@
 package com.linsh.lshutils.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import com.linsh.lshutils.module.SimpleDate;
+import com.linsh.lshutils.utils.Basic.LshStringUtils;
+
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,27 +16,13 @@ public class LshLunarCalendarUtils {
     /**
      * 农历日期字符串 转 Date
      *
-     * @param lunarStr 农历日期字符串, 如: 二零零零年正月初一, 腊月廿三, 十一月二十一
+     * @param lunarStr 农历日期字符串, 如: 二零零零年正月初一, 腊月廿三, 1992年十一月二十一
      * @return Date 日期格式, 解析失败返回 null
      */
     public static Date lunarStr2Date(String lunarStr) {
-        Matcher matcher = Pattern.compile("(([\\u4e00-\\u9fa5]{2,4})年)?([\\u4e00-\\u9fa5]{1,2})月([\\u4e00-\\u9fa5]{1,3})日?").matcher(lunarStr);
-        if (matcher.find()) {
-            String year = matcher.group(2);
-            String month = matcher.group(3);
-            String day = matcher.group(4);
-
-            try {
-                Date date = new Date();
-                if (year != null) {
-                    date.setYear(LshChineseNumberUtils.parseLunarYear(year) - 1900);
-                }
-                date.setMonth(LshChineseNumberUtils.parseLunarMonth(month) - 1);
-                date.setDate(LshChineseNumberUtils.parseLunarDay(day));
-                return date;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        SimpleDate simpleDate = parseLunarStr(lunarStr);
+        if (simpleDate != null) {
+            return new Date(simpleDate.getYear(), simpleDate.getMonth() - 1, simpleDate.getDay());
         }
         return null;
     }
@@ -49,27 +36,59 @@ public class LshLunarCalendarUtils {
     public static String lunarStr2NormalStr(String lunarStr) {
         if (lunarStr == null) return null;
 
-        Matcher matcher = Pattern.compile("(([\\u4e00-\\u9fa5]{2,4})年)?([\\u4e00-\\u9fa5]{1,2})月([\\u4e00-\\u9fa5]{1,3})日?").matcher(lunarStr);
+        SimpleDate simpleDate = parseLunarStr(lunarStr);
+        if (simpleDate != null) {
+            return simpleDate.getNormalizedString();
+        }
+        return null;
+    }
+
+    public static SimpleDate parseLunarStr(String lunarStr) {
+        if (LshStringUtils.isEmpty(lunarStr)) return null;
+
+        Matcher matcher = Pattern.compile("^(((\\d{2,4})|([\\u4e00-\\u9fa5]{2,4}))年)?([\\u4e00-\\u9fa5]{1,2})月([\\u4e00-\\u9fa5]{1,3})日?$").matcher(lunarStr);
+        if (matcher.find()) {
+            String yearArStr = matcher.group(3);
+            String yearCnStr = matcher.group(4);
+            String monthStr = matcher.group(5);
+            String dayStr = matcher.group(6);
+
+            try {
+                int year = 0;
+                if (yearArStr != null) {
+                    year = Integer.parseInt(yearArStr);
+                } else if (yearCnStr != null) {
+                    year = LshChineseNumberUtils.parseLunarYear(yearCnStr);
+                }
+                int month = LshChineseNumberUtils.parseLunarMonth(monthStr);
+                int day = LshChineseNumberUtils.parseLunarDay(dayStr);
+                return new SimpleDate(year, month, day, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static SimpleDate parseNormalizedStr(String dateStr) {
+        if (LshStringUtils.isEmpty(dateStr)) return null;
+        Matcher matcher = Pattern.compile("^((\\d{2,4})[年-])?(\\d{1,2})[月-](\\d{1,2})日?$").matcher(dateStr);
         if (matcher.find()) {
             String yearStr = matcher.group(2);
             String monthStr = matcher.group(3);
             String dayStr = matcher.group(4);
 
-            StringBuilder builder = new StringBuilder();
-            if (yearStr != null) {
-                builder.append(LshChineseNumberUtils.parseLunarYear(yearStr)).append('-');
+            try {
+                int year = 0;
+                if (yearStr != null) {
+                    year = Integer.parseInt(yearStr);
+                }
+                int month = Integer.parseInt(monthStr);
+                int day = Integer.parseInt(dayStr);
+                return new SimpleDate(year, month, day, false);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            int month = LshChineseNumberUtils.parseLunarMonth(monthStr);
-            if (month < 10) {
-                builder.append('0');
-            }
-            builder.append(month).append('-');
-            int day = LshChineseNumberUtils.parseLunarDay(dayStr);
-            if (day < 10) {
-                builder.append('0');
-            }
-            builder.append(day);
-            return builder.toString();
         }
         return null;
     }
@@ -81,31 +100,26 @@ public class LshLunarCalendarUtils {
      * @return 农历日期字符串, 如: 正月初一, 腊月廿三
      */
     public static String normalStr2LunarStr(String dateStr) {
-        try {
-            if (dateStr.length() > 5) {
-                return getLunarDate(new SimpleDateFormat("yyyy-MM-dd").parse(dateStr), true);
-            } else {
-                return getLunarDate(new SimpleDateFormat("MM-dd").parse(dateStr), false);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        SimpleDate simpleDate = parseNormalizedStr(dateStr);
+        if (simpleDate != null) {
+            simpleDate.setLunar(true);
+            return simpleDate.getDisplayString(true);
         }
         return null;
     }
 
-    public static String getLunarDate(Date date, boolean hasYear) {
+    public static String getLunarStr(Date date, boolean hasYear) {
+        return getLunarStr(hasYear ? date.getYear() + 1900 : 0, date.getMonth() + 1, date.getDate());
+    }
+
+    public static String getLunarStr(int year, int month, int day) {
         StringBuilder builder = new StringBuilder();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        if (hasYear) {
-            String year = LshChineseNumberUtils.formatNumberWithoutUnit(calendar.get(Calendar.YEAR));
+        if (year > 0) {
             builder.append(year).append("年");
         }
-        char month = LshChineseNumberUtils.formatLunarMonth(calendar.get(Calendar.MONTH) + 1);
-        builder.append(month).append("月");
-        String day = LshChineseNumberUtils.formatLunarDay(calendar.get(Calendar.DAY_OF_MONTH));
-        builder.append(day);
+        builder.append(LshChineseNumberUtils.formatLunarMonth(month)).append("月");
+        builder.append(LshChineseNumberUtils.formatLunarDay(day));
         return builder.toString();
     }
 
