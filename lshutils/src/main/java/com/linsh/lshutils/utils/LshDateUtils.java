@@ -27,7 +27,7 @@ public class LshDateUtils {
     }
 
     public static String getLunarDate(Date date, boolean hasYear) {
-        return LshLunarCalendarUtils.getLunarDate(date, hasYear);
+        return LshLunarCalendarUtils.getLunarStr(date, hasYear);
     }
 
     protected static String formatDateTime(long millis, int flags) {
@@ -56,5 +56,39 @@ public class LshDateUtils {
 
     public static int getCurDay() {
         return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static String getNormalizedStr(Date date, boolean hasYear) {
+        return getNormalizedStr(hasYear ? date.getYear() + 1900 : 0, date.getMonth() + 1, date.getDate());
+    }
+
+    public static String getNormalizedStr(int year, int month, int day) {
+        StringBuilder builder = new StringBuilder();
+        if (year > 0) {
+            builder.append(year).append('-');
+        }
+        if (month < 10) {
+            builder.append('0');
+        }
+        builder.append(month).append('-');
+        if (day < 10) {
+            builder.append('0');
+        }
+        builder.append(day);
+        return builder.toString();
+    }
+
+    public static String getDisplayStr(Date date, boolean hasYear) {
+        return getDisplayStr(hasYear ? date.getYear() + 1900 : 0, date.getMonth() + 1, date.getDate());
+    }
+
+    public static String getDisplayStr(int year, int month, int day) {
+        StringBuilder builder = new StringBuilder();
+        if (year > 0) {
+            builder.append(year).append('年');
+        }
+        builder.append(month).append('月')
+                .append(day).append('日');
+        return builder.toString();
     }
 }
