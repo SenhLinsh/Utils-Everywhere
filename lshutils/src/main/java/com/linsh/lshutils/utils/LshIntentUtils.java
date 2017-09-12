@@ -277,6 +277,14 @@ public class LshIntentUtils {
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
+    /**
+     * 获取跳转「无障碍设置」的意图
+     */
+    public static Intent getAccessibilitySettingIntent() {
+        return new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
     //================================================ goto ================================================//
 
     /**
@@ -490,6 +498,13 @@ public class LshIntentUtils {
      */
     public static void gotoWirelessSetting() {
         LshContextUtils.startActivity(getWirelessSettingIntent());
+    }
+
+    /**
+     * 跳转:「无障碍设置」界面
+     */
+    public static void gotoAccessibilitySetting() {
+        LshContextUtils.startActivity(getAccessibilitySettingIntent());
     }
 
 
