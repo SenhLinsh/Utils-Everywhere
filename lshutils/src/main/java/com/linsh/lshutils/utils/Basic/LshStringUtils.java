@@ -37,6 +37,10 @@ public class LshStringUtils {
         return true;
     }
 
+    public static boolean isNotAllEmpty(CharSequence... str) {
+        return !isAllEmpty(str);
+    }
+
     /**
      * null & 空字符串 & 空格字符串 : 返回true
      */
