@@ -537,12 +537,12 @@ public class LshIntentUtils {
                     intent.setAction("miui.intent.action.APP_PERM_EDITOR");
                     intent.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
                     intent.putExtra("extra_pkgname", packageName);
-                } else if ("V8".equals(rom)) {
+                } else if ("V8".equals(rom) || "V9".equals(rom)) {
                     intent.setAction("miui.intent.action.APP_PERM_EDITOR");
                     intent.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity");
                     intent.putExtra("extra_pkgname", packageName);
                 } else {
-                    gotoAppDetailSetting(packageName);
+                    intent = getAppDetailsSettingsIntent(packageName);
                 }
                 break;
             case Manufacturer.SONY:
