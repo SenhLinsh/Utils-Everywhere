@@ -15,6 +15,20 @@ public class LshArrayUtils {
         return arr == null || arr.length == 0;
     }
 
+    public static <T> boolean isAllEmpty(T[]... arrs) {
+        for (T[] arr : arrs) {
+            if (!isEmpty(arr)) return false;
+        }
+        return true;
+    }
+
+    public static <T> boolean isAnyOneEmpty(T[]... arrs) {
+        for (T[] arr : arrs) {
+            if (isEmpty(arr)) return true;
+        }
+        return false;
+    }
+
     public static String joint(Object[] arr, String divider) {
         String joint = "";
         for (int i = 0; i < arr.length; i++) {
