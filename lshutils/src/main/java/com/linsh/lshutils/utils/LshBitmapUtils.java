@@ -781,7 +781,7 @@ public class LshBitmapUtils {
         return ret;
     }
 
-    public static Bitmap addColorMark(Bitmap src, int color, final boolean recycle) {
+    public static Bitmap addColorMask(Bitmap src, int color, final boolean recycle) {
         if (isEmptyBitmap(src)) return null;
         Bitmap ret = src.copy(src.getConfig(), true);
         Canvas canvas = new Canvas(ret);
@@ -877,7 +877,7 @@ public class LshBitmapUtils {
 
     /**
      * 合并 Bitmap
-    */
+     */
     public static Bitmap combineBitmaps(Bitmap background, Bitmap foreground) {
         Bitmap bmp;
 
@@ -894,6 +894,11 @@ public class LshBitmapUtils {
         canvas.drawBitmap(foreground, 0, 0, paint);
 
         return bmp;
+    }
+
+    public static Bitmap copy(Bitmap src) {
+        if (isEmptyBitmap(src)) return src;
+        return src.copy(src.getConfig(), true);
     }
 
     /**
