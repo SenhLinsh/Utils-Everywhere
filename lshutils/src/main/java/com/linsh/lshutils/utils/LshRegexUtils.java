@@ -9,7 +9,7 @@ public class LshRegexUtils {
     // 手机号码
     public static final String PHONE_NUMBER_REGEX = "^1\\d{10}$";
     // 邮箱 ("www."可省略不写)
-    public static final String EMAIL_REGEX = "^(www\\.)?\\w+@\\w+(\\.\\w+)+$";
+    public static final String EMAIL_REGEX = "^(www\\.)?\\w+(\\.\\w+)*@\\w+(\\.\\w+)+$";
     // 汉字 (个数限制为一个或多个)
     public static final String CHINESE_REGEX = "^[\u4e00-\u9f5a]+$";
     // 身份证号
