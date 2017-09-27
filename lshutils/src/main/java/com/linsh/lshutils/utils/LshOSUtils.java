@@ -301,7 +301,6 @@ public class LshOSUtils {
         FuntouchOS, // vivo
         SmartisanOS, // 锤子
         EUI, // 乐视
-        LGE, // LG
         Sense, // HTC
         AmigoOS, // 金立
         _360OS, // 奇酷360

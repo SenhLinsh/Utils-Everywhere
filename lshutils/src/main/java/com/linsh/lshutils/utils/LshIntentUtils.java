@@ -13,7 +13,6 @@ import android.provider.Settings;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.Fragment;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 import com.linsh.lshutils.utils.Basic.LshIOUtils;
 import com.linsh.lshutils.utils.Basic.LshLogUtils;
 import com.linsh.lshutils.utils.Basic.LshStringUtils;
@@ -512,26 +511,28 @@ public class LshIntentUtils {
      * 跳转: 「权限设置」界面
      * <p>
      * 根据各大厂商的不同定制而跳转至其权限设置
-     * 目前已测试成功机型: 小米V7V8, 华为, 三星, 魅族; 测试失败: OPPO
+     * 目前已测试成功机型: 小米V7V8V9, 华为, 三星, 锤子, 魅族; 测试失败: OPPO
      *
      * @return 成功跳转权限设置, 返回 true; 没有适配该厂商或不能跳转, 则自动默认跳转设置界面, 并返回 false
      */
     public static boolean gotoPermissionSetting() {
         boolean success = true;
         Intent intent = new Intent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         String packageName = LshAppUtils.getPackageName();
-        String manufacturer = Build.MANUFACTURER.toLowerCase();
-        switch (manufacturer) {
-            case Manufacturer.HUAWEI:
+
+        LshOSUtils.ROM romType = LshOSUtils.getRomType();
+        switch (romType) {
+            case EMUI: // 华为
                 intent.putExtra("packageName", packageName);
                 intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.permissionmanager.ui.MainActivity"));
                 break;
-            case Manufacturer.MEIZU:
+            case Flyme: // 魅族
                 intent.setAction("com.meizu.safe.security.SHOW_APPSEC");
                 intent.addCategory(Intent.CATEGORY_DEFAULT);
                 intent.putExtra("packageName", packageName);
                 break;
-            case Manufacturer.XIAOMI:
+            case MIUI: // 小米
                 String rom = getMiuiVersion();
                 if ("V6".equals(rom) || "V7".equals(rom)) {
                     intent.setAction("miui.intent.action.APP_PERM_EDITOR");
@@ -545,26 +546,26 @@ public class LshIntentUtils {
                     intent = getAppDetailsSettingsIntent(packageName);
                 }
                 break;
-            case Manufacturer.SONY:
+            case Sony: // 索尼
                 intent.putExtra("packageName", packageName);
                 intent.setComponent(new ComponentName("com.sonymobile.cta", "com.sonymobile.cta.SomcCTAMainActivity"));
                 break;
-            case Manufacturer.OPPO:
+            case ColorOS: // OPPO
                 intent.putExtra("packageName", packageName);
                 intent.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.PermissionManagerActivity"));
                 break;
-            case Manufacturer.LETV:
+            case EUI: // 乐视
                 intent.putExtra("packageName", packageName);
                 intent.setComponent(new ComponentName("com.letv.android.letvsafe", "com.letv.android.letvsafe.PermissionAndApps"));
                 break;
-            case Manufacturer.LG:
+            case LG: // LG
                 intent.setAction("android.intent.action.MAIN");
                 intent.putExtra("packageName", packageName);
                 ComponentName comp = new ComponentName("com.android.settings", "com.android.settings.Settings$AccessLockSummaryActivity");
                 intent.setComponent(comp);
                 break;
-            case Manufacturer.SAMSUNG:
-            case Manufacturer.SMARTISAN:
+            case SamSung: // 三星
+            case SmartisanOS: // 锤子
                 gotoAppDetailSetting(packageName);
                 break;
             default:
@@ -573,9 +574,8 @@ public class LshIntentUtils {
                 success = false;
                 break;
         }
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
-            LshApplicationUtils.getContext().startActivity(intent);
+            LshContextUtils.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
             // 跳转失败, 前往普通设置界面
