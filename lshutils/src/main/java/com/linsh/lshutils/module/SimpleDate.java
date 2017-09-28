@@ -43,32 +43,36 @@ public class SimpleDate {
         return mIsLunar;
     }
 
-    public void setLunar(boolean isLunar) {
+    public SimpleDate setLunar(boolean isLunar) {
         mIsLunar = isLunar;
+        return this;
     }
 
     public int getYear() {
         return mDate[0];
     }
 
-    public void setYear(int year) {
+    public SimpleDate setYear(int year) {
         mDate[0] = year;
+        return this;
     }
 
     public int getMonth() {
         return mDate[1];
     }
 
-    public void setMonth(int month) {
+    public SimpleDate setMonth(int month) {
         mDate[1] = month;
+        return this;
     }
 
     public int getDay() {
         return mDate[2];
     }
 
-    public void setDay(int day) {
+    public SimpleDate setDay(int day) {
         mDate[2] = day;
+        return this;
     }
 
     public Date getDate() {
@@ -94,11 +98,31 @@ public class SimpleDate {
         return LshDateUtils.getDisplayStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
     }
 
+    public boolean isSameDay(SimpleDate compare) {
+        return isSameDay(compare, false);
+    }
+
+    public boolean isSameDay(SimpleDate compare, boolean ignoreLunar) {
+        return compare != null && getYear() == compare.getYear() && getMonth() == compare.getMonth()
+                && getDay() == compare.getDay() && (ignoreLunar || isLunar() == compare.isLunar());
+    }
+
     public static SimpleDate parseDateString(String date) {
         SimpleDate simpleDate = LshLunarCalendarUtils.parseNormalizedStr(date);
         if (simpleDate == null) {
             simpleDate = LshLunarCalendarUtils.parseLunarStr(date);
         }
         return simpleDate;
+    }
+
+    public static boolean isEqual(SimpleDate src, SimpleDate dest) {
+        return isEqual(src, dest, false);
+    }
+
+    public static boolean isEqual(SimpleDate src, SimpleDate dest, boolean ignoreLunar) {
+        if (src == null && dest == null) return true;
+        if (src == null || dest == null) return false;
+        return src.getYear() == dest.getYear() && src.getMonth() == dest.getMonth()
+                && src.getDay() == dest.getDay() && (ignoreLunar || src.isLunar() == dest.isLunar());
     }
 }
