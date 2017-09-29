@@ -6,7 +6,6 @@ import android.content.Context;
 import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 import com.linsh.lshutils.utils.Basic.LshLogUtils;
 import com.linsh.lshutils.utils.LshActivityLifecycleUtils;
-import com.linsh.lshutils.utils.LshBackgroundUtils;
 import com.linsh.lshutils.utils.LshFileManagerUtils;
 
 import java.io.File;
@@ -39,9 +38,5 @@ public class LshUtils {
 
     public static void initActivityLifecycleUtils(Application application) {
         LshActivityLifecycleUtils.init(application);
-    }
-
-    public static void initBackgroundUtils(Application application) {
-        LshBackgroundUtils.init(application);
     }
 }
