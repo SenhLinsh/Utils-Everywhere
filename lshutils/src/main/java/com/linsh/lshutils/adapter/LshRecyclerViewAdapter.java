@@ -73,7 +73,7 @@ public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolde
     public boolean onLongClick(View v) {
         Object tag = v.getTag(R.id.tag_item_view);
         if (mOnItemLongClickListener != null && tag != null && tag instanceof Integer) {
-            mOnItemLongClickListener.onItemLongClick((Integer) tag);
+            mOnItemLongClickListener.onItemLongClick(v, (Integer) tag);
             return true;
         }
         return false;
@@ -86,6 +86,6 @@ public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolde
     }
 
     public interface OnItemLongClickListener {
-        void onItemLongClick(int position);
+        void onItemLongClick(View view, int position);
     }
 }
