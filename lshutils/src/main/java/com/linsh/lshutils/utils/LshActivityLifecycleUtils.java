@@ -66,7 +66,7 @@ public class LshActivityLifecycleUtils {
         application.registerActivityLifecycleCallbacks(sLifecycleCallbacks);
     }
 
-    public static boolean isBackGround() {
+    public static boolean isAppInBackground() {
         check();
         return foregroundActivityCount <= 0;
     }

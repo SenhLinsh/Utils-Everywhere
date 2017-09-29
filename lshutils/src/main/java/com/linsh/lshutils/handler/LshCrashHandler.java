@@ -42,7 +42,7 @@ public abstract class LshCrashHandler {
                 }
                 refreshCrashTime();
 
-                if (!LshActivityLifecycleUtils.isBackGround()) {
+                if (!LshActivityLifecycleUtils.isAppInBackground()) {
                     ArrayList<Activity> activities = LshActivityLifecycleUtils.getCreatedActivities();
                     for (int i = activities.size() - 1; i >= 0; i--) {
                         Activity activity = activities.get(i);
