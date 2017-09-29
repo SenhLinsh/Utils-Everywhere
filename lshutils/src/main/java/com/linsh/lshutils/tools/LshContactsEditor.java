@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
+import com.linsh.lshutils.module.SimpleDate;
 import com.linsh.lshutils.utils.Basic.LshIOUtils;
 import com.linsh.lshutils.utils.LshArrayUtils;
 import com.linsh.lshutils.utils.LshContextUtils;
@@ -216,13 +217,13 @@ public class LshContactsEditor {
         public ContactBuilder insertBirthday(String birthday) {
             return insert(ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
                     new String[]{ContactsContract.CommonDataKinds.Event.START_DATE, ContactsContract.CommonDataKinds.Event.TYPE},
-                    new String[]{birthday, String.valueOf(3)});
+                    new String[]{getSavedBirthdayStr(birthday), String.valueOf(3)});
         }
 
         public ContactBuilder updateBirthday(String birthday) {
             return update(ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE,
                     new String[]{ContactsContract.CommonDataKinds.Event.TYPE}, new String[]{String.valueOf(3)},
-                    new String[]{ContactsContract.CommonDataKinds.Event.START_DATE}, new String[]{birthday});
+                    new String[]{ContactsContract.CommonDataKinds.Event.START_DATE}, new String[]{getSavedBirthdayStr(birthday)});
         }
 
         public ContactBuilder deleteBirthday() {
@@ -293,5 +294,18 @@ public class LshContactsEditor {
         public ContactBuilder deletePhoto() {
             return delete(ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE);
         }
+    }
+
+    private String getSavedBirthdayStr(String birthday) {
+        SimpleDate simpleDate = SimpleDate.parseDateString(birthday);
+        if (simpleDate != null) {
+            birthday = simpleDate.getNormalizedString();
+            if (LshOSUtils.getRomType() == LshOSUtils.ROM.MIUI) {
+                if (birthday.matches("\\d{1,2}-\\d{1,2}")) {
+                    birthday = "--" + birthday;
+                }
+            }
+        }
+        return birthday;
     }
 }
