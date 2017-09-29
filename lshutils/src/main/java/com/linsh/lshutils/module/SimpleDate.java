@@ -76,7 +76,7 @@ public class SimpleDate {
     }
 
     public Date getDate() {
-        return new Date(mDate[0], mDate[1] - 1, mDate[2]);
+        return new Date(mDate[0] - 1900, mDate[1] - 1, mDate[2]);
     }
 
     public String getNormalizedString() {
