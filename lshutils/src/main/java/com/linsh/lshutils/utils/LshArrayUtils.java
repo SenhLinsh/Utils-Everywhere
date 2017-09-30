@@ -134,4 +134,31 @@ public class LshArrayUtils {
             }
         }
     }
+
+    public static String toString(Object[] array) {
+        return Arrays.toString(array);
+    }
+
+    public static String toString(Object array) {
+        if (array == null) return "null";
+        if (array instanceof int[]) {
+            return Arrays.toString((int[]) array);
+        } else if (array instanceof long[]) {
+            return Arrays.toString((long[]) array);
+        } else if (array instanceof short[]) {
+            return Arrays.toString((short[]) array);
+        } else if (array instanceof char[]) {
+            return Arrays.toString((char[]) array);
+        } else if (array instanceof byte[]) {
+            return Arrays.toString((byte[]) array);
+        } else if (array instanceof boolean[]) {
+            return Arrays.toString((boolean[]) array);
+        } else if (array instanceof float[]) {
+            return Arrays.toString((float[]) array);
+        } else if (array instanceof double[]) {
+            return Arrays.toString((double[]) array);
+        } else {
+            return "not an array";
+        }
+    }
 }
