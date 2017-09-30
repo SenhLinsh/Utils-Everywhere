@@ -3,6 +3,7 @@ package com.linsh.lshutils.utils;
 import com.linsh.lshutils.Rx.Action;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -46,13 +47,32 @@ public class LshListUtils {
     }
 
     public static <T> String joint(List<T> list, String divider) {
-        String joint = "";
+        StringBuilder builder = new StringBuilder();
+
         for (int i = 0; i < list.size(); i++) {
             if (i != 0) {
-                joint += divider;
+                builder.append(divider);
             }
-            joint += list.get(i).toString();
+            builder.append(list.get(i));
         }
-        return joint;
+        return builder.toString();
+    }
+
+    public static String toString(Iterable iterable) {
+        return toString(iterable == null ? null : iterable.iterator());
+    }
+
+    public static String toString(Iterator iterator) {
+        if (iterator == null) return "null";
+        if (!iterator.hasNext()) return "[]";
+        StringBuilder builder = new StringBuilder();
+        builder.append('[');
+        for (; ; ) {
+            Object element = iterator.next();
+            builder.append(element);
+            if (!iterator.hasNext())
+                return builder.append(']').toString();
+            builder.append(',').append(' ');
+        }
     }
 }
