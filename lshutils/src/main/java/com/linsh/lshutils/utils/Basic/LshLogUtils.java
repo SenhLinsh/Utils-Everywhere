@@ -4,6 +4,8 @@ import android.content.pm.ApplicationInfo;
 import android.os.Environment;
 import android.util.Log;
 
+import com.linsh.lshutils.utils.LshArrayUtils;
+import com.linsh.lshutils.utils.LshListUtils;
 import com.linsh.lshutils.utils.LshTimeUtils;
 
 import java.io.BufferedWriter;
@@ -23,8 +25,8 @@ public class LshLogUtils {
     private static boolean sIsDebug = checkDebugMode();
     private static String sTag = "LshLogUtils: ";
 
-    private static Tracer mTracer;
-    private static Printer mPrinter;
+    private static Tracer sTracer;
+    private static Printer sPrinter;
 
     public static void init(boolean isDebug) {
         sIsDebug = isDebug;
@@ -32,93 +34,117 @@ public class LshLogUtils {
 
     public static void init(boolean isDebug, String tag) {
         sIsDebug = isDebug;
-        sTag = tag;
+        sTag = tag + " : ";
+    }
+
+    public static void v(String msg) {
+        if (sIsDebug) {
+            log(Log.VERBOSE, sTag + getClassName(), msg);
+        }
     }
 
     public static void v(Object msg) {
         if (sIsDebug) {
-            String mmsg = msg != null ? msg.toString() : "msg == null";
-            Log.v(sTag + getClassName(), mmsg);
+            checkAndLog(Log.VERBOSE, sTag + getClassName(), msg);
         }
     }
 
-    public static void v(String tag, Object msg) {
+    public static void v(Object... array) {
         if (sIsDebug) {
-            String mmsg = msg != null ? msg.toString() : "msg == null";
-            Log.v(sTag + getClassName(), tag + ": " + mmsg);
+            log(Log.VERBOSE, sTag + getClassName(), LshArrayUtils.toString(array));
+        }
+    }
+
+    public static void d(String msg) {
+        if (sIsDebug) {
+            log(Log.DEBUG, sTag + getClassName(), msg);
         }
     }
 
     public static void d(Object msg) {
         if (sIsDebug) {
-            String mmsg = msg != null ? msg.toString() : "msg == null";
-            Log.d(sTag + getClassName(), mmsg);
+            checkAndLog(Log.DEBUG, sTag + getClassName(), msg);
         }
     }
 
-    public static void d(String tag, Object msg) {
-        String mmsg = msg != null ? msg.toString() : "msg == null";
+    public static void d(Object... array) {
         if (sIsDebug) {
-            Log.d(sTag + getClassName(), tag + ": " + mmsg);
+            log(Log.DEBUG, sTag + getClassName(), LshArrayUtils.toString(array));
+        }
+    }
+
+    public static void i(String msg) {
+        if (sIsDebug) {
+            log(Log.INFO, sTag + getClassName(), msg);
         }
     }
 
     public static void i(Object msg) {
         if (sIsDebug) {
-            String mmsg = msg != null ? msg.toString() : "msg == null";
-            Log.i(sTag + getClassName(), mmsg);
+            checkAndLog(Log.INFO, sTag + getClassName(), msg);
         }
     }
 
-    public static void i(String tag, Object msg) {
+    public static void i(Object... array) {
         if (sIsDebug) {
-            String mmsg = msg != null ? msg.toString() : "msg == null";
-            Log.i(sTag + getClassName(), tag + ": " + mmsg);
+            log(Log.INFO, sTag + getClassName(), LshArrayUtils.toString(array));
+        }
+    }
+
+    public static void w(String msg) {
+        if (sIsDebug) {
+            log(Log.WARN, sTag + getClassName(), msg);
         }
     }
 
     public static void w(Object msg) {
         if (sIsDebug) {
-            String mmsg = msg != null ? msg.toString() : "msg == null";
-            Log.w(sTag + getClassName(), mmsg);
+            checkAndLog(Log.WARN, sTag + getClassName(), msg);
         }
     }
 
-    public static void w(String tag, Object msg) {
+    public static void w(Object... array) {
         if (sIsDebug) {
-            String mmsg = msg != null ? msg.toString() : "msg == null";
-            Log.w(sTag + getClassName(), tag + ": " + mmsg);
+            log(Log.WARN, sTag + getClassName(), LshArrayUtils.toString(array));
         }
     }
 
     public static void e(String msg) {
         if (sIsDebug) {
-            Log.e(sTag + getClassName(), msg);
+            log(Log.ERROR, sTag + getClassName(), msg);
         }
     }
 
-    public static void e(String tag, String msg) {
+    public static void e(String... array) {
         if (sIsDebug) {
-            Log.e(sTag + getClassName(), tag + ": " + msg);
+            log(Log.ERROR, sTag + getClassName(), LshArrayUtils.toString(array));
         }
     }
 
-    public static void e(String tag, String msg, Throwable e) {
+    public static void e(Throwable thr) {
         if (sIsDebug) {
-            Log.e(sTag + getClassName(), tag + ": " + msg);
-            if (e != null) {
-                e.printStackTrace();
-            }
+            Log.e(sTag + getClassName(), "", thr);
         }
     }
 
-    public static void e(String msg, Throwable e) {
+    public static void e(String msg, Throwable thr) {
         if (sIsDebug) {
-            Log.e(sTag + getClassName(), msg, e);
-            if (e != null) {
-                e.printStackTrace();
-            }
+            Log.e(sTag + getClassName(), msg, thr);
         }
+    }
+
+    private static void checkAndLog(int priority, String tag, Object msg) {
+        if (msg instanceof Iterable) {
+            log(priority, tag, LshListUtils.toString((Iterable) msg));
+        } else if (msg.getClass().isArray()) {
+            log(priority, tag, LshArrayUtils.toString(msg));
+        } else {
+            log(priority, tag, msg);
+        }
+    }
+
+    private static void log(int priority, String tag, Object msg) {
+        Log.println(priority, tag, msg != null ? msg.toString() : "null");
     }
 
     public static String getStackTraceString(Throwable tr) {
@@ -134,14 +160,14 @@ public class LshLogUtils {
 
     //================================================ 日志追踪相关 ================================================//
     public static Tracer tracer() {
-        if (mTracer == null) {
+        if (sTracer == null) {
             synchronized (LshLogUtils.class) {
-                if (mTracer == null) {
-                    mTracer = new Tracer();
+                if (sTracer == null) {
+                    sTracer = new Tracer();
                 }
             }
         }
-        return mTracer;
+        return sTracer;
     }
 
     public static class Tracer {
@@ -162,7 +188,7 @@ public class LshLogUtils {
 
         public void i(String msg) {
             if (sIsDebug) {
-                Log.i(sTag + getClassName(), msg);
+                LshLogUtils.i(msg);
             }
             traces.add(msg);
             while (traces.size() > 10) {
@@ -192,14 +218,14 @@ public class LshLogUtils {
 
     //================================================ 打印日志到本地相关 ================================================//
     public static Printer printer() {
-        if (mPrinter == null) {
+        if (sPrinter == null) {
             synchronized (LshLogUtils.class) {
-                if (mPrinter == null) {
-                    mPrinter = new Printer();
+                if (sPrinter == null) {
+                    sPrinter = new Printer();
                 }
             }
         }
-        return mPrinter;
+        return sPrinter;
     }
 
     /**
@@ -224,7 +250,7 @@ public class LshLogUtils {
 
         public void i(String msg) {
             if (sIsDebug) {
-                Log.i(sTag + getClassName(), msg);
+                LshLogUtils.i(msg);
             }
             print(msg);
         }
@@ -232,7 +258,7 @@ public class LshLogUtils {
         public void i(List<String> msgs) {
             if (sIsDebug) {
                 for (String msg : msgs) {
-                    Log.i(sTag + getClassName(), msg);
+                    LshLogUtils.i(msg);
                 }
             }
             print(msgs);
@@ -245,7 +271,7 @@ public class LshLogUtils {
         public void e(String msg, Throwable thr) {
             msg = msg == null ? "msg = null" : msg;
             if (sIsDebug) {
-                Log.e(sTag + getClassName(), msg, thr);
+                LshLogUtils.e(msg, thr);
             }
             List<String> logs = new ArrayList<>();
             logs.add("  ---------------------Throw an ERROR----------------  ");
