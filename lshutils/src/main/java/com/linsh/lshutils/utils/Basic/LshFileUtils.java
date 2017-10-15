@@ -312,18 +312,18 @@ public class LshFileUtils {
     /**
      * 复制文件
      */
-    private static boolean copy(File srcFile, File destFile) {
+    public static boolean copy(File srcFile, File destFile) {
         return copyOrMoveFile(srcFile, destFile, false);
     }
 
     /**
      * 移动文件
      */
-    private static boolean move(File srcFile, File destFile) {
+    public static boolean move(File srcFile, File destFile) {
         return copyOrMoveFile(srcFile, destFile, true);
     }
 
-    private static boolean copyOrMoveFile(File srcFile, File destFile, boolean isMove) {
+    public static boolean copyOrMoveFile(File srcFile, File destFile, boolean isMove) {
         if (srcFile == null || !srcFile.exists() || !srcFile.isFile())
             return false;
         if (destFile == null || destFile.exists())
@@ -337,7 +337,7 @@ public class LshFileUtils {
         }
     }
 
-    private static boolean copyOrMoveDir(File srcDir, File destDir, boolean isMove) {
+    public static boolean copyOrMoveDir(File srcDir, File destDir, boolean isMove) {
         if (srcDir == null || !srcDir.exists() || !srcDir.isDirectory())
             return false;
         if (!checkFile(destDir) || (destDir.exists() && destDir.isFile()))
