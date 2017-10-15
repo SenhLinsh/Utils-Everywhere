@@ -62,9 +62,12 @@ public class LshStringUtils {
         return true;
     }
 
-    // 避免了空指针异常
     public static boolean isEquals(String actual, String expected) {
         return actual == expected || (actual != null && actual.equals(expected));
+    }
+
+    public static boolean notEquals(String actual, String expected) {
+        return !isEquals(actual, expected);
     }
 
     /**
