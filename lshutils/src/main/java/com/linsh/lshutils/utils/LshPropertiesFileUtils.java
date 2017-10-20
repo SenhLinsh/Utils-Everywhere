@@ -58,6 +58,6 @@ public class LshPropertiesFileUtils {
         File file = getPropertyFile(fileName);
         if (!file.exists()) return null;
         StringBuilder stringBuilder = LshFileUtils.readFile(file);
-        return stringBuilder.toString();
+        return stringBuilder == null ? null : stringBuilder.toString();
     }
 }
