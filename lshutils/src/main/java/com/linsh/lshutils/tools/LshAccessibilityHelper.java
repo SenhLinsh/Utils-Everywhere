@@ -114,4 +114,27 @@ public class LshAccessibilityHelper {
             findAllContentDescriptions(nodeInfo.getChild(i), result);
         }
     }
+
+    public void performClick(AccessibilityNodeInfo nodeInfo) {
+        nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+    }
+
+    public void performClick(AccessibilityNodeInfo nodeInfo, boolean clickParentIfNotClickable) {
+        if (clickParentIfNotClickable) {
+            if (nodeInfo.isClickable()) {
+                nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            } else {
+                AccessibilityNodeInfo parent = nodeInfo.getParent();
+                while (parent != null) {
+                    if (parent.isClickable()) {
+                        parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                        break;
+                    }
+                    parent = parent.getParent();
+                }
+            }
+        } else {
+            nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        }
+    }
 }
