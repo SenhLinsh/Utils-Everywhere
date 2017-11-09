@@ -3,8 +3,6 @@ package com.linsh.lshutils.utils;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-
 import java.io.File;
 
 /**

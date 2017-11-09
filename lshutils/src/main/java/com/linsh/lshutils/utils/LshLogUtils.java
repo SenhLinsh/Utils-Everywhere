@@ -1,12 +1,8 @@
-package com.linsh.lshutils.utils.Basic;
+package com.linsh.lshutils.utils;
 
 import android.content.pm.ApplicationInfo;
 import android.os.Environment;
 import android.util.Log;
-
-import com.linsh.lshutils.utils.LshArrayUtils;
-import com.linsh.lshutils.utils.LshListUtils;
-import com.linsh.lshutils.utils.LshTimeUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;

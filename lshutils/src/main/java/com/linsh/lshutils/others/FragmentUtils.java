@@ -12,7 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 
-import com.linsh.lshutils.utils.Basic.LshLogUtils;
+import com.linsh.lshutils.utils.LshLogUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

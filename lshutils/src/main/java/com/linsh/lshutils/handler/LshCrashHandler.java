@@ -6,8 +6,8 @@ import android.app.Application;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-import com.linsh.lshutils.utils.Basic.LshSharedPreferenceUtils;
+import com.linsh.lshutils.utils.LshApplicationUtils;
+import com.linsh.lshutils.utils.LshSharedPreferenceUtils;
 import com.linsh.lshutils.utils.LshActivityLifecycleUtils;
 import com.linsh.lshutils.utils.LshAppUtils;
 

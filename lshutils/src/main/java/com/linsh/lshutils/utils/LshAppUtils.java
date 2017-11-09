@@ -10,8 +10,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.RequiresPermission;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-
 import java.io.File;
 import java.util.List;
 

@@ -7,8 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Parcelable;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-
 /**
  * Created by Senh Linsh on 17/1/6.
  */

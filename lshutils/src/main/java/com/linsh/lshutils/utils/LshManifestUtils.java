@@ -3,8 +3,6 @@ package com.linsh.lshutils.utils;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-
 /**
  * Created by Senh Linsh on 17/2/20.
  */

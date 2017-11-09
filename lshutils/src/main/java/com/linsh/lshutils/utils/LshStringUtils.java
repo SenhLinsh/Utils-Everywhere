@@ -1,4 +1,4 @@
-package com.linsh.lshutils.utils.Basic;
+package com.linsh.lshutils.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

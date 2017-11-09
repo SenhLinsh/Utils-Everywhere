@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 
 import com.linsh.lshutils.module.SimpleDate;
-import com.linsh.lshutils.utils.Basic.LshIOUtils;
+import com.linsh.lshutils.utils.LshIOUtils;
 import com.linsh.lshutils.utils.LshArrayUtils;
 import com.linsh.lshutils.utils.LshContextUtils;
 import com.linsh.lshutils.utils.LshOSUtils;

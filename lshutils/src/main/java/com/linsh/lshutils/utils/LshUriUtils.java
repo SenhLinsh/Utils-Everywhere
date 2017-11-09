@@ -3,8 +3,6 @@ package com.linsh.lshutils.utils;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-
 import java.io.File;
 
 /**

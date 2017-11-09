@@ -3,8 +3,6 @@ package com.linsh.lshutils.utils;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-
 /**
  * Created by Senh Linsh on 17/1/11.
  */

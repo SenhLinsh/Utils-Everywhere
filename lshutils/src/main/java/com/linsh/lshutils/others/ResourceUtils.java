@@ -2,7 +2,7 @@ package com.linsh.lshutils.others;
 
 import android.content.Context;
 
-import com.linsh.lshutils.utils.Basic.LshStringUtils;
+import com.linsh.lshutils.utils.LshStringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.linsh.lshutils.utils.Basic;
+package com.linsh.lshutils.utils;
 
 import android.database.Cursor;
 

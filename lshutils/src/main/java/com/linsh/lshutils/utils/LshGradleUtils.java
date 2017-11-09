@@ -1,7 +1,5 @@
 package com.linsh.lshutils.utils;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-
 import java.lang.reflect.Field;
 
 /**

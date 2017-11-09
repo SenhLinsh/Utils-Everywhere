@@ -1,8 +1,8 @@
 package com.linsh.lshutils.others;
 
-import com.linsh.lshutils.utils.Basic.LshFileUtils;
-import com.linsh.lshutils.utils.Basic.LshIOUtils;
-import com.linsh.lshutils.utils.Basic.LshStringUtils;
+import com.linsh.lshutils.utils.LshFileUtils;
+import com.linsh.lshutils.utils.LshIOUtils;
+import com.linsh.lshutils.utils.LshStringUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

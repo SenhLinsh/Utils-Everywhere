@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import com.linsh.lshutils.common.FileProperties;
-import com.linsh.lshutils.utils.Basic.LshSharedPreferenceUtils;
 
 
 /**

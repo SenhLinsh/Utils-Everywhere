@@ -1,11 +1,9 @@
-package com.linsh.lshutils.utils.Basic;
+package com.linsh.lshutils.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.widget.Toast;
-
-import com.linsh.lshutils.utils.LshContextUtils;
 
 import java.lang.ref.SoftReference;
 

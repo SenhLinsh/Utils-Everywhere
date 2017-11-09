@@ -2,9 +2,6 @@ package com.linsh.lshutils.utils;
 
 import android.os.Environment;
 
-import com.linsh.lshutils.utils.Basic.LshIOUtils;
-import com.linsh.lshutils.utils.Basic.LshStringUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

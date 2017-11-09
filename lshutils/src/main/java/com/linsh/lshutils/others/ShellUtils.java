@@ -1,6 +1,6 @@
 package com.linsh.lshutils.others;
 
-import com.linsh.lshutils.utils.Basic.LshIOUtils;
+import com.linsh.lshutils.utils.LshIOUtils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

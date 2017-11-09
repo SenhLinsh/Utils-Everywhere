@@ -7,7 +7,6 @@ import android.net.Uri;
 
 import com.google.gson.Gson;
 import com.linsh.lshutils.base.JsonBean;
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
 
 /**
  * Created by Senh Linsh on 16/12/23.

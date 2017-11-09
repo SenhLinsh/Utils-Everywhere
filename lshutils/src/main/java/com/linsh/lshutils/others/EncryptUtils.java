@@ -2,7 +2,7 @@ package com.linsh.lshutils.others;
 
 import android.util.Base64;
 
-import com.linsh.lshutils.utils.Basic.LshIOUtils;
+import com.linsh.lshutils.utils.LshIOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

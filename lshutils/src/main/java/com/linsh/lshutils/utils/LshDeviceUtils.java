@@ -2,8 +2,6 @@ package com.linsh.lshutils.utils;
 
 import android.content.res.Configuration;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-
 /**
  * Created by Senh Linsh on 16/10/21.
  */

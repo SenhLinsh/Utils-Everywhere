@@ -1,4 +1,4 @@
-package com.linsh.lshutils.utils.Basic;
+package com.linsh.lshutils.utils;
 
 import android.content.Context;
 import android.os.Handler;

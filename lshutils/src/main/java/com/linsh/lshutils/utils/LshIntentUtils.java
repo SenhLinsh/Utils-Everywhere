@@ -13,10 +13,6 @@ import android.provider.Settings;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.Fragment;
 
-import com.linsh.lshutils.utils.Basic.LshIOUtils;
-import com.linsh.lshutils.utils.Basic.LshLogUtils;
-import com.linsh.lshutils.utils.Basic.LshStringUtils;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;

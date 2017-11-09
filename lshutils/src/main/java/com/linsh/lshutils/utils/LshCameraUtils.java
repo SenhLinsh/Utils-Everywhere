@@ -3,8 +3,6 @@ package com.linsh.lshutils.utils;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-
 /**
  * Created by Senh Linsh on 17/7/6.
  */

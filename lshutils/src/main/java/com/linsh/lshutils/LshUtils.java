@@ -3,8 +3,8 @@ package com.linsh.lshutils;
 import android.app.Application;
 import android.content.Context;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-import com.linsh.lshutils.utils.Basic.LshLogUtils;
+import com.linsh.lshutils.utils.LshApplicationUtils;
+import com.linsh.lshutils.utils.LshLogUtils;
 import com.linsh.lshutils.utils.LshActivityLifecycleUtils;
 import com.linsh.lshutils.utils.LshFileManagerUtils;
 

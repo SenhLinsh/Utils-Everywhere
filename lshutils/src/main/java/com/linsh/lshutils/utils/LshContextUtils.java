@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-
 import java.io.File;
 
 /**

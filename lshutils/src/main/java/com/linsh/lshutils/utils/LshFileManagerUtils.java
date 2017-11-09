@@ -2,8 +2,6 @@ package com.linsh.lshutils.utils;
 
 import android.os.Environment;
 
-import com.linsh.lshutils.utils.Basic.LshFileUtils;
-
 import java.io.File;
 
 /**

@@ -26,9 +26,6 @@ import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.FloatRange;
 import android.view.View;
 
-import com.linsh.lshutils.utils.Basic.LshFileUtils;
-import com.linsh.lshutils.utils.Basic.LshIOUtils;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;

@@ -4,8 +4,6 @@ import android.app.KeyguardManager;
 import android.content.Context;
 import android.os.PowerManager;
 
-import com.linsh.lshutils.utils.Basic.LshApplicationUtils;
-
 /**
  * Created by Senh Linsh on 17/5/11.
  */

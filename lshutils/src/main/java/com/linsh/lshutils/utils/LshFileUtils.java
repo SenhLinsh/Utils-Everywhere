@@ -1,12 +1,10 @@
-package com.linsh.lshutils.utils.Basic;
+package com.linsh.lshutils.utils;
 
 import android.os.Environment;
 import android.text.format.Formatter;
 
 import com.linsh.lshutils.module.unit.FileSize;
 import com.linsh.lshutils.module.unit.Unit;
-import com.linsh.lshutils.utils.LshPermissionUtils;
-import com.linsh.lshutils.utils.LshSDCardUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

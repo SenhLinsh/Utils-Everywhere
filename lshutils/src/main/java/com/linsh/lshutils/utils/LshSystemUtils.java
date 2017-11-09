@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import com.linsh.lshutils.utils.Basic.LshLogUtils;
-
 /**
  * Created by Senh Linsh on 16/1/11.
  */
