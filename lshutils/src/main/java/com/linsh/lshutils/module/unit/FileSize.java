@@ -1,9 +1,13 @@
 package com.linsh.lshutils.module.unit;
 
 /**
- * Created by Senh Linsh on 17/6/2.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 文件尺寸
+ * </pre>
  */
-
 public class FileSize {
 
     public static final int B = 0;

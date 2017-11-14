@@ -22,9 +22,13 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by Senh Linsh on 17/3/7.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 简化的 RecyclerView Adapter 基类, 可直接使用内部类创建继承的子类实现 Adapter 功能
+ * </pre>
  */
-
 public abstract class LshSimplifiedRcvAdapter<T> extends RecyclerView.Adapter<LshSimplifiedRcvAdapter.LshSimplifiedViewHolder> {
 
     private List<T> list;

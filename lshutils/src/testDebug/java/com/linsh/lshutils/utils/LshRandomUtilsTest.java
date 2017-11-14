@@ -20,12 +20,14 @@ public class LshRandomUtilsTest {
 
     @Test
     public void getNumberString() throws Exception {
-
+        int[] src = new int[]{1, 2, 3};
+        int[] dest = new int[]{4, 5, 6, 7};
+        LshArrayUtils.copy(src, dest);
+        LshTestUtils.print(dest);
     }
 
     @Test
     public void getLetterString() throws Exception {
 
     }
-
 }

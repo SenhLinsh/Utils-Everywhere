@@ -8,12 +8,19 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 /**
- * Created by Senh Linsh on 16/1/11.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/13
+ *    desc   : 工具类: 系统相关
+ * </pre>
  */
 public class LshSystemUtils {
 
     /**
-     * 隐藏状态栏和虚拟按键
+     * 隐藏系统状态栏和虚拟按键
+     *
+     * @param view View 对象
      */
     public static void hideNavigationBar(View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -31,6 +38,8 @@ public class LshSystemUtils {
 
     /**
      * 隐藏状态栏
+     *
+     * @param view View 对象
      */
     public static void hideStatusBar(View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -47,16 +56,32 @@ public class LshSystemUtils {
     }
 
     /**
-     * 设置沉浸式状态栏, 为状态栏着色
+     * 设置沉浸式状态栏, 并为状态栏着色
+     *
+     * @param activity       Activity
+     * @param statusBarColor 需要设置的状态栏颜色
      */
     public static void setTranslucentStatusBar(Activity activity, int statusBarColor) {
         setTranslucentStatusBar(activity, statusBarColor, false);
     }
 
+    /**
+     * 设置沉浸式状态栏, 并为状态栏着色, 将状态栏颜色块添加在 Activity UI 层的后方(底下)
+     *
+     * @param activity       Activity
+     * @param statusBarColor 需要设置的状态栏颜色
+     */
     public static void setTranslucentStatusBarBehind(Activity activity, int statusBarColor) {
         setTranslucentStatusBar(activity, statusBarColor, true);
     }
 
+    /**
+     * 设置沉浸式状态栏, 并为状态栏着色
+     *
+     * @param activity       Activity
+     * @param statusBarColor 需要设置的状态栏颜色
+     * @param behind         是否将状态栏颜色块添加在 Activity UI 层的后方
+     */
     private static void setTranslucentStatusBar(Activity activity, int statusBarColor, boolean behind) {
         if (Build.VERSION.SDK_INT < 19) {
             return;
@@ -75,6 +100,12 @@ public class LshSystemUtils {
         }
     }
 
+    /**
+     * 设置沉浸式状态栏, 并为状态栏着色, 将颜色块嵌入在 Activity UI 层的前后方, 实现沉浸式效果
+     *
+     * @param activity       Activity
+     * @param statusBarColor 需要设置的状态栏颜色
+     */
     public static void setTranslucentStatusBarWithInsertion(Activity activity, int statusBarColor) {
         if (Build.VERSION.SDK_INT < 19) {
             return;

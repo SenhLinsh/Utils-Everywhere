@@ -4,8 +4,20 @@ import android.content.Context;
 import android.provider.Settings;
 import android.widget.Toast;
 
+/**
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/09
+ *    desc   : 工具类：辅助功能（无障碍服务功能）相关
+ * </pre>
+ */
 public class LshAccessibilityUtils {
 
+    /**
+     * 检查辅助功能（无障碍服务功能）是否开启，如果没有开启则自动跳转『无障碍服务』界面
+     * @return
+     */
     public static boolean checkAccessibility() {
         if (isAccessibilitySettingsOn()) {
             return true;
@@ -15,6 +27,9 @@ public class LshAccessibilityUtils {
         return false;
     }
 
+    /**
+     * 检查辅助功能（无障碍服务功能）是否开启
+     */
     public static boolean isAccessibilitySettingsOn() {
         int result;
         Context context = LshContextUtils.get();

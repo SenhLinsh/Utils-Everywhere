@@ -1,7 +1,14 @@
 package com.linsh.lshutils.utils;
 
 /**
- * Created by Senh Linsh on 17/1/11.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: 正则相关
+ *
+ *             注: 部分 API 直接参考或使用 https://github.com/l123456789jy/Lazy 中 RegexUtils 类里面的方法
+ * </pre>
  */
 public class LshRegexUtils {
     // 全网IP

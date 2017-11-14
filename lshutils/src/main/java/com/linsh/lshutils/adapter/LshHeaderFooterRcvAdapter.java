@@ -11,8 +11,9 @@ import java.util.List;
 /**
  * <pre>
  *    author : Senh Linsh
- *    date   : 17/10/11
- *    desc   :
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 自动为 RecyclerView 添加头部和尾部的 Adapter
  * </pre>
  */
 public abstract class LshHeaderFooterRcvAdapter<T, H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H>

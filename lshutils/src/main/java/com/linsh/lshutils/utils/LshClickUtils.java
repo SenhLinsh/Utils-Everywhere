@@ -1,15 +1,19 @@
 package com.linsh.lshutils.utils;
 
 /**
- * Created by Senh Linsh on 17/6/29.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/09
+ *    desc   : 工具类: 点击事件相关
+ * </pre>
  */
-
 public class LshClickUtils {
 
     private static long lastClickTime;
 
     /**
-     * 判断快速点击
+     * 判断是否为快速多次点击
      */
     public static boolean isFastDoubleClick() {
         long time = System.currentTimeMillis();

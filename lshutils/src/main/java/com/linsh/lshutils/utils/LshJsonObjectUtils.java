@@ -5,9 +5,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Senh Linsh on 17/3/1.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: 对 JsonObject 的处理进行了封装
+ * </pre>
  */
-
 public class LshJsonObjectUtils {
 
     public JsonObjectBuilder parseJson(String json) {

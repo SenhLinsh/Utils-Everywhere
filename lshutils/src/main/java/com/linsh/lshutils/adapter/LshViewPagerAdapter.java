@@ -7,9 +7,13 @@ import android.view.ViewGroup;
 import java.util.List;
 
 /**
- * Created by Senh Linsh on 17/7/11.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 用于简化 ViewPager Adapter 操作的基类
+ * </pre>
  */
-
 public abstract class LshViewPagerAdapter<T> extends PagerAdapter {
 
     private List<T> data;

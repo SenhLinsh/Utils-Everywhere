@@ -7,11 +7,13 @@ import android.view.ViewGroup;
 import java.util.List;
 
 /**
- * Created by linsh on 17/1/25.
- * <p>
- * 可展开RecyclerView的Adapter. 目前只能展开二级, 并且展开某一条目后之前展开的条目会自动关闭
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 可展开RecyclerView的Adapter. 目前只能展开二级, 并且展开某一条目后之前展开的条目会自动关闭
+ * </pre>
  */
-
 public abstract class LshExpandableRcvAdapter<F, S> extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener {
 
     public static final int VIEW_TYPE_FIRST_LEVEL = 1;

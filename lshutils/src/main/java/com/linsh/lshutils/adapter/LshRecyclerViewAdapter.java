@@ -10,7 +10,12 @@ import com.linsh.lshutils.R;
 import java.util.List;
 
 /**
- * Created by linsh on 17/4/30.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 简单抽取的 RecyclerView Adapter 基类
+ * </pre>
  */
 public abstract class LshRecyclerViewAdapter<T, H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H>
         implements View.OnClickListener, View.OnLongClickListener {

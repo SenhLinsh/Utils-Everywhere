@@ -15,13 +15,20 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 /**
- * Created by Senh Linsh on 17/4/11.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: 网络相关
+ *             API  : 检查网络是否可用 / 检查网络类型 / 获取 IP 地址 等
+ * </pre>
  */
-
 public class LshNetworkUtils {
 
     /**
-     * 检查是否有网络
+     * 判断网络是否可用
+     *
+     * @return 是否可用
      */
     public static boolean isAvailable() {
         NetworkInfo info = getNetworkInfo();
@@ -30,6 +37,8 @@ public class LshNetworkUtils {
 
     /**
      * 判断网络是否连接
+     *
+     * @return 是否连接
      */
     public static boolean isConnected() {
         NetworkInfo info = getNetworkInfo();
@@ -38,6 +47,8 @@ public class LshNetworkUtils {
 
     /**
      * 判断移动数据是否打开
+     *
+     * @return 是否打开
      */
     public static boolean getDataEnabled() {
         try {
@@ -53,7 +64,44 @@ public class LshNetworkUtils {
     }
 
     /**
-     * 检查是否是WIFI
+     * 检查当前网络类型是否为移动网络
+     *
+     * @return 是否为移动网络
+     */
+    public static boolean isMobile() {
+        NetworkInfo info = getNetworkInfo();
+        if (info != null) {
+            if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 检查当前网络类型是否为 移动4G
+     *
+     * @return 是否为 移动4G
+     */
+    public static boolean isMobile4G() {
+        NetworkInfo info = getNetworkInfo();
+        return info != null && info.isAvailable() && info.getSubtype() == TelephonyManager.NETWORK_TYPE_LTE;
+    }
+
+    /**
+     * 判断 WIFI 是否打开
+     *
+     * @return 是否打开
+     */
+    public static boolean isWifiEnabled() {
+        WifiManager wifiManager = (WifiManager) LshContextUtils.getSystemService(Context.WIFI_SERVICE);
+        return wifiManager.isWifiEnabled();
+    }
+
+    /**
+     * 检查当前网络类型是否为 WIFI
+     *
+     * @return 是否为 WIFI
      */
     public static boolean isWifi() {
         NetworkInfo info = getNetworkInfo();
@@ -66,33 +114,9 @@ public class LshNetworkUtils {
     }
 
     /**
-     * 检查是否是移动网络
-     */
-    public static boolean isMobile() {
-        NetworkInfo info = getNetworkInfo();
-        if (info != null) {
-            if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isMobile4G() {
-        NetworkInfo info = getNetworkInfo();
-        return info != null && info.isAvailable() && info.getSubtype() == TelephonyManager.NETWORK_TYPE_LTE;
-    }
-
-    /**
-     * 判断wifi是否打开
-     */
-    public static boolean isWifiEnabled() {
-        WifiManager wifiManager = (WifiManager) LshContextUtils.getSystemService(Context.WIFI_SERVICE);
-        return wifiManager.isWifiEnabled();
-    }
-
-    /**
-     * 判断wifi是否连接状态
+     * 判断 WIFI 是否已连接
+     *
+     * @return 是否已连接
      */
     public static boolean isWifiConnected() {
         ConnectivityManager cm = (ConnectivityManager) LshContextUtils.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -101,11 +125,13 @@ public class LshNetworkUtils {
     }
 
     /**
-     * 打开或关闭wifi
+     * 打开或关闭 WIFI
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>}</p>
+     *
+     * @param enabled 是否可用 (可用即为打开)
      */
     @RequiresPermission(Manifest.permission.CHANGE_WIFI_STATE)
-    public static void setWifiEnabled(final boolean enabled) {
+    public static void setWifiEnabled(boolean enabled) {
         WifiManager wifiManager = (WifiManager) LshContextUtils.getSystemService(Context.WIFI_SERVICE);
         if (enabled) {
             if (!wifiManager.isWifiEnabled()) {
@@ -121,6 +147,8 @@ public class LshNetworkUtils {
     /**
      * 获取网络运营商名称
      * <p>中国移动、如中国联通、中国电信</p>
+     *
+     * @return 网络运营商名称
      */
     public static String getNetworkOperatorName() {
         TelephonyManager tm = (TelephonyManager) LshContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
@@ -128,14 +156,19 @@ public class LshNetworkUtils {
     }
 
     /**
-     * 获取IP地址
+     * 获取 IP地址
+     *
+     * @return IP地址
      */
     public static String getIPAddress() {
         return getIPAddress(true);
     }
 
     /**
-     * 获取IP地址
+     * 获取 IP地址
+     *
+     * @param useIPv4 是否使用 IPv4 地址
+     * @return IP地址
      */
     public static String getIPAddress(boolean useIPv4) {
         try {

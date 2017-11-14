@@ -19,13 +19,22 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Created by Senh Linsh on 17/6/7.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: Intent 意图相关
+ *
+ *             注: 部分 API 直接参考或使用 https://github.com/Blankj/AndroidUtilCode 中 IntentUtils 类里面的方法
+ * </pre>
  */
-
 public class LshIntentUtils {
 
     /**
      * 获取分享文本的意图
+     *
+     * @param content 文本内容
+     * @return 意图
      */
     public static Intent getShareTextIntent(String content) {
         return new Intent(Intent.ACTION_SEND)
@@ -36,6 +45,8 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「桌面主页」的意图
+     *
+     * @return 意图
      */
     public static Intent getHomeIntent() {
         return new Intent(Intent.ACTION_MAIN)
@@ -44,13 +55,18 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「选择文件」的意图
+     *
+     * @return 意图
      */
     public static Intent getPickFileIntent() {
         return getPickIntent("file/*");
     }
 
     /**
-     * 获取跳转「选择文件」的意图
+     * 获取跳转「选择文件」的意图, 指定文件扩展名
+     *
+     * @param fileExtension 文件扩展名
+     * @return 意图
      */
     public static Intent getPickFileIntent(String fileExtension) {
         String type = LshMimeTypeUtils.getMimeTypeFromExtension(fileExtension);
@@ -62,6 +78,8 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「选择图片」的意图
+     *
+     * @return 意图
      */
     public static Intent getPickPhotoIntent() {
         return getPickIntent("image/*");
@@ -69,6 +87,8 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「选择视频」的意图
+     *
+     * @return 意图
      */
     public static Intent getPickVideoIntent() {
         return getPickIntent("video/*");
@@ -76,6 +96,8 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「选择音频」的意图
+     *
+     * @return 意图
      */
     public static Intent getPickAudioIntent() {
         return getPickIntent("audio/*");
@@ -83,6 +105,9 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「选择...」的意图
+     *
+     * @param type mimeType 类型
+     * @return 意图
      */
     public static Intent getPickIntent(String type) {
         return new Intent(Intent.ACTION_GET_CONTENT)
@@ -92,6 +117,9 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「系统相机」的意图
+     *
+     * @param outputFile 拍摄图片的输入文件对象
+     * @return 意图
      */
     public static Intent getTakePhotoIntent(File outputFile) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -106,6 +134,14 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「系统剪裁」的意图
+     *
+     * @param inputFile  剪裁图片文件
+     * @param outputFile 输出图片文件
+     * @param aspectX    输出图片宽高比中的宽
+     * @param aspectY    输出图片宽高比中的高
+     * @param outputX    输出图片的宽
+     * @param outputY    输出图片的高
+     * @return 意图
      */
     public static Intent getCropPhotoIntent(File inputFile, File outputFile, int aspectX, int aspectY, int outputX, int outputY) {
         Uri inputUri;
@@ -117,8 +153,17 @@ public class LshIntentUtils {
         return getCropPhotoIntent(inputUri, Uri.fromFile(outputFile), aspectX, aspectY, outputX, outputY);
     }
 
+
     /**
      * 获取跳转「系统剪裁」的意图
+     *
+     * @param inputUri  剪裁图片文件的 Uri
+     * @param outputUri 输出图片文件的 Uri
+     * @param aspectX   输出图片宽高比中的宽
+     * @param aspectY   输出图片宽高比中的高
+     * @param outputX   输出图片的宽
+     * @param outputY   输出图片的高
+     * @return 意图
      */
     public static Intent getCropPhotoIntent(Uri inputUri, Uri outputUri, int aspectX, int aspectY, int outputX, int outputY) {
         Intent intent = new Intent("com.android.camera.action.CROP");
@@ -140,6 +185,9 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「安装应用」的意图
+     *
+     * @param apkFile APK 文件
+     * @return 意图
      */
     public static Intent getInstallAppIntent(File apkFile) {
         if (apkFile == null || !apkFile.exists() || !apkFile.isFile())
@@ -160,6 +208,9 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「卸载应用」的意图
+     *
+     * @param packageName 应用包名
+     * @return 意图
      */
     public static Intent getUninstallAppIntent(String packageName) {
         if (LshStringUtils.isEmpty(packageName)) return null;
@@ -172,6 +223,9 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「应用」的意图
+     *
+     * @param packageName 应用包名
+     * @return 意图
      */
     public static Intent getLaunchAppIntent(String packageName) {
         return LshContextUtils.getPackageManager().getLaunchIntentForPackage(packageName);
@@ -180,8 +234,12 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「应用组件」的意图
+     *
+     * @param packageName 应用包名
+     * @param className   应用组件的类名
+     * @return 意图
      */
-    public static Intent getComponentIntent(final String packageName, final String className) {
+    public static Intent getComponentIntent(String packageName, String className) {
         return new Intent(Intent.ACTION_VIEW)
                 .setComponent(new ComponentName(packageName, className))
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -189,6 +247,19 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「拨号界面」的意图
+     *
+     * @return 意图
+     */
+    public static Intent getDialIntent() {
+        return new Intent(Intent.ACTION_DIAL)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    /**
+     * 获取跳转「拨号界面」的意图
+     *
+     * @param phoneNumber 电话号码
+     * @return 意图
      */
     public static Intent getDialIntent(String phoneNumber) {
         return new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber))
@@ -196,8 +267,11 @@ public class LshIntentUtils {
     }
 
     /**
-     * 获取跳转「拨打电话」的意图
+     * 获取跳转「拨打电话」的意图, 即直接拨打电话
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.CALL_PHONE"/>}</p>
+     *
+     * @param phoneNumber 电话号码
+     * @return 意图
      */
     @RequiresPermission(value = Manifest.permission.CALL_PHONE)
     public static Intent getCallIntent(String phoneNumber) {
@@ -207,6 +281,10 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「发送短信」的意图
+     *
+     * @param phoneNumber 电话号码
+     * @param content     预设内容
+     * @return 意图
      */
     public static Intent getSendSmsIntent(String phoneNumber, String content) {
         return new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phoneNumber))
@@ -216,6 +294,8 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「联系人」的意图
+     *
+     * @return 意图
      */
     public static Intent getContactsIntent() {
         return new Intent(Intent.ACTION_VIEW)
@@ -224,6 +304,10 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「联系人详情」的意图
+     *
+     * @param contactId 联系人的 contactId
+     * @param lookupKey 联系人的 lookupKey
+     * @return 意图
      */
     public static Intent getContactDetailIntent(long contactId, String lookupKey) {
         Uri data = ContactsContract.Contacts.getLookupUri(contactId, lookupKey);
@@ -233,6 +317,8 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「设置界面」的意图
+     *
+     * @return 意图
      */
     public static Intent getSettingIntent() {
         return new Intent(Settings.ACTION_SETTINGS)
@@ -241,6 +327,9 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「应用详情」的意图
+     *
+     * @param packageName 应用包名
+     * @return 意图
      */
     public static Intent getAppDetailsSettingsIntent(String packageName) {
         return new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -250,6 +339,8 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「应用列表」的意图
+     *
+     * @return 意图
      */
     public static Intent getAppsIntent() {
         return new Intent(Settings.ACTION_APPLICATION_SETTINGS)
@@ -258,6 +349,8 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「 Wifi 设置」的意图
+     *
+     * @return 意图
      */
     public static Intent getWifiSettingIntent() {
         return new Intent(Settings.ACTION_WIFI_SETTINGS)
@@ -266,6 +359,8 @@ public class LshIntentUtils {
 
     /**
      * 获取跳转「网络设置」的意图
+     *
+     * @return 意图
      */
     public static Intent getWirelessSettingIntent() {
         return new Intent(Settings.ACTION_WIRELESS_SETTINGS)
@@ -273,7 +368,9 @@ public class LshIntentUtils {
     }
 
     /**
-     * 获取跳转「无障碍设置」的意图
+     * 获取跳转「无障碍服务设置」的意图
+     *
+     * @return 意图
      */
     public static Intent getAccessibilitySettingIntent() {
         return new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
@@ -284,6 +381,8 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「安装应用」界面
+     *
+     * @param apkFile APK 文件
      */
     public static void gotoInstallApp(File apkFile) {
         startActivity(getInstallAppIntent(apkFile));
@@ -291,13 +390,17 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「卸载应用」界面
+     *
+     * @param packageName 应用包名
      */
     public static void gotoUninstallApp(String packageName) {
         startActivity(getUninstallAppIntent(packageName));
     }
 
     /**
-     * 跳转: 某APP
+     * 跳转: 指定应用
+     *
+     * @param packageName 应用包名
      */
     public static void gotoApp(String packageName) {
         if (LshStringUtils.isEmpty(packageName))
@@ -314,14 +417,18 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「拨号」界面
+     *
+     * @param phoneNumber 电话号码
      */
     public static void gotoDial(String phoneNumber) {
         startActivity(getDialIntent(phoneNumber));
     }
 
     /**
-     * 「打电话」
+     * 执行「打电话」
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.CALL_PHONE"/>}</p>
+     *
+     * @param phoneNumber 电话号码
      */
     @RequiresPermission(value = Manifest.permission.CALL_PHONE)
     public static void gotoCallPhone(String phoneNumber) {
@@ -330,6 +437,9 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「发送短信」界面
+     *
+     * @param phoneNumber 电话号码
+     * @param content     短信内容
      */
     public static void gotoSendSms(String phoneNumber, String content) {
         startActivity(getSendSmsIntent(phoneNumber, content));
@@ -344,6 +454,9 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「联系人详情」界面
+     *
+     * @param contactId 联系人的 contactId
+     * @param lookupKey 联系人的 lookupKey
      */
     public static void gotoContactDetail(long contactId, String lookupKey) {
         startActivity(getContactDetailIntent(contactId, lookupKey));
@@ -351,6 +464,9 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统选择文件」界面
+     *
+     * @param activity    Activity
+     * @param requestCode 请求码
      */
     public static void gotoPickFile(Activity activity, int requestCode) {
         startActivityForResult(activity, null, getPickFileIntent(), requestCode);
@@ -358,6 +474,9 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统选择文件」界面
+     *
+     * @param fragment    Fragment
+     * @param requestCode 请求码
      */
     public static void gotoPickFile(Fragment fragment, int requestCode) {
         startActivityForResult(null, fragment, getPickFileIntent(), requestCode);
@@ -365,6 +484,10 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统选择文件」界面
+     *
+     * @param activity      Activity
+     * @param requestCode   请求码
+     * @param fileExtension 文件扩展名
      */
     public static void gotoPickFile(Activity activity, int requestCode, String fileExtension) {
         startActivityForResult(activity, null, getPickFileIntent(fileExtension), requestCode);
@@ -372,6 +495,9 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统选择图片」界面
+     *
+     * @param activity    Activity
+     * @param requestCode 请求码
      */
     public static void gotoPickPhoto(Activity activity, int requestCode) {
         startActivityForResult(activity, null, getPickPhotoIntent(), requestCode);
@@ -379,6 +505,9 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统选择图片」界面
+     *
+     * @param fragment    Fragment
+     * @param requestCode 请求码
      */
     public static void gotoPickPhoto(Fragment fragment, int requestCode) {
         startActivityForResult(null, fragment, getPickPhotoIntent(), requestCode);
@@ -386,6 +515,9 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统选择视频」界面
+     *
+     * @param activity    Activity
+     * @param requestCode 请求码
      */
     public static void gotoPickVideo(Activity activity, int requestCode) {
         startActivityForResult(activity, null, getPickVideoIntent(), requestCode);
@@ -393,6 +525,9 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统选择视频」界面
+     *
+     * @param fragment    Fragment
+     * @param requestCode 请求码
      */
     public static void gotoPickVideo(Fragment fragment, int requestCode) {
         startActivityForResult(null, fragment, getPickVideoIntent(), requestCode);
@@ -400,6 +535,9 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统选择音频」界面
+     *
+     * @param activity    Activity
+     * @param requestCode 请求码
      */
     public static void gotoPickAudio(Activity activity, int requestCode) {
         startActivityForResult(activity, null, getPickAudioIntent(), requestCode);
@@ -407,6 +545,9 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统选择音频」界面
+     *
+     * @param fragment    Fragment
+     * @param requestCode 请求码
      */
     public static void gotoPickAudio(Fragment fragment, int requestCode) {
         startActivityForResult(null, fragment, getPickAudioIntent(), requestCode);
@@ -414,6 +555,10 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统拍照」界面
+     *
+     * @param activity    Activity
+     * @param requestCode 请求码
+     * @param outputFile  拍摄照片的输出文件
      */
     public static void gotoTakePhoto(Activity activity, int requestCode, File outputFile) {
         startActivityForResult(activity, null, getTakePhotoIntent(outputFile), requestCode);
@@ -421,6 +566,10 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统拍照」界面
+     *
+     * @param fragment    Fragment
+     * @param requestCode 请求码
+     * @param outputFile  拍摄照片的输出文件
      */
     public static void gotoTakePhoto(Fragment fragment, int requestCode, File outputFile) {
         startActivityForResult(null, fragment, getTakePhotoIntent(outputFile), requestCode);
@@ -428,6 +577,14 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统剪裁」界面
+     *
+     * @param activity    Activity
+     * @param requestCode 请求码
+     * @param inputFile   剪裁图片文件
+     * @param outputFile  输出图片文件
+     * @param aspectX     输出图片宽高比中的宽
+     * @param aspectY     输出图片宽高比中的高
+     * @param outputX     输出图片的宽
      */
     public static void gotoCropPhoto(Activity activity, int requestCode, File inputFile, File outputFile,
                                      int aspectX, int aspectY, int outputX, int outputY) {
@@ -437,6 +594,14 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统剪裁」界面
+     *
+     * @param fragment    Fragment
+     * @param requestCode 请求码
+     * @param inputFile   剪裁图片文件
+     * @param outputFile  输出图片文件
+     * @param aspectX     输出图片宽高比中的宽
+     * @param aspectY     输出图片宽高比中的高
+     * @param outputX     输出图片的宽
      */
     public static void gotoCropPhoto(Fragment fragment, int requestCode, File inputFile, File outputFile,
                                      int aspectX, int aspectY, int outputX, int outputY) {
@@ -446,6 +611,15 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统剪裁」界面
+     *
+     * @param activity    Activity
+     * @param requestCode 请求码
+     * @param inputUri    剪裁图片文件的 Uri
+     * @param outputUri   输出图片文件的 Uri
+     * @param aspectX     输出图片宽高比中的宽
+     * @param aspectY     输出图片宽高比中的高
+     * @param outputX     输出图片的宽
+     * @param outputY     输出图片的高
      */
     public static void gotoCropPhoto(Activity activity, int requestCode, Uri inputUri, Uri outputUri,
                                      int aspectX, int aspectY, int outputX, int outputY) {
@@ -455,6 +629,15 @@ public class LshIntentUtils {
 
     /**
      * 跳转:「系统剪裁」界面
+     *
+     * @param fragment    Fragment
+     * @param requestCode 请求码
+     * @param inputUri    剪裁图片文件的 Uri
+     * @param outputUri   输出图片文件的 Uri
+     * @param aspectX     输出图片宽高比中的宽
+     * @param aspectY     输出图片宽高比中的高
+     * @param outputX     输出图片的宽
+     * @param outputY     输出图片的高
      */
     public static void gotoCropPhoto(Fragment fragment, int requestCode, Uri inputUri, Uri outputUri,
                                      int aspectX, int aspectY, int outputX, int outputY) {
@@ -469,6 +652,11 @@ public class LshIntentUtils {
         LshContextUtils.startActivity(getSettingIntent());
     }
 
+    /**
+     * 跳转:「应用详情」界面
+     *
+     * @param packageName 应用包名
+     */
     public static void gotoAppDetailSetting(String packageName) {
         LshContextUtils.startActivity(getAppDetailsSettingsIntent(packageName));
     }
@@ -582,12 +770,18 @@ public class LshIntentUtils {
         return success;
     }
 
+    /**
+     * 跳转界面
+     */
     private static void startActivity(Intent intent) {
         if (intent != null) {
             LshContextUtils.startActivity(intent);
         }
     }
 
+    /**
+     * 跳转界面
+     */
     private static void startActivity(Activity activity, Fragment fragment, Intent intent) {
         if (intent == null) return;
         if (activity != null) {
@@ -597,6 +791,9 @@ public class LshIntentUtils {
         }
     }
 
+    /**
+     * 跳转界面
+     */
     private static void startActivityForResult(Activity activity, Fragment fragment, Intent intent, int requestCode) {
         if (intent == null) return;
         if (activity != null) {
@@ -606,6 +803,9 @@ public class LshIntentUtils {
         }
     }
 
+    /**
+     * 获取 MIUI 版本号
+     */
     private static String getMiuiVersion() {
         String propName = "ro.miui.ui.version.name";
         String line;

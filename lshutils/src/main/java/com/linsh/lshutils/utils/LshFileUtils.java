@@ -22,12 +22,24 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by Senh Linsh on 17/1/10.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: 文件或文件夹操作相关
+ *             如 读写文件 / 复制移动删除重命名文件或文件夹 / 获取文件扩展名或大小 等
+ * </pre>
  */
 public class LshFileUtils {
 
     /**
-     * 检查文件是否是 SD卡文件, 如果是则需要检查权限
+     * 检查指定文件或文件夹是否可用
+     * <p>判断的标准:</p>
+     * <br>1.如果是外部文件, 判断外部存储是否可用以及是否有外部储存权限, 通过即为可用, 否则为不可用
+     * <br>2.如果是内部文件, 则为可用
+     *
+     * @param file 文件或文件夹对象
+     * @return true 为可用, false 为不可用
      */
     private static boolean checkFile(File file) {
         if (file == null) return false;
@@ -35,6 +47,16 @@ public class LshFileUtils {
         return !isStorageFile || LshSDCardUtils.isAvailable() && checkPermission();
     }
 
+    /**
+     * 检查文件是否可用, 如果可用将自动创建父文件夹
+     * <p>检查的标准:</p>
+     * <br>1.文件不可用或没有权限, 返回 false
+     * <br>2.文件不存在, 如果父文件夹已存在, 返回 true; 如果父文件夹不存在将自动创建, 创建成功返回 true, 失败返回 false
+     * <br>3.文件存在, 对象为文件对象返回 true, 为文件夹对象返回 false
+     *
+     * @param file 指定文件
+     * @return true 检查通过, false 为不通过
+     */
     public static boolean checkFileAndMakeDirs(File file) {
         if (!checkFile(file)) return false;
         if (!file.exists()) {
@@ -44,6 +66,16 @@ public class LshFileUtils {
         return !file.isDirectory();
     }
 
+    /**
+     * 检查文件夹是否可用, 如果可用将自动创建该文件夹及其父文件夹
+     * <p>检查的标准:</p>
+     * <br>1.文件不可用或没有权限, 返回 false
+     * <br>2.文件不存在, 将创建该文件夹及其父文件夹, 创建成功返回 true, 失败返回 false
+     * <br>3.文件存在, 对象为文件夹对象返回 true, 为文件对象返回 false
+     *
+     * @param file 指定文件夹
+     * @return true 检查通过, false 为不通过
+     */
     public static boolean checkDirAndMakeDirs(File file) {
         if (!checkFile(file))
             return false;
@@ -54,21 +86,28 @@ public class LshFileUtils {
     }
 
     /**
-     * 检查文件权限
+     * 检查文件权限 (即外部存储的读写权限)
+     *
+     * @return true 为拥有权限, false 为没有权限
      */
     public static boolean checkPermission() {
         return LshPermissionUtils.Storage.checkPermission();
     }
 
     /**
-     * 获取SD卡以app包名命名的文件夹路径
+     * 获取外部储存中以 APP 包名命名的文件夹路径
+     *
+     * @return 文件夹路径
      */
     public static String getPackageDir() {
         return Environment.getExternalStorageDirectory() + "/" + LshApplicationUtils.getContext().getPackageName() + "/";
     }
 
     /**
-     * 判断文件夹不存在则创建
+     * 创建文件夹及其父文件夹
+     *
+     * @param dir 文件夹对象
+     * @return 成功创建返回 true, 否则返回 false
      */
     public static boolean makeDirs(File dir) {
         if (!checkFile(dir)) return false;
@@ -80,7 +119,10 @@ public class LshFileUtils {
     }
 
     /**
-     * 判断文件夹不存在则创建
+     * 创建父文件夹
+     *
+     * @param file 文件或文件夹对象
+     * @return 成功创建返回 true, 否则返回 false
      */
     public static boolean makeParentDirs(File file) {
         if (!checkFile(file)) return false;
@@ -95,17 +137,33 @@ public class LshFileUtils {
     //================================================ 读取文件 ================================================//
 
     /**
-     * 读取文件, 默认编码UTF-8
+     * 读取文件, 默认编码 UTF-8
+     *
+     * @param file 文件对象
+     * @return 文本内容, 读取失败返回 null
      */
     public static StringBuilder readFile(File file) {
         return readFile(file, "UTF-8");
     }
 
+    /**
+     * 读取文件, 默认编码 UTF-8
+     *
+     * @param filePath 文件路径
+     * @return 文本内容, 读取失败返回 null
+     */
     public static StringBuilder readFile(String filePath) {
         return readFile(new File(filePath), "UTF-8");
     }
 
-    private static StringBuilder readFile(File file, String charsetName) {
+    /**
+     * 读取文件, 默认编码 UTF-8
+     *
+     * @param file        文件对象
+     * @param charsetName 编码名称
+     * @return 文本内容, 读取失败返回 null
+     */
+    public static StringBuilder readFile(File file, String charsetName) {
         if (!checkFile(file) || !file.isFile()) {
             return null;
         }
@@ -134,20 +192,32 @@ public class LshFileUtils {
 
     /**
      * 将字符串写入文件
+     *
+     * @param file    文件
+     * @param content 文本内容
+     * @return 是否写入成功
      */
     public static boolean writeFile(File file, String content) {
         return writeFile(file, content, false);
     }
 
     /**
-     * 将字符串写入文件
+     * 将字符串集合写入文件, 集合中每个元素占一行
+     *
+     * @param file     文件
+     * @param contents 文本内容集合
+     * @return 是否写入成功
      */
     public static boolean writeFile(File file, List<String> contents) {
         return writeFile(file, contents, false);
     }
 
     /**
-     * 将字符串写入文件
+     * 将字符串数组写入文件, 数组中每个元素占一行
+     *
+     * @param file     文件
+     * @param contents 文本内容数组
+     * @return 是否写入成功
      */
     public static boolean writeFile(File file, String... contents) {
         return writeFile(file, Arrays.asList(contents), false);
@@ -155,6 +225,11 @@ public class LshFileUtils {
 
     /**
      * 将字符串写入文件
+     *
+     * @param file    文件
+     * @param content 文本内容
+     * @param append  是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
+     * @return 是否写入成功
      */
     public static boolean writeFile(File file, String content, boolean append) {
         if (LshStringUtils.isEmpty(content) || !checkFileAndMakeDirs(file)) {
@@ -174,7 +249,12 @@ public class LshFileUtils {
     }
 
     /**
-     * 将字符串写入文件
+     * 将字符串集合写入文件, 集合中每个元素占一行
+     *
+     * @param file     文件
+     * @param contents 文本内容集合
+     * @param append   是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
+     * @return 是否写入成功
      */
     public static boolean writeFile(File file, List<String> contents, boolean append) {
         if (contents == null || !checkFileAndMakeDirs(file)) {
@@ -200,6 +280,10 @@ public class LshFileUtils {
 
     /**
      * 将输入流写入文件
+     *
+     * @param file 文件
+     * @param is   输入流
+     * @return 是否写入成功
      */
     public static boolean writeFile(File file, InputStream is) {
         return writeFile(file, is, false);
@@ -207,6 +291,11 @@ public class LshFileUtils {
 
     /**
      * 将输入流写入文件
+     *
+     * @param file   文件
+     * @param is     输入流
+     * @param append 是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
+     * @return 是否写入成功
      */
     public static boolean writeFile(File file, InputStream is, boolean append) {
         if (is == null || !checkFileAndMakeDirs(file)) return false;
@@ -231,13 +320,22 @@ public class LshFileUtils {
 
     /**
      * 将字节数组写入文件
+     *
+     * @param file  文件
+     * @param bytes 字节数组
+     * @return 是否写入成功
      */
-    public static boolean writeFile(File file, final byte[] bytes) {
+    public static boolean writeFile(File file, byte[] bytes) {
         return writeFile(file, bytes, false);
     }
 
     /**
      * 将字节数组写入文件
+     *
+     * @param file   文件
+     * @param bytes  字节数组
+     * @param append 是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
+     * @return 是否写入成功
      */
     public static boolean writeFile(final File file, final byte[] bytes, final boolean append) {
         if (bytes == null || !checkFileAndMakeDirs(file)) return false;
@@ -259,6 +357,9 @@ public class LshFileUtils {
 
     /**
      * 删除文件
+     *
+     * @param file 文件
+     * @return 是否删除成功
      */
     public static boolean deleteFile(File file) {
         if (checkFile(file) && file.exists()) {
@@ -268,7 +369,10 @@ public class LshFileUtils {
     }
 
     /**
-     * 删除文件夹
+     * 删除文件夹及文件夹内的文件
+     *
+     * @param dir 文件夹
+     * @return 是否删除成功
      */
     public static boolean deleteDir(File dir) {
         if (!checkFile(dir) || !dir.exists() || !dir.isDirectory())
@@ -278,6 +382,9 @@ public class LshFileUtils {
         return dir.delete();
     }
 
+    /**
+     * 递归执行删除文件夹操作
+     */
     private static boolean executeDeleteDir(File dir) {
         File[] files = dir.listFiles();
         if (files != null && files.length != 0) {
@@ -295,7 +402,11 @@ public class LshFileUtils {
     }
 
     /**
-     * 重命名文件
+     * 重命名文件或文件夹
+     *
+     * @param file    文件或文件夹
+     * @param newName 新文件名或文件夹名
+     * @return 是否成功
      */
     public static boolean rename(File file, String newName) {
         if (file == null || !file.exists() || LshStringUtils.isEmpty(newName))
@@ -309,6 +420,10 @@ public class LshFileUtils {
 
     /**
      * 复制文件
+     *
+     * @param srcFile  原文件对象
+     * @param destFile 目标文件对象
+     * @return 是否成功
      */
     public static boolean copy(File srcFile, File destFile) {
         return copyOrMoveFile(srcFile, destFile, false);
@@ -316,6 +431,10 @@ public class LshFileUtils {
 
     /**
      * 移动文件
+     *
+     * @param srcFile  原文件对象
+     * @param destFile 目标文件对象
+     * @return 是否成功
      */
     public static boolean move(File srcFile, File destFile) {
         return copyOrMoveFile(srcFile, destFile, true);
@@ -335,6 +454,14 @@ public class LshFileUtils {
         }
     }
 
+    /**
+     * 复制或移动文件夹
+     *
+     * @param srcDir  原文件夹
+     * @param destDir 目标文件夹
+     * @param isMove  是否为移动
+     * @return 是否成功
+     */
     public static boolean copyOrMoveDir(File srcDir, File destDir, boolean isMove) {
         if (srcDir == null || !srcDir.exists() || !srcDir.isDirectory())
             return false;
@@ -349,6 +476,9 @@ public class LshFileUtils {
         return !isMove || deleteDir(srcDir);
     }
 
+    /**
+     * 递归执行复制或移动文件夹的操作
+     */
     private static boolean executeCopyOrMoveDir(File srcDir, File destDir, boolean isMove) {
         File[] files = srcDir.listFiles();
         for (File file : files) {
@@ -368,6 +498,9 @@ public class LshFileUtils {
 
     /**
      * 获取文件名, 带扩展名
+     *
+     * @param file 文件
+     * @return 文件名
      */
     public static String getFileName(File file) {
         if (file == null) return null;
@@ -377,6 +510,9 @@ public class LshFileUtils {
 
     /**
      * 获取文件名, 带扩展名
+     *
+     * @param filePath 文件路径
+     * @return 文件名
      */
     public static String getFileName(String filePath) {
         if (LshStringUtils.isTrimEmpty(filePath)) return filePath;
@@ -387,6 +523,9 @@ public class LshFileUtils {
 
     /**
      * 获取文件名, 不带扩展名
+     *
+     * @param file 文件
+     * @return 文件名
      */
     public static String getFileNameWithoutExtension(File file) {
         if (file == null) return null;
@@ -396,6 +535,9 @@ public class LshFileUtils {
 
     /**
      * 获取文件名, 不带扩展名
+     *
+     * @param filePath 文件路径
+     * @return 文件名
      */
     public static String getFileNameWithoutExtension(String filePath) {
         if (LshStringUtils.isTrimEmpty(filePath)) return filePath;
@@ -413,6 +555,9 @@ public class LshFileUtils {
 
     /**
      * 获取文件扩展名
+     *
+     * @param file 文件
+     * @return 文件扩展名
      */
     public static String getFileExtension(File file) {
         if (file == null) return null;
@@ -422,6 +567,9 @@ public class LshFileUtils {
 
     /**
      * 获取文件扩展名
+     *
+     * @param filePath 文件路径
+     * @return 文件扩展名
      */
     public static String getFileExtension(String filePath) {
         if (LshStringUtils.isTrimEmpty(filePath)) return filePath;
@@ -434,6 +582,9 @@ public class LshFileUtils {
 
     /**
      * 获取文件或文件夹的大小
+     *
+     * @param file 文件或文件夹
+     * @return 大小, 单位为 B
      */
     public static long getFileSize(File file) {
         if (file == null || !file.exists()) {
@@ -450,14 +601,21 @@ public class LshFileUtils {
     }
 
     /**
-     * 获取文件或文件夹的大小
+     * 指定单位下, 获取文件或文件夹的大小
+     *
+     * @param file 文件或文件夹
+     * @param unit 单位
+     * @return 指定单位下的大小
      */
     public static float getFileSize(File file, @Unit.FileSizeDef int unit) {
         return FileSize.formatByte(getFileSize(file), unit);
     }
 
     /**
-     * 获取文件或文件夹的大小
+     * 获取文件或文件夹格式化后的大小, 单位根据算法自动进行调整
+     *
+     * @param file 文件或文件夹
+     * @return 格式化后的大小
      */
     public static String getFormattedFileSize(File file) {
         return Formatter.formatFileSize(LshApplicationUtils.getContext(), getFileSize(file));

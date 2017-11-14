@@ -14,11 +14,21 @@ import android.view.View;
 import com.linsh.lshutils.tools.LshXmlCreater;
 
 /**
- * Created by Senh Linsh on 17/5/11.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/09
+ *    desc   : 工具类: View 背景相关
+ * </pre>
  */
-
 public class LshBackgroundUtils {
 
+    /**
+     * 给 View 设置背景, 用于简化 SDK 版本判断
+     *
+     * @param view     View
+     * @param drawable 背景
+     */
     public static void setBackground(View view, Drawable drawable) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             view.setBackground(drawable);
@@ -27,16 +37,33 @@ public class LshBackgroundUtils {
         }
     }
 
+    /**
+     * 给 View 添加触按效果, 触按效果为混合一个透明度为 30% 的黑色背景
+     *
+     * @param views 指定添加效果的 View 或多个 View
+     */
     public static void addPressedEffect(View... views) {
         for (View view : views) {
             addPressedEffect(view, 0x33333333);
         }
     }
 
+    /**
+     * 给 View 添加触按效果, 触按效果为混合一个透明度为 30% 的黑色背景
+     *
+     * @param view 指定添加效果的 View
+     */
     public static void addPressedEffect(View view) {
         addPressedEffect(view, 0x33333333);
     }
 
+    /**
+     * 给 View 添加一个颜色或者颜色蒙层作为触按效果<br/>
+     * 该方法将自动在原本背景的基础上给 View 添加一个触按状态下的颜色混合 (新状态颜色 = 原本颜色 + color)
+     *
+     * @param view  指定添加效果的 View
+     * @param color 覆盖触按状态的颜色
+     */
     public static void addPressedEffect(View view, int color) {
         Drawable pressedDr = null;
         Drawable background = view.getBackground();
@@ -57,7 +84,7 @@ public class LshBackgroundUtils {
             } else if (background instanceof BitmapDrawable) {
                 Bitmap fgBitmap = ((BitmapDrawable) background).getBitmap();
                 Bitmap pressedBitmap = LshBitmapUtils.addColorMask(fgBitmap, color, false);
-                pressedDr = LshBitmapUtils.bitmap2Drawable(pressedBitmap);
+                pressedDr = LshBitmapUtils.toDrawable(pressedBitmap);
             } else if (background instanceof GradientDrawable) {
                 GradientDrawable gradientDrawable = (GradientDrawable) background;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
@@ -104,6 +131,13 @@ public class LshBackgroundUtils {
         }
     }
 
+    /**
+     * 给 Drawable 添触按状态下的颜色蒙层 (在原本状态的颜色基础上盖印新的颜色)
+     *
+     * @param background 需要添加触按状态的 Drawable
+     * @param color      覆盖触按状态的颜色
+     * @return 传入的 Drawable 对象
+     */
     private static Drawable addPressedState(Drawable background, int color) {
         Drawable pressedBg = null;
         if (Color.alpha(color) == 0xFF) {
@@ -123,7 +157,7 @@ public class LshBackgroundUtils {
             } else if (background instanceof BitmapDrawable) {
                 Bitmap fgBitmap = ((BitmapDrawable) background).getBitmap();
                 Bitmap pressedBitmap = LshBitmapUtils.addColorMask(fgBitmap, color, false);
-                pressedBg = LshBitmapUtils.bitmap2Drawable(pressedBitmap);
+                pressedBg = LshBitmapUtils.toDrawable(pressedBitmap);
 //            } else if (background instanceof GradientDrawable) {
             } else if (background instanceof StateListDrawable) {
                 StateListDrawable stateListDrawable = (StateListDrawable) background;

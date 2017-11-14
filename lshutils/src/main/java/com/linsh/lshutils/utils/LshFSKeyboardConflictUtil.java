@@ -10,9 +10,13 @@ import android.view.ViewTreeObserver;
 
 import com.linsh.lshutils.common.FileProperties;
 
-
 /**
- * Created by Senh Linsh on 16/8/12.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: 解决全屏状态下软件盘冲突的问题 (软键盘部分遮挡输入框)
+ * </pre>
  */
 public class LshFSKeyboardConflictUtil extends LshKeyboardUtils {
     public static final String KEY_KEYBOARD_HEIGHT_LANDSCAPE = "key_keyboard_height_landscape";
@@ -21,10 +25,28 @@ public class LshFSKeyboardConflictUtil extends LshKeyboardUtils {
     private static final int PANEL_HEIGHT_EQUAL_KEYBOARD = ViewGroup.LayoutParams.MATCH_PARENT;
     private static int mPanelHeight = PANEL_HEIGHT_WRAP_CONTENT;
 
+    /**
+     * 解决全屏状态下软件盘冲突的问题 (软键盘部分遮挡输入框)
+     *
+     * @param activity                  当前 Activity
+     * @param panelRoot                 面板
+     * @param etInput                   输入框
+     * @param onKeyboardShowingListener 键盘弹出收起回调
+     */
     public static void attach(Activity activity, View panelRoot, View etInput, @Nullable OnKeyboardShowingListener onKeyboardShowingListener) {
         attach(activity, panelRoot, null, etInput, onKeyboardShowingListener, null);
     }
 
+    /**
+     * 解决全屏状态下软件盘冲突的问题 (软键盘部分遮挡输入框)
+     *
+     * @param activity                  当前 Activity
+     * @param panelRoot                 面板
+     * @param btn                       切换键盘和面板的按钮
+     * @param etInput                   输入框
+     * @param onKeyboardShowingListener 键盘弹出收起回调
+     * @param onPanelShowingListener    面板弹出收起回调
+     */
     public static void attach(Activity activity, View panelRoot, @Nullable View btn, View etInput,
                               @Nullable OnKeyboardShowingListener onKeyboardShowingListener, @Nullable OnPanelShowingListener onPanelShowingListener) {
         if (activity == null) {
@@ -233,15 +255,19 @@ public class LshFSKeyboardConflictUtil extends LshKeyboardUtils {
 
     /**
      * 显示键盘并隐藏面板
+     *
+     * @param panelLayout 面板布局
+     * @param focusView   焦点 View
      */
     public static void showKeyboardAndHidePanel(View panelLayout, View focusView) {
         panelLayout.setVisibility(View.INVISIBLE);
         LshKeyboardUtils.showKeyboard(focusView);
     }
 
-
     /**
      * 显示面板
+     *
+     * @param panelLayout 面板布局
      */
     public static void showPanel(View panelLayout) {
         final Activity activity = (Activity) panelLayout.getContext();
@@ -253,6 +279,8 @@ public class LshFSKeyboardConflictUtil extends LshKeyboardUtils {
 
     /**
      * 隐藏面板和键盘
+     *
+     * @param panelLayout 面板布局
      */
     public static void hidePanelAndKeyboard(View panelLayout) {
         final Activity activity = (Activity) panelLayout.getContext();
@@ -264,6 +292,11 @@ public class LshFSKeyboardConflictUtil extends LshKeyboardUtils {
         panelLayout.setVisibility(View.GONE);
     }
 
+    /**
+     * 设置面板的高度
+     *
+     * @param panelHeight 面板高度
+     */
     public static void setPanelHeight(int panelHeight) {
         mPanelHeight = panelHeight;
     }

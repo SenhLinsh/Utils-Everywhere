@@ -6,30 +6,72 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by Senh Linsh on 17/1/11.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/13
+ *    desc   : 工具类: 时间相关
+ * </pre>
  */
 public class LshTimeUtils {
 
+    /**
+     * 当前时间下, 获取格式化的时间字符串, 英式
+     *
+     * @return 时间字符串
+     */
     public static String getCurrentTimeStringEN() {
         return getTimeStringEN(System.currentTimeMillis());
     }
 
+    /**
+     * 获取格式化的时间字符串, 英式
+     *
+     * @param time 指定时间
+     * @return 时间字符串
+     */
     public static String getTimeStringEN(long time) {
         return getTimeString(time, "yyyy-MM-dd HH:mm:ss");
     }
 
+    /**
+     * 获取格式化的时间字符串, 英式
+     *
+     * @param date 指定时间
+     * @return 时间字符串
+     */
     public static String getTimeStringEN(Date date) {
         return getTimeString(date, "yyyy-MM-dd HH:mm:ss");
     }
 
+    /**
+     * 获取格式化的时间字符串
+     *
+     * @param time    指定时间
+     * @param pattern 样式
+     * @return 时间字符串
+     */
     public static String getTimeString(long time, String pattern) {
         return getTimeString(new Date(time), pattern);
     }
 
+    /**
+     * 获取格式化的时间字符串
+     *
+     * @param date    指定时间
+     * @param pattern 样式
+     * @return 时间字符串
+     */
     public static String getTimeString(Date date, String pattern) {
         return new SimpleDateFormat(pattern).format(date);
     }
 
+    /**
+     * 解析时间字符串, 字符串需要符合格式: [yyyy-MM-dd HH:mm:ss]
+     *
+     * @param time 时间字符串
+     * @return 时间
+     */
     public static long getTimeLong(String time) {
         try {
             Date parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
@@ -40,6 +82,13 @@ public class LshTimeUtils {
         return 0;
     }
 
+    /**
+     * 解析时间字符串
+     *
+     * @param time    时间字符串
+     * @param pattern 格式
+     * @return 时间
+     */
     public static long getTimeLong(String time, String pattern) {
         try {
             Date parse = new SimpleDateFormat(pattern).parse(time);
@@ -50,6 +99,13 @@ public class LshTimeUtils {
         return 0;
     }
 
+
+    /**
+     * 获取星期几的字符串
+     *
+     * @param milliseconds 时间
+     * @param prefix       前缀 如:需返回"周一"则传入"周", 返回"星期几"则传入"星期"
+     */
     public static String getWeekDayString(long milliseconds, String prefix) {
         return getWeekDayString(new Date(milliseconds), prefix);
     }
@@ -93,15 +149,21 @@ public class LshTimeUtils {
         return prefix;
     }
 
+    /**
+     * 将以前的时间和现在对比, 转化成描述性时间字符串，并附上当时的时间后缀
+     *
+     * @param beforeDate 当前时间点以前的时间
+     * @return 描述性时间字符串
+     */
     public static String dateBefore2StringDesc(Date beforeDate) {
         return dateBefore2StringDesc(beforeDate, true);
     }
 
     /**
-     * 将以前的时间毫秒值和现在对比，转换成日期描述，并附上当时的时间后缀
+     * 将以前的时间毫秒值和现在对比，转化成描述性时间字符串，并附上当时的时间后缀
      *
-     * @param beforeDate beforeDate
-     * @return 转换成带描述的日期
+     * @param beforeDate 当前时间点以前的时间
+     * @return 描述性时间字符串
      */
     public static String dateBefore2StringDesc(Date beforeDate, boolean isShowWeek) {
         long milliseconds = beforeDate.getTime();
@@ -215,14 +277,31 @@ public class LshTimeUtils {
         return diffDesc + fix;
     }
 
+    /**
+     * 将指定的时间长度转换成描述性字符串，如2天，3月1天12时5分4秒。
+     *
+     * @param timeLong 相对的日期
+     */
     public static String timeLong2StringCN(long timeLong) {
         return timeLong2StringCN(timeLong, true, 0);
     }
 
+    /**
+     * 将指定的时间长度转换成描述性字符串，如2天，3月1天12时5分4秒。
+     *
+     * @param timeLong 相对的日期
+     * @param isFull   是否全部显示： true 全部显示，如x年x月x日x时x分； false 简单显示,如4月 / 3天
+     */
     public static String timeLong2StringCN(long timeLong, boolean isFull) {
         return timeLong2StringCN(timeLong, isFull, 0);
     }
 
+    /**
+     * 将指定的时间长度转换成描述性字符串，如 3月1天12时5分4秒。
+     *
+     * @param timeLong 相对的日期
+     * @param minUnit  最低显示单位, 6->年 5->月 4->日 3->时 2->分, 如3: 00时00分06秒
+     */
     public static String timeLong2StringCN(long timeLong, int minUnit) {
         return timeLong2StringCN(timeLong, true, minUnit);
     }
@@ -232,7 +311,7 @@ public class LshTimeUtils {
      *
      * @param timeLong 相对的日期
      * @param isFull   是否全部显示： true 全部显示，如x年x月x日x时x分； false 简单显示,如4月 / 3天
-     * @param minUnit  最低显示单位, 年6 月5 日4 时3 分2, 如3: 00时00分06秒
+     * @param minUnit  最低显示单位, 6->年 5->月 4->日 3->时 2->分, 如3: 00时00分06秒
      */
     public static String timeLong2StringCN(long timeLong, boolean isFull, int minUnit) {
         StringBuilder diffDesc = new StringBuilder();
@@ -299,7 +378,10 @@ public class LshTimeUtils {
     }
 
     /**
-     * 将指定的时间长度转换成常规描述性的文本,时长为24小时以内,如 23:32:00。
+     * 将指定的时间长度转换成常规描述性的时间字符串, 时长为24小时以内, 如 23:32:00。
+     *
+     * @param timeLong 指定的时间长度
+     * @return 常规描述性的时间字符串
      */
     public static String dayTime2StringNol(long timeLong) {
         StringBuilder desc = new StringBuilder();

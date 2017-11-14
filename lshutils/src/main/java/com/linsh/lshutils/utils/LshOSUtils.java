@@ -9,13 +9,22 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 /**
- * Created by Senh Linsh on 17/7/25.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: OS 系统相关
+ *             简介  : 由于国内定制系统的泛滥, 不同定制系统的一些功能或实现方法会有所不同, 如果需要做到足够好的适配工作, 需要
+ *                     对不同的定制系统做一些专门的适配.
+ *             API  : 获取 ROM 类型等
+ * </pre>
  */
-
 public class LshOSUtils {
 
+    /**
+     * ROM 类型
+     */
     private static final ROM ROM_TYPE = initRomType();
 
     private static final String KEY_DISPLAY_ID = "ro.build.display.id";
@@ -92,10 +101,18 @@ public class LshOSUtils {
 
     private static final String VALUE_LENOVO_CLIENT_ID_BASE = "android-lenovo";
 
+    /**
+     * 获取 ROM 类型
+     *
+     * @return ROM
+     */
     public static ROM getRomType() {
         return ROM_TYPE;
     }
 
+    /**
+     * 初始化 ROM 类型
+     */
     private static ROM initRomType() {
         ROM rom = ROM.Other;
         FileInputStream is = null;

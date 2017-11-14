@@ -6,11 +6,21 @@ import android.net.Uri;
 import java.io.File;
 
 /**
- * Created by Senh Linsh on 17/6/29.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 工具类: Uri 相关
+ * </pre>
  */
-
 public class LshUriUtils {
 
+    /**
+     * 从 Uri 中获取文件路径
+     *
+     * @param uri Uri
+     * @return 文件路径
+     */
     public static String getFilePathFromUri(Uri uri) {
         if ("content".equals(uri.getScheme())) {
             Cursor cursor = null;
@@ -32,10 +42,22 @@ public class LshUriUtils {
         return null;
     }
 
+    /**
+     * 获取指定文件的 Uri
+     *
+     * @param file 指定文件
+     * @return Uri
+     */
     public static Uri getUriFromFile(File file) {
         return Uri.fromFile(file);
     }
 
+    /**
+     * Android 7.0 获取指定文件的 Provider Uri
+     *
+     * @param file 指定文件
+     * @return Uri
+     */
     public static Uri getProviderUriFromFile(File file) {
         return LshFileProviderUtils.getUriForFile(file);
     }

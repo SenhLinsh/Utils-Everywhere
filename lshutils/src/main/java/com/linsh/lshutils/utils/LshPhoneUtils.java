@@ -10,60 +10,81 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Senh Linsh on 17/2/21.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: 手机相关
+ * </pre>
  */
-
 public class LshPhoneUtils {
 
+    /**
+     * 判断当前设备是否为手机
+     *
+     * @return 是否为手机
+     */
     public static boolean isPhone() {
         TelephonyManager tm = (TelephonyManager) LshContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null && tm.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE;
     }
 
     /**
-     * 获取IMEI码
+     * 获取手机 IMEI 码
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.READ_PHONE_STATE"/>}</p>
+     *
+     * @return IMEI 码
      */
-    @SuppressLint("HardwareIds")
+    @SuppressLint({"HardwareIds", "MissingPermission"})
     public static String getIMEI() {
         TelephonyManager tm = (TelephonyManager) LshContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getDeviceId() : null;
     }
 
     /**
-     * 获取IMSI码
+     * 获取 IMSI 码
      * <p>需添加权限 {@code <uses-permission android:name="android.permission.READ_PHONE_STATE"/>}</p>
+     *
+     * @return IMSI 码
      */
-    @SuppressLint("HardwareIds")
+    @SuppressLint({"HardwareIds", "MissingPermission"})
     public static String getIMSI() {
         TelephonyManager tm = (TelephonyManager) LshContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getSubscriberId() : null;
     }
 
     /**
-     * 获取ip地址
+     * 获取 IP 地址
+     *
+     * @return IP 地址
      */
     public static String getIp() {
         return LshNetworkUtils.getIPAddress();
     }
 
-    /**
-     * 获取设备厂商, 如Xiaomi
-     */
 
+    /**
+     * 获取设备厂商, 如: Xiaomi
+     *
+     * @return 设备厂商
+     */
     public static String getManufacturer() {
         return Build.MANUFACTURER;
     }
 
     /**
-     * 获取手机品牌
+     * 获取设备品牌
+     *
+     * @return 设备品牌
      */
     public static String getMobileBrand() {
         return Build.BRAND;
     }
 
     /**
-     * 获取手机型号
+     * 获取设备型号
+     *
+     * @return 设备型号
      */
     public static String getMobileModel() {
         String model = Build.MODEL;
@@ -76,21 +97,27 @@ public class LshPhoneUtils {
     }
 
     /**
-     * 获取SDK版本号
+     * 获取 SDK 版本号
+     *
+     * @return SDK 版本号
      */
     public static int getSDKVersion() {
         return Build.VERSION.SDK_INT;
     }
 
     /**
-     * 获取SDK版本名称
+     * 获取 SDK 版本名称
+     *
+     * @return SDK 版本名称
      */
     public static String getSDKVersionName() {
         return Build.VERSION.RELEASE;
     }
 
     /**
-     * 获取手机的硬件信息
+     * 获取设备硬件信息
+     *
+     * @return 硬件信息
      */
     public static List<String> getMobileInfo() {
         ArrayList<String> list = new ArrayList<>();

@@ -1,7 +1,12 @@
 package com.linsh.lshutils.common;
 
 /**
- * Created by Senh Linsh on 17/1/8.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 配置相关
+ * </pre>
  */
 public class Config {
 

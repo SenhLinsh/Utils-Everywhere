@@ -3,14 +3,19 @@ package com.linsh.lshutils.utils;
 import android.content.res.Configuration;
 
 /**
- * Created by Senh Linsh on 16/10/21.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/09
+ *    desc   : 工具类: 设备相关
+ * </pre>
  */
 public class LshDeviceUtils {
 
     /**
-     * 判断是否平板设备
+     * 判断是否为手机设备
      *
-     * @return true:平板,false:手机
+     * @return true 为手机, false 为平板
      */
     public static boolean isPhoneDevice() {
         return (LshApplicationUtils.getContext().getResources().getConfiguration().screenLayout

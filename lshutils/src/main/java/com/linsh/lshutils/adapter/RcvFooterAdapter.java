@@ -12,7 +12,12 @@ import com.linsh.lshutils.R;
 import com.linsh.lshutils.base.BaseRecyclerViewAdapter;
 
 /**
- * Created by Senh Linsh on 16/12/16.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 自动实现加载更多尾部的 RecyclerView Adapter 基类
+ * </pre>
  */
 public abstract class RcvFooterAdapter extends BaseRecyclerViewAdapter {
     private boolean mCanLoadMore;

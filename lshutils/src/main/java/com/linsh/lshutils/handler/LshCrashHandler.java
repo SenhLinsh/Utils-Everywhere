@@ -6,13 +6,21 @@ import android.app.Application;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.linsh.lshutils.utils.LshApplicationUtils;
-import com.linsh.lshutils.utils.LshSharedPreferenceUtils;
 import com.linsh.lshutils.utils.LshActivityLifecycleUtils;
 import com.linsh.lshutils.utils.LshAppUtils;
+import com.linsh.lshutils.utils.LshApplicationUtils;
+import com.linsh.lshutils.utils.LshSharedPreferenceUtils;
 
-import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 崩溃处理的基类
+ * </pre>
+ */
 public abstract class LshCrashHandler {
 
     private static final String KEY_LASTED_CRASH = "key_lasted_crash";
@@ -43,7 +51,7 @@ public abstract class LshCrashHandler {
                 refreshCrashTime();
 
                 if (!LshActivityLifecycleUtils.isAppInBackground()) {
-                    ArrayList<Activity> activities = LshActivityLifecycleUtils.getCreatedActivities();
+                    List<Activity> activities = LshActivityLifecycleUtils.getCreatedActivities();
                     for (int i = activities.size() - 1; i >= 0; i--) {
                         Activity activity = activities.get(i);
                         if (activity != null) {

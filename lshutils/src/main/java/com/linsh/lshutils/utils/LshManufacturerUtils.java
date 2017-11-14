@@ -3,13 +3,26 @@ package com.linsh.lshutils.utils;
 import android.os.Build;
 
 /**
- * Created by Senh Linsh on 17/7/27.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: 手机设备厂商相关
+ *             API  : 获取设备厂商
+ * </pre>
  */
-
 public class LshManufacturerUtils {
 
+    /**
+     * 当前设备厂商
+     */
     private static final Manufacturer CUR_MANUFACTURER = initManufacturer();
 
+    /**
+     * 初始化设备厂商
+     *
+     * @return 设备厂商
+     */
     private static Manufacturer initManufacturer() {
         String device = Build.MANUFACTURER;
         Manufacturer curManufacturer = Manufacturer.OTHER;
@@ -22,10 +35,18 @@ public class LshManufacturerUtils {
         return curManufacturer;
     }
 
+    /**
+     * 获取当前设备的厂商
+     *
+     * @return 设备厂商
+     */
     public static Manufacturer getManufacturer() {
         return CUR_MANUFACTURER;
     }
 
+    /**
+     * 设备厂商
+     */
     public enum Manufacturer {
 
         HUAWEI("华为", "HUAWEI"),
@@ -63,7 +84,10 @@ public class LshManufacturerUtils {
             return mName;
         }
 
-        public boolean isIt(String manufacturer) {
+        /**
+         * 判断是否为当前设备厂商
+         */
+        boolean isIt(String manufacturer) {
             for (String manu : mManufacturers) {
                 if (manu.equalsIgnoreCase(manufacturer)) {
                     return true;

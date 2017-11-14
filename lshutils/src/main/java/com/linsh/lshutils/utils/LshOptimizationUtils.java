@@ -1,9 +1,12 @@
 package com.linsh.lshutils.utils;
 
 /**
- * Created by Senh Linsh on 16/11/22.
- * <p/>
- * 专注于提供各项APP优化方案的方法类
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: 提供各项APP优化方案
+ * </pre>
  */
 public class LshOptimizationUtils {
 

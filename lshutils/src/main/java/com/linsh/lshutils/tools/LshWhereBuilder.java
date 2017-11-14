@@ -6,9 +6,15 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by Senh Linsh on 17/8/16.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 构建 SQL 查询条件筛选语句的帮助类
+ *
+ *           注: 该类直接参考或使用 https://github.com/tamir7/Contacts 中 Where 类里面的方法
+ * </pre>
  */
-
 public class LshWhereBuilder {
 
     private Where where;

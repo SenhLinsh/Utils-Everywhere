@@ -1,38 +1,43 @@
 package com.linsh.lshutils.utils;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 
 /**
- * Created by Senh Linsh on 16/11/29.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: 处理 EditText 相关
+ * </pre>
  */
 public class LshEditTextUtils {
 
-    public static void setEditTextChangeListener(EditText editText, final View deleteView) {
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                deleteView.setVisibility(editable.length() > 0 ? View.VISIBLE : View.GONE);
-            }
-        });
-    }
-
+    /**
+     * 将 EditText 的光标移动至所显示文字的末尾
+     *
+     * @param editText EditText
+     */
     public static void moveCursorToLast(EditText editText) {
         editText.setSelection(editText.getText().length());
     }
 
+    /**
+     * 关闭 EditText 的输入 & 编辑功能
+     *
+     * @param editText EditText
+     */
+    public static void disableEditState(EditText editText) {
+        editText.clearFocus();
+        editText.setFocusable(false);
+        editText.setFocusableInTouchMode(false);
+    }
+
+    /**
+     * 打开 EditText 的输入 & 编辑功能
+     *
+     * @param editText    EditText
+     * @param focusNeeded 是否需要获取光标
+     */
     public static void enableEditState(EditText editText, boolean focusNeeded) {
         editText.setFocusableInTouchMode(true);
         editText.setFocusable(true);
@@ -40,11 +45,5 @@ public class LshEditTextUtils {
             editText.requestFocus();
             moveCursorToLast(editText);
         }
-    }
-
-    public static void disableEditState(EditText editText) {
-        editText.clearFocus();
-        editText.setFocusable(false);
-        editText.setFocusableInTouchMode(false);
     }
 }

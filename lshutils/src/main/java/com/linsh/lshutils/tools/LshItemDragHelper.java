@@ -6,17 +6,25 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
 /**
- * Created by Senh Linsh on 17/5/8.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : RecyclerView Item 拖动排序 / 滑动删除动画的帮助类
+ * </pre>
  */
-
 public class LshItemDragHelper extends ItemTouchHelper {
 
-    // 使用接口模式, 可以通过 Adapter 实现 IItemDragCallback 接口来让其在Adapter内部进行处理
+    /**
+     * 使用接口模式, 可以通过 Adapter 实现 IItemDragCallback 接口来让其在Adapter内部进行处理
+     */
     public LshItemDragHelper(IItemDragCallback callback) {
         super(new CallbackImpl(callback));
     }
 
-    // 使用继承模式, 可以在Adapter里面创建内部类来实现, 方便获取更多的方法来实现更多的功能
+    /**
+     * 使用继承模式, 可以在Adapter里面创建内部类来实现, 方便获取更多的方法来实现更多的功能
+     */
     public LshItemDragHelper(ItemDragCallback callback) {
         super(callback);
     }
@@ -58,7 +66,7 @@ public class LshItemDragHelper extends ItemTouchHelper {
         }
 
         /**
-         * 每次进行拖拽排序时, ItemTouchHelper都会一直在进行相邻两个item的替换操作, 所以方法里面不宜进行耗时操作
+         * 每次进行拖拽排序时, ItemTouchHelper 都会一直在进行相邻两个item的替换操作, 所以方法里面不宜进行耗时操作
          */
         @Override
         public abstract boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target);
@@ -73,10 +81,32 @@ public class LshItemDragHelper extends ItemTouchHelper {
 
         boolean isLongPressDragEnabled();
 
+        /**
+         * 拖拽 Item 时, 进行两个相邻 Item 的互换操作
+         *
+         * @param recyclerView recyclerView
+         * @param fromPosition 被用户拖动 Item 的开始位置
+         * @param toPosition   被用户拖动 Item 的结束位置
+         * @return
+         */
         boolean onMove(RecyclerView recyclerView, int fromPosition, int toPosition);
 
+        /**
+         * 拖拽 Item 后
+         *
+         * @param recyclerView recyclerView
+         * @param fromPosition 被用户拖动 Item 的开始位置
+         * @param toPosition   被用户拖动 Item 的结束位置
+         */
         void onMoved(RecyclerView recyclerView, int fromPosition, int toPosition);
 
+        /**
+         * 用户执行滑动删除后
+         *
+         * @param position  滑动删除 Item 的位置
+         * @param direction 滑动方向; 值为以下其中一个:
+         *                  <br>{@link #UP}, {@link #DOWN}, {@link #LEFT}, {@link #RIGHT}
+         */
         void onSwiped(int position, int direction);
     }
 

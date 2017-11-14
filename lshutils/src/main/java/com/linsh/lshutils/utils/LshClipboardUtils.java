@@ -5,24 +5,29 @@ import android.content.ClipboardManager;
 import android.content.Context;
 
 /**
- * Created by Senh Linsh on 17/6/20.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/09
+ *    desc   : 工具类: 剪贴板相关
+ * </pre>
  */
-
 public class LshClipboardUtils {
 
     /**
-     * 复制文本
+     * 将文本复制到剪切板中
+     *
+     * @param text 需要复制的文字
      */
     public static void putText(String text) {
-        // 得到剪贴板管理器
         ClipboardManager manager = (ClipboardManager) LshContextUtils.getSystemService(Context.CLIPBOARD_SERVICE);
         manager.setPrimaryClip(ClipData.newPlainText(null, text.trim()));
     }
 
     /**
-     * 粘贴文本
+     * 获取剪切板中的文字
      *
-     * @return 当剪贴板没有东西时或者是其他类型的数据时返回 false
+     * @return 剪切板中的文字, 当剪贴板没有东西时或者是其他类型的数据时返回 null
      */
     public static String getText() {
         ClipboardManager manager = (ClipboardManager) LshContextUtils.getSystemService(Context.CLIPBOARD_SERVICE);

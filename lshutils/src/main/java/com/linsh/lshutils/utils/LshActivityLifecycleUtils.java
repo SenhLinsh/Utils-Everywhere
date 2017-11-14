@@ -9,15 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Senh Linsh on 17/6/5.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/09
+ *    desc   : 工具类：Activity 生命周期回调相关，主要用于获取顶部 Activity 以及判断 APP 是否处于后台
+ * </pre>
  */
-
 public class LshActivityLifecycleUtils {
 
     private static int foregroundActivityCount = 0;
     private static List<WeakReference<Activity>> sCreatedActivities;
     private static Application.ActivityLifecycleCallbacks sLifecycleCallbacks = null;
 
+    /**
+     * 使用该工具类需要先进行初始化
+     */
     public static void init(Application application) {
         if (sLifecycleCallbacks == null) {
             sCreatedActivities = new ArrayList<>();
@@ -66,12 +73,23 @@ public class LshActivityLifecycleUtils {
         application.registerActivityLifecycleCallbacks(sLifecycleCallbacks);
     }
 
+    /**
+     * 判断 App 是否处于后台 (屏幕关闭也算处于后台)
+     *
+     * @return true: 处于后台
+     * <br/>false: 处于前台
+     */
     public static boolean isAppInBackground() {
         check();
         return foregroundActivityCount <= 0;
     }
 
-    public static ArrayList<Activity> getCreatedActivities() {
+    /**
+     * 获取所有已经创建且没有被销毁的 Activities
+     *
+     * @return 已经创建的 Activity 集合
+     */
+    public static List<Activity> getCreatedActivities() {
         check();
         ArrayList<Activity> list = new ArrayList<>();
         for (WeakReference<Activity> reference : sCreatedActivities) {
@@ -83,6 +101,11 @@ public class LshActivityLifecycleUtils {
         return list;
     }
 
+    /**
+     * 获取处于栈顶的 Activity
+     *
+     * @return 栈顶 Activity
+     */
     public static Activity getTopActivity() {
         check();
         int size = sCreatedActivities.size();
@@ -93,6 +116,9 @@ public class LshActivityLifecycleUtils {
         }
     }
 
+    /**
+     * 检查该工具类是否被初始化, 没有初始化则抛出异常
+     */
     private static void check() {
         if (sLifecycleCallbacks == null) {
             throw new RuntimeException("请先调用初始化方法 init()");

@@ -9,9 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by linsh on 17/4/30.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 为嵌套数据准备的 Adapter 基类, 如 List<List<String>> 加载其中的 String 数据
+ * </pre>
  */
-
 public abstract class LshNestedDataRcvAdapter<T, H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> {
 
     private List<T> mFirstLevelData;

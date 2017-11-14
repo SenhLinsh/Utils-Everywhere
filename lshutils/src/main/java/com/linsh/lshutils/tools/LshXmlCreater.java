@@ -146,7 +146,7 @@ public class LshXmlCreater {
         }
 
         public ColorStateList getSelector() {
-            int[][] states = LshArrayUtils.toArray(mStates, new int[mStates.size()][]);
+            int[][] states = LshArrayUtils.toArray(mStates, int[].class);
             int[] colors = LshArrayUtils.toIntArray(mColors);
             return new ColorStateList(states, colors);
         }

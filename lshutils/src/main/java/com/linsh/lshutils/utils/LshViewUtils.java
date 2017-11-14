@@ -4,12 +4,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Created by Senh Linsh on 16/11/2.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 工具类: View 相关
+ * </pre>
  */
 public class LshViewUtils {
 
     /**
-     * 将该View及其所有子View设置selected状态
+     * 为指定的 View 及其所有子 View 都设置 selected 状态
+     *
+     * @param view     指定 View
+     * @param selected 是否为 selected
      */
     public static void setSelectedWithChildView(View view, boolean selected) {
         if (view == null) return;

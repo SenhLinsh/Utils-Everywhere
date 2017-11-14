@@ -5,9 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/14
+ *    desc   : 简单的 ViewHolder 基类
+ * </pre>
+ */
 public abstract class LshViewHolder extends RecyclerView.ViewHolder {
 
-    private LshViewHolder(View itemView) {
+    public LshViewHolder(View itemView) {
         super(itemView);
         initView(itemView);
     }

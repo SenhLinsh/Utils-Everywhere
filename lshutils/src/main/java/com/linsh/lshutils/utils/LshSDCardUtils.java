@@ -10,37 +10,52 @@ import com.linsh.lshutils.module.unit.Unit;
 import java.io.File;
 
 /**
- * Created by Senh Linsh on 17/1/8.
- * <p>
- * SD卡工具箱
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/13
+ *    desc   : 工具类: 外部储存相关
+ *             API  : 判断是否存在/可用, 获取状态, 获取根目录, 获取容量 等
+ * </pre>
  */
 public class LshSDCardUtils {
 
     /**
-     * 获取SD卡的状态
+     * 获取 SD卡的状态
+     *
+     * @return SD卡状态, 为以下其中一种: <br/>
+     * {@link Environment#MEDIA_UNKNOWN}, {@link Environment#MEDIA_REMOVED},
+     * {@link Environment#MEDIA_UNMOUNTED}, {@link Environment#MEDIA_CHECKING},
+     * {@link Environment#MEDIA_NOFS}, {@link Environment#MEDIA_MOUNTED},
+     * {@link Environment#MEDIA_MOUNTED_READ_ONLY}, {@link Environment#MEDIA_SHARED},
+     * {@link Environment#MEDIA_BAD_REMOVAL}, {@link Environment#MEDIA_UNMOUNTABLE}.
      */
     public static String getState() {
         return Environment.getExternalStorageState();
     }
 
     /**
-     * SD卡是否可用
+     * 判断 SD卡是否可用
+     *
+     * @return 是否可用
      */
     public static boolean isAvailable() {
         return getState().equals(Environment.MEDIA_MOUNTED);
     }
 
     /**
-     * 检查SD卡是否存在
+     * 检查 SD卡是否存在
+     *
+     * @return 是否存在
      */
     private static boolean checkSdCard() {
         return isAvailable();
     }
 
     /**
-     * 获取SD卡的根目录
+     * 获取 SD卡的根目录
      *
-     * @return null：不存在SD卡
+     * @return 根目录文件对象, 不存在 SD卡返回 null
      */
     public static File getRootDirectory() {
         return isAvailable() ? Environment.getExternalStorageDirectory() : null;
@@ -48,6 +63,8 @@ public class LshSDCardUtils {
 
     /**
      * 获取 Download 文件夹
+     *
+     * @return 系统级 Download 文件夹对象
      */
     public static File getDownloadDir() {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -55,6 +72,8 @@ public class LshSDCardUtils {
 
     /**
      * 获取 SD卡容量
+     *
+     * @return SD卡容量, 单位: B
      */
     public static long getSdCardSize() {
         if (!isAvailable()) return 0;
@@ -67,12 +86,20 @@ public class LshSDCardUtils {
         }
     }
 
+    /**
+     * 指定单位下, 获取 SD卡容量
+     *
+     * @param unit 单位
+     * @return 指定单位下的 SD卡容量
+     */
     public static float getSdCardSize(@Unit.FileSizeDef int unit) {
         return FileSize.formatByte(getSdCardSize(), unit);
     }
 
     /**
      * 获取 SD卡可用容量
+     *
+     * @return SD卡可用容量, 单位: B
      */
     public static long getSdCardAvailableSize() {
         if (!isAvailable()) return 0;
@@ -85,6 +112,12 @@ public class LshSDCardUtils {
         }
     }
 
+    /**
+     * 指定单位下, 获取 SD卡可用容量
+     *
+     * @param unit 单位
+     * @return 指定单位下的 SD卡可用容量
+     */
     public static float getSdCardAvailableSize(@Unit.FileSizeDef int unit) {
         return FileSize.formatByte(getSdCardAvailableSize(), unit);
     }

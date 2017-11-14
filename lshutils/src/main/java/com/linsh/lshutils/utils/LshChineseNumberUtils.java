@@ -1,19 +1,26 @@
 package com.linsh.lshutils.utils;
 
-/**
- * Created by Senh Linsh on 17/8/22.
- */
+import android.support.annotation.IntRange;
 
+/**
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/09
+ *    desc   : 工具类: 中文数字相关
+ * </pre>
+ */
 public class LshChineseNumberUtils {
 
     static final char[] sCnNums = new char[]{'一', '二', '三', '四', '五', '六', '七', '八', '九'};
     static final char[] sCnMonths = {'正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'};
 
     /**
-     * 解析单个常规中文数字字符, 如: 零(0), 一(1), 十(10) 等
+     * 解析单个常规中文数字字符, 如: 零一...十百千万亿
+     * <p>不包含大写中文数字壹到玖以及廿/卅/腊/冬数字</p>
      *
-     * @param cnChar
-     * @return
+     * @param cnChar 常规中文数字字符
+     * @return int 数值
      */
     public static int parseChar(char cnChar) {
         for (int j = 0; j < sCnNums.length; j++) {
@@ -60,7 +67,7 @@ public class LshChineseNumberUtils {
      * 解析不带单位的中文数字, 如: 一九九二, 二零零二, 二〇〇二
      *
      * @param cnNumber 不带单位的中文数字
-     * @return
+     * @return int 数值
      */
     public static int parseNumberWithoutUnit(String cnNumber) {
         int result = 0;
@@ -86,11 +93,14 @@ public class LshChineseNumberUtils {
 
     /**
      * 格式化数字为不带单位的中文数字, 如: 二零二三四五
+     *
+     * @param number long 数值
+     * @return 不带单位的中文数字表示
      */
-    public static String formatNumberWithoutUnit(int number) {
+    public static String formatNumberWithoutUnit(long number) {
         StringBuilder builder = new StringBuilder();
         while (number > 0) {
-            builder.insert(0, formatChar(number % 10));
+            builder.insert(0, formatChar((int) (number % 10)));
             number /= 10;
         }
         return builder.toString();
@@ -100,6 +110,7 @@ public class LshChineseNumberUtils {
      * 解析中文数字, 如: 一万八千零八(18008), 一百八(180), 十八(18)
      *
      * @param cnNumber 中文数字, 一亿以内
+     * @return int 数值
      */
     public static int parseNumber(String cnNumber) {
         int[] result = new int[5];
@@ -170,6 +181,7 @@ public class LshChineseNumberUtils {
      * 解析中文数字, 如: 一万八千零八(18008), 一百八(180), 十八(18)
      *
      * @param cnNumber 中文数字, 接受一亿及以上的大数字
+     * @return long 数值
      */
     public static long parseNumberAsLong(String cnNumber) {
         long[] result = new long[6];
@@ -243,7 +255,7 @@ public class LshChineseNumberUtils {
      * 解析农历年份, 例: 一九九二(1992), 九二年(1992), 零八(2008), 一七年(2017), 二零(1920)
      *
      * @param lunarYear 农历年份, 简写时默认为过去的年份
-     * @return
+     * @return int 数值
      */
     public static int parseLunarYear(String lunarYear) {
         String year = lunarYear;
@@ -268,7 +280,7 @@ public class LshChineseNumberUtils {
      * 解析农历月份, 例: 一月(1), 正月(1), 二(2), 冬(11), 腊月(12)等
      *
      * @param lunarMonth 农历月份, 末尾可带可不带 '月' 字
-     * @return
+     * @return int 数值
      */
     public static int parseLunarMonth(String lunarMonth) {
         if (lunarMonth.charAt(lunarMonth.length() - 1) == '月') {
@@ -324,7 +336,7 @@ public class LshChineseNumberUtils {
      * 解析农历日期中的日, 如: 初一(1), 一(1), 十三(13), 廿二(22), 二十二(22), 卅(30), 三十(30)
      *
      * @param lunarDay 农历日期中的日, 末尾可带可不带 '日' 字
-     * @return
+     * @return int 数值
      */
     public static int parseLunarDay(String lunarDay) {
         if (lunarDay.charAt(lunarDay.length() - 1) == '日') {
@@ -378,8 +390,14 @@ public class LshChineseNumberUtils {
         return result + temp;
     }
 
-    public static String formatLunarDay(int day) {
-        if (day <= 0 || day > 31) {
+    /**
+     * 格式化数字为农历日份, 如 1 -> 初一、 20 -> 二十
+     *
+     * @param day 农历日份数值
+     * @return 字符串表示的农历日份
+     */
+    public static String formatLunarDay(@IntRange(from = 1, to = 31) int day) {
+        if (day < 1 || day > 31) {
             throw new IllegalArgumentException("无法接收 1 - 31 以外的数值");
         }
         if (day == 10) {

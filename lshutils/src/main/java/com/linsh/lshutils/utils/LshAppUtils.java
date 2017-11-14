@@ -14,12 +14,20 @@ import java.io.File;
 import java.util.List;
 
 /**
- * Created by Senh Linsh on 16/8/9.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/09
+ *    desc   : 工具类: APP 相关
+ * </pre>
  */
 public class LshAppUtils {
 
     /**
-     * 判断服务是否在运行
+     * 判断服务是否正在运行
+     *
+     * @param serviceClassName 指定的服务类名
+     * @return true 为正在运行; 其他为 false
      */
     public static boolean isServiceRunning(String serviceClassName) {
         ActivityManager activityManager = (ActivityManager) LshApplicationUtils.getContext().getSystemService(Context.ACTIVITY_SERVICE);
@@ -33,14 +41,23 @@ public class LshAppUtils {
         return false;
     }
 
+    /**
+     * 判断当前 APP 是否正在前台运行<br/>
+     * 注意: 原理是判断 APP 是否处于栈顶, 屏幕是否关闭不会影响结果
+     *
+     * @return true 为是, false 为否
+     */
     @RequiresPermission(Manifest.permission.GET_TASKS)
     public static boolean isAppOnForeground() {
         return isAppOnForeground(getPackageName());
     }
 
     /**
-     * 判断App是否在前台运行
-     * 注意: 该方法是判断APP是否处于栈顶, 处于栈顶但是是关闭屏幕的情况下依然返回true
+     * 判断某应用程序(App)是否正在前台运行
+     * 注意: 原理是判断 APP 是否处于栈顶, 屏幕是否关闭不会影响结果
+     *
+     * @param packageName 应用程序包名
+     * @return true 为是, false 为否
      */
     @RequiresPermission(Manifest.permission.GET_TASKS)
     public static boolean isAppOnForeground(String packageName) {
@@ -56,22 +73,31 @@ public class LshAppUtils {
     }
 
     /**
-     * 获取顶部Activity的名称
+     * 获取栈顶 Activity 的名称
+     *
+     * @return 栈顶 Activity 的名称
      */
     public static String getTopActivityName() {
         ActivityManager activityManager = (ActivityManager) LshApplicationUtils.getContext().getSystemService(Context.ACTIVITY_SERVICE);
-        return activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+        if (activityManager != null) {
+            return activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+        }
+        return null;
     }
 
     /**
-     * 获取包名
+     * 获取当前 APP 的包名
+     *
+     * @return 当前 APP 的包名
      */
     public static String getPackageName() {
-        return LshApplicationUtils.getContext().getPackageName();
+        return LshApplicationUtils.getPackageName();
     }
 
     /**
-     * 获取版本名称
+     * 获取当前 APP 的版本名称
+     *
+     * @return 当前 APP 的版本名称
      */
     public static String getVersionName() {
         PackageManager packageManager = LshApplicationUtils.getContext().getPackageManager();
@@ -86,7 +112,9 @@ public class LshAppUtils {
     }
 
     /**
-     * 获取版本号
+     * 获取当前 APP 的版本号
+     *
+     * @return 当前 APP 的版本号
      */
     public static int getVersionCode() {
         PackageManager packageManager = LshApplicationUtils.getContext().getPackageManager();
@@ -101,7 +129,9 @@ public class LshAppUtils {
     }
 
     /**
-     * 获取应用名称
+     * 获取当前 APP 的应用名称
+     *
+     * @return 当前 APP 的应用名称
      */
     public String getAppName() {
         PackageManager pm = LshApplicationUtils.getContext().getPackageManager();
@@ -115,7 +145,9 @@ public class LshAppUtils {
     }
 
     /**
-     * 获取当前应用签名
+     * 获取当前 APP 的应用签名
+     *
+     * @return 当前 APP 的应用签名
      */
     public static String getAppSignature() {
         PackageManager pm = LshApplicationUtils.getContext().getPackageManager();
@@ -128,8 +160,11 @@ public class LshAppUtils {
         return null;
     }
 
+
     /**
-     * 安装 APK
+     * 安装 APK 文件
+     *
+     * @param apkFile 指定的 APK 文件
      */
     public static void installApk(File apkFile) {
         LshIntentUtils.gotoInstallApp(apkFile);
@@ -137,13 +172,19 @@ public class LshAppUtils {
 
     /**
      * 卸载 APP
+     *
+     * @param packageName 指定的 APP 的包名
      */
     public static void uninstallApp(String packageName) {
         LshIntentUtils.gotoUninstallApp(packageName);
     }
 
+
     /**
-     * 检测某个应用是否安装
+     * 判断指定的应用程序是否已安装
+     *
+     * @param packageName 指定的 APP 的包名
+     * @return true 为已安装; false 为未安装
      */
     public static boolean isAppInstalled(String packageName) {
         try {
@@ -155,14 +196,20 @@ public class LshAppUtils {
     }
 
     /**
-     * 打开 APP
+     * 启动指定的应用程序
+     *
+     * @param packageName 指定的 APP 的包名
      */
     public static void launchApp(String packageName) {
         LshIntentUtils.gotoApp(packageName);
     }
 
     /**
-     * 打开 APP
+     * 启动指定的应用程序
+     *
+     * @param activity    当前 Activity
+     * @param packageName 指定的 APP 的包名
+     * @param requestCode
      */
     public static void launchApp(Activity activity, String packageName, int requestCode) {
         Intent launchIntent = LshContextUtils.getPackageManager().getLaunchIntentForPackage(packageName);
@@ -170,7 +217,11 @@ public class LshAppUtils {
     }
 
     /**
-     * 检测某个应用是否安装, 如果一安装则启动跳转该应用
+     * 检测指定的应用程序是否已安装, 如果已安装则启动该应用
+     *
+     * @param activity    当前 Activity
+     * @param packageName 指定的 APP 的包名
+     * @return true 为已安装; false 为未安装
      */
     public static boolean checkAndStartInstalledApp(Activity activity, String packageName) {
         if (isAppInstalled(packageName)) {
@@ -182,12 +233,20 @@ public class LshAppUtils {
         }
     }
 
+    /**
+     * 判断当前 APP 是否为 Debug 版本
+     *
+     * @return true 为 Debug 版本; 其他为 false
+     */
     public static boolean isAppDebug() {
         return isAppDebug(getPackageName());
     }
 
     /**
-     * 判断App是否是Debug版本
+     * 判断指定的 APP 是否为 Debug 版本
+     *
+     * @param packageName 指定的 APP 的包名
+     * @return true 为 Debug 版本; 其他为 false
      */
     public static boolean isAppDebug(String packageName) {
         try {
@@ -201,7 +260,7 @@ public class LshAppUtils {
     }
 
     /**
-     * 杀死当前进程, 退出APP
+     * 杀死当前进程, 并退出 APP
      */
     public static void killCurrentProcess() {
         android.os.Process.killProcess(android.os.Process.myPid());

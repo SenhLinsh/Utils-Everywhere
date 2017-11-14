@@ -6,13 +6,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-;
-
 /**
- * Created by Senh Linsh on 16/12/2.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/10
+ *    desc   : 工具类: Fragment 相关
+ * </pre>
  */
 public class LshFragmentUtils {
 
+    /**
+     * 创建切换 replace
+     *
+     * @param fragment        Fragment
+     * @param containerViewId 容器 id
+     * @param activity        Activity
+     */
     public static void replaceFragment(android.app.Fragment fragment, int containerViewId, Activity activity) {
         if (fragment != null) {
             android.app.FragmentTransaction ft = activity.getFragmentManager().beginTransaction();
@@ -21,6 +31,13 @@ public class LshFragmentUtils {
         }
     }
 
+    /**
+     * 创建切换 replace
+     *
+     * @param fragment        Fragment
+     * @param containerViewId 容器 id
+     * @param activity        Activity
+     */
     public static void replaceFragment(Fragment fragment, int containerViewId, AppCompatActivity activity) {
         if (fragment != null) {
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();

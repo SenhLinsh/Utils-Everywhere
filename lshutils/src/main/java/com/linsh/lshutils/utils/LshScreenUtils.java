@@ -13,11 +13,21 @@ import android.view.View;
 import android.view.WindowManager;
 
 /**
- * Created by Senh Linsh on 17/3/30.
+ * <pre>
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/13
+ *    desc   : 工具类: 屏幕相关
+ *             API  : 获取屏幕尺寸, 获取屏幕宽高尺寸, 判断屏幕方向, 截屏, 获取 View 再屏幕中的位置 等
+ * </pre>
  */
-
 public class LshScreenUtils {
 
+    /**
+     * 获取屏幕尺寸
+     *
+     * @return DisplayMetrics 对象
+     */
     public static DisplayMetrics getScreenSize() {
         WindowManager wm = (WindowManager) LshApplicationUtils.getContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -25,6 +35,11 @@ public class LshScreenUtils {
         return outMetrics;
     }
 
+    /**
+     * 获取屏幕像素宽
+     *
+     * @return 屏幕宽
+     */
     public static int getScreenWidth() {
         WindowManager wm = (WindowManager) LshApplicationUtils.getContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -32,6 +47,11 @@ public class LshScreenUtils {
         return outMetrics.widthPixels;
     }
 
+    /**
+     * 获取屏幕像素高
+     *
+     * @return 屏幕高
+     */
     public static int getScreenHeight() {
         WindowManager wm = (WindowManager) LshApplicationUtils.getContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -39,20 +59,40 @@ public class LshScreenUtils {
         return outMetrics.heightPixels;
     }
 
+    /**
+     * 获取屏幕短边尺寸
+     *
+     * @return 短边尺寸
+     */
     public static int getScreenShortSize() {
         DisplayMetrics outMetrics = LshApplicationUtils.getContext().getResources().getDisplayMetrics();
         return Math.min(outMetrics.widthPixels, outMetrics.heightPixels);
     }
 
+    /**
+     * 获取屏幕长边尺寸
+     *
+     * @return 长边尺寸
+     */
     public static int getScreenLongSize() {
         DisplayMetrics outMetrics = LshApplicationUtils.getContext().getResources().getDisplayMetrics();
         return Math.max(outMetrics.widthPixels, outMetrics.heightPixels);
     }
 
+    /**
+     * 判断是否横屏
+     *
+     * @return 是否横屏
+     */
     public static boolean isLandscape() {
         return LshContextUtils.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
+    /**
+     * 判断是否竖屏
+     *
+     * @return 是否竖屏
+     */
     public static boolean isPortrait() {
         return LshContextUtils.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
@@ -60,8 +100,10 @@ public class LshScreenUtils {
     /**
      * 获取屏幕旋转角度
      * <p>0 为正常竖屏, 180 为倒置竖屏, 90 270 为横屏</p>
+     *
+     * @return 屏幕选择角度
      */
-    public static int getScreenRotation(final Activity activity) {
+    public static int getScreenRotation() {
         WindowManager wm = (WindowManager) LshApplicationUtils.getContext().getSystemService(Context.WINDOW_SERVICE);
         int rotation = wm.getDefaultDisplay().getRotation();
         switch (rotation) {
@@ -77,20 +119,46 @@ public class LshScreenUtils {
         }
     }
 
+    /**
+     * 获取指定的 View 再屏幕中的位置
+     * <p>该位置为 View 左上角像素相对于屏幕左上角的位置
+     *
+     * @param view View
+     * @return 包含 x 和 y 坐标的数组, [0] 为 x 坐标, [1] 为 y 坐标
+     */
     public static int[] getLocationOnScreen(View view) {
         int[] location = new int[2];
         view.getLocationOnScreen(location);
         return location;
     }
 
+    /**
+     * 获取指定的 View 再屏幕中 x 方向的位置
+     * <p>该位置为 View 左上角像素相对于屏幕左上角的位置
+     *
+     * @param view View
+     * @return x 坐标
+     */
     public static int getLocationXOnScreen(View view) {
         return getLocationOnScreen(view)[0];
     }
 
+    /**
+     * 获取指定的 View 再屏幕中 y 方向的位置
+     * <p>该位置为 View 左上角像素相对于屏幕左上角的位置
+     *
+     * @param view View
+     * @return y 坐标
+     */
     public static int getLocationYOnScreen(View view) {
         return getLocationOnScreen(view)[1];
     }
 
+    /**
+     * 获取屏幕状态栏高度
+     *
+     * @return 状态栏高度
+     */
     public static int getStatusBarHeight() {
         Resources resources = LshResourceUtils.getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
@@ -98,7 +166,10 @@ public class LshScreenUtils {
     }
 
     /**
-     * 获取当前屏幕截图，包含状态栏
+     * 获取当前屏幕截图 (包含状态栏)
+     *
+     * @param activity Activity
+     * @return 屏幕截图
      */
     public static Bitmap getScreenShot(Activity activity) {
         View view = activity.getWindow().getDecorView();
@@ -114,10 +185,10 @@ public class LshScreenUtils {
     }
 
     /**
-     * 获取当前屏幕截图，不包含状态栏
+     * 获取当前屏幕截图 (不包含状态栏)
      *
-     * @param activity
-     * @return
+     * @param activity Activity
+     * @return 屏幕截图
      */
     public static Bitmap getScreenShotWithoutStatusBar(Activity activity) {
         View view = activity.getWindow().getDecorView();
@@ -139,9 +210,10 @@ public class LshScreenUtils {
         return bp;
     }
 
-
     /**
-     * 判断是否锁屏
+     * 判断屏幕是否锁屏
+     *
+     * @return 是否锁屏
      */
     public static boolean isScreenLock() {
         KeyguardManager km = (KeyguardManager) LshContextUtils.getSystemService(Context.KEYGUARD_SERVICE);
