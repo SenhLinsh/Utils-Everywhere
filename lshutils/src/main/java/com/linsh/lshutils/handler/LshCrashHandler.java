@@ -6,10 +6,10 @@ import android.app.Application;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.linsh.lshutils.utils.LshActivityLifecycleUtils;
-import com.linsh.lshutils.utils.LshAppUtils;
-import com.linsh.lshutils.utils.LshApplicationUtils;
-import com.linsh.lshutils.utils.LshSharedPreferenceUtils;
+import com.linsh.lshutils.utils.ActivityLifecycleUtils;
+import com.linsh.lshutils.utils.AppUtils;
+import com.linsh.lshutils.utils.ApplicationUtils;
+import com.linsh.lshutils.utils.SharedPreferenceUtils;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public abstract class LshCrashHandler {
             mHandler.mOldHandler = oldHandler;
         }
 
-        LshActivityLifecycleUtils.init(application);
+        ActivityLifecycleUtils.init(application);
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable thr) {
@@ -50,8 +50,8 @@ public abstract class LshCrashHandler {
                 }
                 refreshCrashTime();
 
-                if (!LshActivityLifecycleUtils.isAppInBackground()) {
-                    List<Activity> activities = LshActivityLifecycleUtils.getCreatedActivities();
+                if (!ActivityLifecycleUtils.isAppInBackground()) {
+                    List<Activity> activities = ActivityLifecycleUtils.getCreatedActivities();
                     for (int i = activities.size() - 1; i >= 0; i--) {
                         Activity activity = activities.get(i);
                         if (activity != null) {
@@ -62,9 +62,9 @@ public abstract class LshCrashHandler {
                     Class<? extends Activity> restartActivity = mHandler.onRestartAppIfNeeded();
                     if (restartActivity != null) {
                         try {
-                            Intent intent = new Intent(LshApplicationUtils.getContext(), restartActivity);
+                            Intent intent = new Intent(ApplicationUtils.getContext(), restartActivity);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            LshApplicationUtils.getContext().startActivity(intent);
+                            ApplicationUtils.getContext().startActivity(intent);
                         } catch (Exception e) {
                             e.printStackTrace();
                             handleByDefaultHandler(thread, thr);
@@ -72,7 +72,7 @@ public abstract class LshCrashHandler {
                         }
                     }
                 }
-                LshAppUtils.killCurrentProcess();
+                AppUtils.killCurrentProcess();
             }
         });
     }
@@ -104,20 +104,20 @@ public abstract class LshCrashHandler {
      * 是否在几秒内发生过崩溃
      */
     private static boolean isCrashInLastSeconds() {
-        long lastCrashTime = LshSharedPreferenceUtils.getLong(KEY_LASTED_CRASH);
+        long lastCrashTime = SharedPreferenceUtils.getLong(KEY_LASTED_CRASH);
         return System.currentTimeMillis() - lastCrashTime < 3000;
     }
 
     @SuppressLint("ApplySharedPref")
     private static void refreshCrashTime() {
-        LshSharedPreferenceUtils.getSharedPreferences().edit().putLong(KEY_LASTED_CRASH, System.currentTimeMillis()).commit();
+        SharedPreferenceUtils.getSharedPreferences().edit().putLong(KEY_LASTED_CRASH, System.currentTimeMillis()).commit();
     }
 
     private static void handleByDefaultHandler(Thread thread, Throwable thr) {
         if (mHandler != null) {
             mHandler.mOldHandler.uncaughtException(thread, thr);
         } else {
-            LshAppUtils.killCurrentProcess();
+            AppUtils.killCurrentProcess();
         }
     }
 }

@@ -186,7 +186,7 @@ public final class ZipUtils {
             // 如果是空文件夹那么创建它，我把'/'换为File.separator测试就不成功，eggPain
             if (fileList == null || fileList.length <= 0) {
                 ZipEntry entry = new ZipEntry(rootPath + '/');
-                if (!LshStringUtils.isEmpty(comment)) entry.setComment(comment);
+                if (!StringUtils.isEmpty(comment)) entry.setComment(comment);
                 zos.putNextEntry(entry);
                 zos.closeEntry();
             } else {
@@ -200,7 +200,7 @@ public final class ZipUtils {
             try {
                 is = new BufferedInputStream(new FileInputStream(resFile));
                 ZipEntry entry = new ZipEntry(rootPath);
-                if (!LshStringUtils.isEmpty(comment)) entry.setComment(comment);
+                if (!StringUtils.isEmpty(comment)) entry.setComment(comment);
                 zos.putNextEntry(entry);
                 byte buffer[] = new byte[KB];
                 int len;
@@ -310,14 +310,14 @@ public final class ZipUtils {
         while (entries.hasMoreElements()) {
             ZipEntry entry = ((ZipEntry) entries.nextElement());
             String entryName = entry.getName();
-            if (LshStringUtils.isEmpty(keyword) || LshFileUtils.getFileName(entryName).toLowerCase().contains(keyword.toLowerCase())) {
+            if (StringUtils.isEmpty(keyword) || FileUtils.getFileName(entryName).toLowerCase().contains(keyword.toLowerCase())) {
                 String filePath = destDir + File.separator + entryName;
                 File file = new File(filePath);
                 files.add(file);
                 if (entry.isDirectory()) {
-                    if (!LshFileUtils.checkDirAndMakeDirs(file)) return null;
+                    if (!FileUtils.checkDirAndMakeDirs(file)) return null;
                 } else {
-                    if (!LshFileUtils.checkFileAndMakeDirs(file)) return null;
+                    if (!FileUtils.checkFileAndMakeDirs(file)) return null;
                     InputStream in = null;
                     OutputStream out = null;
                     try {
@@ -329,7 +329,7 @@ public final class ZipUtils {
                             out.write(buffer, 0, len);
                         }
                     } finally {
-                        LshIOUtils.close(in, out);
+                        IOUtils.close(in, out);
                     }
                 }
             }

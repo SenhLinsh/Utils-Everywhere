@@ -10,9 +10,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.webkit.MimeTypeMap;
 
-import com.linsh.lshutils.utils.LshApplicationUtils;
-import com.linsh.lshutils.utils.LshSharedPreferenceUtils;
-import com.linsh.lshutils.utils.LshStringUtils;
+import com.linsh.lshutils.utils.ApplicationUtils;
+import com.linsh.lshutils.utils.SharedPreferenceUtils;
+import com.linsh.lshutils.utils.StringUtils;
 
 import java.io.File;
 
@@ -68,7 +68,7 @@ public class LshDownloadManager {
      */
     public void cancel() {
         if (mRequestBuilder != null && mRequestId != 0) {
-            DownloadManager manager = (DownloadManager) LshApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+            DownloadManager manager = (DownloadManager) ApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
             manager.remove(mRequestId);
             mRequestId = 0;
         }
@@ -90,7 +90,7 @@ public class LshDownloadManager {
      */
     private static float getProgress(long requestId) {
         if (requestId != 0) {
-            DownloadManager manager = (DownloadManager) LshApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+            DownloadManager manager = (DownloadManager) ApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
             DownloadManager.Query query = new DownloadManager.Query().setFilterById(requestId);
             return getProgress(manager, query);
         }
@@ -121,7 +121,7 @@ public class LshDownloadManager {
             callback.onFailed("没有当前任务");
             return;
         }
-        final DownloadManager manager = (DownloadManager) LshApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+        final DownloadManager manager = (DownloadManager) ApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
         final DownloadManager.Query query = new DownloadManager.Query().setFilterById(mRequestId);
         if (query == null) {
             callback.onFailed("没有当前任务");
@@ -148,7 +148,7 @@ public class LshDownloadManager {
         }
         callback.inProgress(progress);
         if (progress < 1) {
-            LshApplicationUtils.getMainHandler().postDelayed(new Runnable() {
+            ApplicationUtils.getMainHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     queryProgress(manager, query, callback);
@@ -184,7 +184,7 @@ public class LshDownloadManager {
      */
     public static File getFileIfDownloaded(long requestId) {
         File file = null;
-        DownloadManager manager = (DownloadManager) LshApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager manager = (DownloadManager) ApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
         DownloadManager.Query query = new DownloadManager.Query().setFilterById(requestId);
         Cursor cursor = manager.query(query);
         if (cursor != null) {
@@ -213,7 +213,7 @@ public class LshDownloadManager {
      * @param receiver 广播接收者
      */
     public void registerCompleteReceiver(BroadcastReceiver receiver) {
-        LshApplicationUtils.getContext().registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        ApplicationUtils.getContext().registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
     /**
@@ -222,7 +222,7 @@ public class LshDownloadManager {
      * @param receiver 广播接收者
      */
     public void unregisterReceiver(BroadcastReceiver receiver) {
-        LshApplicationUtils.getContext().unregisterReceiver(receiver);
+        ApplicationUtils.getContext().unregisterReceiver(receiver);
     }
 
     //================================================ 构建 Request ================================================//
@@ -312,8 +312,8 @@ public class LshDownloadManager {
          */
         public long download() {
             // 判断是否已经下载过该文件
-            if (mRequestId == 0 && !LshStringUtils.isEmpty(mDownloadKey)) {
-                long requestId = LshSharedPreferenceUtils.getLong(mDownloadKey);
+            if (mRequestId == 0 && !StringUtils.isEmpty(mDownloadKey)) {
+                long requestId = SharedPreferenceUtils.getLong(mDownloadKey);
                 if (requestId > 0) {
                     float progress = getProgress(requestId);
                     if (progress == 1) {
@@ -338,11 +338,11 @@ public class LshDownloadManager {
             if (mRequestId != 0 && getProgress(mRequestId) == 1) {
                 return mRequestId;
             }
-            DownloadManager manager = (DownloadManager) LshApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+            DownloadManager manager = (DownloadManager) ApplicationUtils.getContext().getSystemService(Context.DOWNLOAD_SERVICE);
             long id = manager.enqueue(mRequest);
             if (mRequestId != id) {
                 mRequestId = id;
-                LshSharedPreferenceUtils.putLong(mDownloadKey, mRequestId);
+                SharedPreferenceUtils.putLong(mDownloadKey, mRequestId);
             }
             return id;
         }

@@ -1,7 +1,7 @@
 package com.linsh.lshutils.module;
 
-import com.linsh.lshutils.utils.LshDateUtils;
-import com.linsh.lshutils.utils.LshLunarCalendarUtils;
+import com.linsh.lshutils.utils.DateUtils;
+import com.linsh.lshutils.utils.LunarCalendarUtils;
 
 import java.util.Date;
 
@@ -88,7 +88,7 @@ public class SimpleDate {
     }
 
     public String getNormalizedString(boolean hasYear) {
-        return LshDateUtils.getNormalizedStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
+        return DateUtils.getNormalizedStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
     }
 
     public String getDisplayString() {
@@ -97,7 +97,7 @@ public class SimpleDate {
 
     public String getDisplayString(boolean hasYear) {
         if (mIsLunar) {
-            return LshLunarCalendarUtils.getLunarStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
+            return LunarCalendarUtils.getLunarStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
         }
         return getDisplayStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
     }
@@ -112,9 +112,9 @@ public class SimpleDate {
     }
 
     public static SimpleDate parseDateString(String date) {
-        SimpleDate simpleDate = LshLunarCalendarUtils.parseNormalizedStr(date);
+        SimpleDate simpleDate = LunarCalendarUtils.parseNormalizedStr(date);
         if (simpleDate == null) {
-            simpleDate = LshLunarCalendarUtils.parseLunarStr(date);
+            simpleDate = LunarCalendarUtils.parseLunarStr(date);
         }
         return simpleDate;
     }
