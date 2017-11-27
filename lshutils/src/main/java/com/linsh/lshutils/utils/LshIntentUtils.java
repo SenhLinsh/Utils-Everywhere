@@ -820,7 +820,13 @@ public class LshIntentUtils {
             ex.printStackTrace();
             return null;
         } finally {
-            LshIOUtils.close(input);
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         LshLogUtils.i("MiuiVersion = " + line);
         return line;

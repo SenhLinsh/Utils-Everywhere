@@ -7,6 +7,7 @@ import android.util.Log;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -425,7 +426,13 @@ public class LshLogUtils {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                LshIOUtils.close(bw);
+                if (bw != null) {
+                    try {
+                        bw.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }

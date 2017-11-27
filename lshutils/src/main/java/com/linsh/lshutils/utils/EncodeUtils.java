@@ -1,4 +1,4 @@
-package com.linsh.lshutils.others;
+package com.linsh.lshutils.utils;
 
 import android.os.Build;
 import android.text.Html;
@@ -10,10 +10,12 @@ import java.net.URLEncoder;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/08/07
- *     desc  : 编码解码相关工具类
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/21
+ *    desc   : 工具类: 编码解码相关
+ *
+ *             注: 该类直接参考使用 https://github.com/Blankj/AndroidUtilCode 中 EncodeUtils
  * </pre>
  */
 public final class EncodeUtils {

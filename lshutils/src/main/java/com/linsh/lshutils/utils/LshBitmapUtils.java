@@ -36,8 +36,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.linsh.lshutils.others.BitmapUtil.calculateInSampleSize;
-
 /**
  * <pre>
  *    author : Senh Linsh
@@ -157,7 +155,13 @@ public class LshBitmapUtils {
             e.printStackTrace();
             return null;
         } finally {
-            LshIOUtils.close(is);
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -187,7 +191,13 @@ public class LshBitmapUtils {
             e.printStackTrace();
             return null;
         } finally {
-            LshIOUtils.close(is);
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -1189,5 +1199,50 @@ public class LshBitmapUtils {
      */
     private static boolean isEmptyBitmap(final Bitmap src) {
         return src == null || src.getWidth() == 0 || src.getHeight() == 0;
+    }
+
+    /**
+     * 图片压缩处理（使用Options的方法）
+     * <p/>
+     * <br>
+     * <b>说明</b> 使用方法：
+     * 首先你要将Options的inJustDecodeBounds属性设置为true，BitmapFactory.decode一次图片 。
+     * 然后将Options连同期望的宽度和高度一起传递到到本方法中。
+     * 之后再使用本方法的返回值做参数调用BitmapFactory.decode创建图片。
+     * <p/>
+     * <br>
+     * <b>说明</b> BitmapFactory创建bitmap会尝试为已经构建的bitmap分配内存
+     * ，这时就会很容易导致OOM出现。为此每一种创建方法都提供了一个可选的Options参数
+     * ，将这个参数的inJustDecodeBounds属性设置为true就可以让解析方法禁止为bitmap分配内存
+     * ，返回值也不再是一个Bitmap对象， 而是null。虽然Bitmap是null了，但是Options的outWidth、
+     * outHeight和outMimeType属性都会被赋值。
+     *
+     * @param reqWidth  目标宽度,这里的宽高只是阀值，实际显示的图片将小于等于这个值
+     * @param reqHeight 目标高度,这里的宽高只是阀值，实际显示的图片将小于等于这个值
+     */
+    public static BitmapFactory.Options calculateInSampleSize(
+            final BitmapFactory.Options options, final int reqWidth,
+            final int reqHeight) {
+        // 源图片的高度和宽度
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+        if (height > 400 || width > 450) {
+            if (height > reqHeight || width > reqWidth) {
+                // 计算出实际宽高和目标宽高的比率
+                final int heightRatio = Math.round((float) height
+                        / (float) reqHeight);
+                final int widthRatio = Math.round((float) width
+                        / (float) reqWidth);
+                // 选择宽和高中最小的比率作为inSampleSize的值，这样可以保证最终图片的宽和高
+                // 一定都会大于等于目标的宽和高。
+                inSampleSize = heightRatio < widthRatio ? heightRatio
+                        : widthRatio;
+            }
+        }
+        // 设置压缩比例
+        options.inSampleSize = inSampleSize;
+        options.inJustDecodeBounds = false;
+        return options;
     }
 }

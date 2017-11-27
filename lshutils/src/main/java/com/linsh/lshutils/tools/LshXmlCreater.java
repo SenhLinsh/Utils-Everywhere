@@ -16,9 +16,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 
-/**
- * Created by Senh Linsh on 17/9/1.
- */
 
 public class LshXmlCreater {
 

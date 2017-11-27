@@ -302,7 +302,13 @@ public class LshOSUtils {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            LshIOUtils.close(is);
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return rom;
     }

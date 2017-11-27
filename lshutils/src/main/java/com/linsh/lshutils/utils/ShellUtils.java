@@ -1,6 +1,4 @@
-package com.linsh.lshutils.others;
-
-import com.linsh.lshutils.utils.LshIOUtils;
+package com.linsh.lshutils.utils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -9,17 +7,15 @@ import java.util.List;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/08/07
- *     desc  : Shell相关工具类
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/21
+ *    desc   : 工具类: Shell 命令相关
+ *
+ *             注: 该类直接参考使用 https://github.com/Blankj/AndroidUtilCode 中 ShellUtils
  * </pre>
  */
 public final class ShellUtils {
-
-    private ShellUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
-    }
 
     /**
      * 是否是在root下执行命令

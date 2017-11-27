@@ -3,6 +3,12 @@ package com.linsh.lshutils.utils;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <pre>
  *    author : Senh Linsh
@@ -70,5 +76,137 @@ public class LshResourceUtils {
      */
     public static int getDimens(int resId) {
         return LshApplicationUtils.getContext().getResources().getDimensionPixelSize(resId);
+    }
+
+    /**
+     * 从 Assets 目录里读取文件的文本
+     *
+     * @param fileName 文件名
+     * @return 文本内容
+     */
+    public static String getTextFromAssets(String fileName) {
+        if (LshStringUtils.isEmpty(fileName)) {
+            return null;
+        }
+        StringBuilder s = new StringBuilder("");
+        InputStreamReader in = null;
+        try {
+            in = new InputStreamReader(LshApplicationUtils.getContext().getResources().getAssets().open(fileName));
+            BufferedReader br = new BufferedReader(in);
+            String line;
+            while ((line = br.readLine()) != null) {
+                s.append(line);
+            }
+            return s.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 从 Assets 目录里读取文件的文本字符串集合 (每行占一个元素)
+     *
+     * @param fileName 文件名
+     * @return 文本字符串集合
+     */
+    public static List<String> geTextListFromAssets(String fileName) {
+        if (LshStringUtils.isEmpty(fileName)) {
+            return null;
+        }
+        List<String> fileContent = new ArrayList<>();
+        InputStreamReader in = null;
+        try {
+            in = new InputStreamReader(LshApplicationUtils.getContext().getResources().getAssets().open(fileName));
+            BufferedReader br = new BufferedReader(in);
+            String line;
+            while ((line = br.readLine()) != null) {
+                fileContent.add(line);
+            }
+            br.close();
+            return fileContent;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 从 Raw 目录里读取文件的文本
+     *
+     * @param resId 资源 Id
+     * @return 文本内容
+     */
+    public static String geTextFromRaw(int resId) {
+        StringBuilder s = new StringBuilder();
+        InputStreamReader in = null;
+        try {
+            in = new InputStreamReader(LshApplicationUtils.getContext().getResources().openRawResource(resId));
+            BufferedReader br = new BufferedReader(in);
+            String line;
+            while ((line = br.readLine()) != null) {
+                s.append(line);
+            }
+            return s.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 从 Raw 目录里读取文件的文本字符串集合
+     *
+     * @param resId 资源 Id
+     * @return 文本字符串集合
+     */
+    public static List<String> geFileToListFromRaw(int resId) {
+        List<String> fileContent = new ArrayList<String>();
+        InputStreamReader in = null;
+        try {
+            in = new InputStreamReader(LshApplicationUtils.getContext().getResources().openRawResource(resId));
+            BufferedReader reader = new BufferedReader(in);
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                fileContent.add(line);
+            }
+            reader.close();
+            return fileContent;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

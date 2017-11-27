@@ -1,16 +1,18 @@
-package com.linsh.lshutils.others;
+package com.linsh.lshutils.utils;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/12/05
- *     desc  : 阴历相关工具类
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/24
+ *    desc   : 工具类: 阴历&阳历转换 相关
+ *
+ *             注: 该类直接参考使用 https://github.com/Blankj/AndroidUtilCode 中 LunarUtils
  * </pre>
  */
-public final class LunarUtils {
+public final class LunarConverseUtils {
 
-    private LunarUtils() {
+    private LunarConverseUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 

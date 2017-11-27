@@ -1,8 +1,6 @@
-package com.linsh.lshutils.others;
+package com.linsh.lshutils.utils;
 
 import android.util.Base64;
-
-import com.linsh.lshutils.utils.LshIOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,10 +17,12 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/08/02
- *     desc  : 加密解密相关的工具类
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/21
+ *    desc   : 工具类: 加密解密相关
+ *
+ *             注: 该类直接参考使用 https://github.com/Blankj/AndroidUtilCode 中 EncryptUtils
  * </pre>
  */
 public final class EncryptUtils {
@@ -177,7 +177,13 @@ public final class EncryptUtils {
             e.printStackTrace();
             return null;
         } finally {
-            LshIOUtils.close(fis);
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -579,8 +585,8 @@ public final class EncryptUtils {
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
      * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
      */
-    public static        String DES_Transformation = "DES/ECB/NoPadding";
-    private static final String DES_Algorithm      = "DES";
+    public static String DES_Transformation = "DES/ECB/NoPadding";
+    private static final String DES_Algorithm = "DES";
 
     /**
      * DES加密后转为Base64编码
@@ -658,8 +664,8 @@ public final class EncryptUtils {
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
      * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
      */
-    public static        String TripleDES_Transformation = "DESede/ECB/NoPadding";
-    private static final String TripleDES_Algorithm      = "DESede";
+    public static String TripleDES_Transformation = "DESede/ECB/NoPadding";
+    private static final String TripleDES_Algorithm = "DESede";
 
 
     /**
@@ -738,8 +744,8 @@ public final class EncryptUtils {
      * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
      * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
      */
-    public static        String AES_Transformation = "AES/ECB/NoPadding";
-    private static final String AES_Algorithm      = "AES";
+    public static String AES_Transformation = "AES/ECB/NoPadding";
+    private static final String AES_Algorithm = "AES";
 
 
     /**

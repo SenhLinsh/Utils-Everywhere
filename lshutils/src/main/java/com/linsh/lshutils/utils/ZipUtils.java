@@ -1,8 +1,4 @@
-package com.linsh.lshutils.others;
-
-import com.linsh.lshutils.utils.LshFileUtils;
-import com.linsh.lshutils.utils.LshIOUtils;
-import com.linsh.lshutils.utils.LshStringUtils;
+package com.linsh.lshutils.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -22,19 +18,17 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * <pre>
- *     author: Blankj
- *     blog  : http://blankj.com
- *     time  : 2016/08/27
- *     desc  : 压缩相关工具类
+ *    author : Senh Linsh
+ *    github : https://github.com/SenhLinsh
+ *    date   : 2017/11/21
+ *    desc   : 工具类: 压缩相关
+ *
+ *             注: 该类直接参考使用 https://github.com/Blankj/AndroidUtilCode 中 ZipUtils
  * </pre>
  */
 public final class ZipUtils {
 
     private static final int KB = 1024;
-
-    private ZipUtils() {
-        throw new UnsupportedOperationException("u can't instantiate me...");
-    }
 
     /**
      * 批量压缩文件
@@ -98,7 +92,11 @@ public final class ZipUtils {
         } finally {
             if (zos != null) {
                 zos.finish();
-                LshIOUtils.close(zos);
+                try {
+                    zos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -161,7 +159,11 @@ public final class ZipUtils {
             return zipFile(resFile, "", zos, comment);
         } finally {
             if (zos != null) {
-                LshIOUtils.close(zos);
+                try {
+                    zos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -207,7 +209,13 @@ public final class ZipUtils {
                 }
                 zos.closeEntry();
             } finally {
-                LshIOUtils.close(is);
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         return true;
