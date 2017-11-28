@@ -26,9 +26,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-
-    compile 'com.google.code.gson:gson:2.7'
 
     testCompile "com.google.truth:truth:0.34"
 }
