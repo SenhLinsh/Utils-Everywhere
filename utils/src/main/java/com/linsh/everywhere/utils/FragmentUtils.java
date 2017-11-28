@@ -26,7 +26,7 @@ import java.util.List;
  *             注: 该类直接参考使用 https://github.com/Blankj/AndroidUtilCode 中 FragmentUtils
  * </pre>
  */
-public final class FragmentUtils {
+public class FragmentUtils {
 
     private FragmentUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");

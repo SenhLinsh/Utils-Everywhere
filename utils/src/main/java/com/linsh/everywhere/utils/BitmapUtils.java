@@ -234,6 +234,18 @@ public class BitmapUtils {
 
     /**
      * Bitmap 转 byte 数组
+     * <p>优化压缩质量的智能计算, 以获取最接近最大尺寸的图片数据</p>
+     *
+     * @param bitmap  Bitmap 对象
+     * @param maxSize 最大尺寸
+     * @return byte 数组
+     */
+    public static byte[] toBytes(Bitmap bitmap, int maxSize) {
+        return toBytes(bitmap, Bitmap.CompressFormat.JPEG, maxSize);
+    }
+
+    /**
+     * Bitmap 转 byte 数组
      *
      * @param bitmap Bitmap 对象
      * @param format 格式: JPEG / PNG / WEBP

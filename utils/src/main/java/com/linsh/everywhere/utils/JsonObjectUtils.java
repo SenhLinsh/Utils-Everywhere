@@ -14,23 +14,23 @@ import org.json.JSONObject;
  */
 public class JsonObjectUtils {
 
-    public JsonObjectBuilder parseJson(String json) {
+    public static JsonObjectBuilder parseJson(String json) {
         return new JsonObjectBuilder(json);
     }
 
-    public JsonArrayBuilder parseJsonArray(String json) {
+    public static JsonArrayBuilder parseJsonArray(String json) {
         return new JsonArrayBuilder(json);
     }
 
-    public JsonObjectBuilder newObject() {
+    public static JsonObjectBuilder newObject() {
         return new JsonObjectBuilder();
     }
 
-    public JsonArrayBuilder newArray() {
+    public static JsonArrayBuilder newArray() {
         return new JsonArrayBuilder();
     }
 
-    public class JsonObjectBuilder {
+    public static class JsonObjectBuilder {
         private JSONObject mJsonObject;
 
         public JsonObjectBuilder() {
@@ -140,7 +140,7 @@ public class JsonObjectUtils {
         }
     }
 
-    public class JsonArrayBuilder {
+    public static class JsonArrayBuilder {
         private JSONArray mJsonArray;
 
         public JsonArrayBuilder() {

@@ -5,9 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.google.gson.Gson;
-import com.linsh.everywhere.base.JsonBean;
-
 
 /**
  * <pre>
@@ -63,23 +60,6 @@ public class ActivityUtils {
         Intent intent = new Intent(context, activity);
         for (int i = 0; i < data.length; i++) {
             intent.putExtra(INTENT_EXTRA_PREFIX + "_string" + i, data[i]);
-        }
-        context.startActivity(intent);
-    }
-
-    /**
-     * 启动 Activity
-     *
-     * @param context  当前 Activity
-     * @param activity 需要启动的 Activity 类
-     * @param data     需要传递的 Json 数据, 获取数据时使用 {@link #getJsonBeanExtra(Activity, Class, int)} , 传入对应的 index 即可
-     */
-    public static void startActivityWithJsonBean(Activity context, Class<?> activity, JsonBean... data) {
-        Intent intent = new Intent(context, activity);
-        for (int i = 0; i < data.length; i++) {
-            JsonBean jsonBean = data[i];
-            String json = new Gson().toJson(jsonBean);
-            intent.putExtra(INTENT_EXTRA_PREFIX + i, json);
         }
         context.startActivity(intent);
     }
@@ -183,52 +163,13 @@ public class ActivityUtils {
         return activity.getIntent().getBooleanExtra(key, defValue);
     }
 
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 JsonBean 数据
-     *
-     * @param activity 当前 Activity
-     * @param clazz    JsonBean 的类, 用于 Json 的解析和转换
-     * @return 当前 Activity Intent 中的 JsonBean 数据
-     */
-    public static <T extends JsonBean> T getJsonBeanExtra(Activity activity, Class<T> clazz) {
-        return getJsonBeanExtra(activity, clazz, INTENT_EXTRA_PREFIX + "_" + clazz.getSimpleName());
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 JsonBean 数据
-     *
-     * @param activity 当前 Activity
-     * @param index    如果传递多个 JsonBean 数据或者指定了 index, 则需要在这里指定与传递时一致的 index
-     * @param clazz    JsonBean 的类, 用于 Json 的解析和转换
-     * @return 当前 Activity Intent 中的 JsonBean 数据
-     */
-    public static <T extends JsonBean> T getJsonBeanExtra(Activity activity, Class<T> clazz, int index) {
-        return getJsonBeanExtra(activity, clazz, INTENT_EXTRA_PREFIX + "_" + clazz.getSimpleName() + index);
-    }
-
-    /**
-     * 获取当前 Activity Intent 中的 JsonBean 数据
-     *
-     * @param activity 当前 Activity
-     * @param key      指定的 key
-     * @return 当前 Activity Intent 中的 JsonBean 数据; 无数据返回 null
-     */
-    public static <T extends JsonBean> T getJsonBeanExtra(Activity activity, Class<T> clazz, String key) {
-        String stringExtra = activity.getIntent().getStringExtra(key);
-        try {
-            return new Gson().fromJson(stringExtra, clazz);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
     /**
      * 1. 使用链式编程简化 Intent 的创建/管理和跳转<br/>
      * 2. 可主动帮助隐藏传递数据时需要传入的 key 值, 简化操作<br/>
      */
     public static class IntentBuilder {
+
         private Intent intent;
 
         public IntentBuilder() {
@@ -301,21 +242,6 @@ public class ActivityUtils {
 
         public IntentBuilder putExtra(String[] values, String key) {
             intent.putExtra(key, values);
-            return this;
-        }
-
-        public IntentBuilder putExtra(JsonBean bean) {
-            intent.putExtra(INTENT_EXTRA_PREFIX + "_" + bean.getClass().getSimpleName(), new Gson().toJson(bean));
-            return this;
-        }
-
-        public IntentBuilder putExtra(JsonBean bean, int index) {
-            intent.putExtra(INTENT_EXTRA_PREFIX + "_" + bean.getClass().getSimpleName() + index, new Gson().toJson(bean));
-            return this;
-        }
-
-        public IntentBuilder putExtra(JsonBean bean, String key) {
-            intent.putExtra(key, new Gson().toJson(bean));
             return this;
         }
 
