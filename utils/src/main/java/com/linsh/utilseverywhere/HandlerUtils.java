@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
 import android.os.Handler;
 
 /**
@@ -8,6 +9,7 @@ import android.os.Handler;
  *    github : https://github.com/SenhLinsh
  *    date   : 2017/11/28
  *    desc   : 工具类: Handler 相关
+ *             默认开启一个 Handler，方便在各个地方随时执行主线程任务
  * </pre>
  */
 public class HandlerUtils {
@@ -17,8 +19,8 @@ public class HandlerUtils {
     private HandlerUtils() {
     }
 
-    static void init() {
-        if (mainHandler == null) mainHandler = new Handler();
+    static void init(Context context) {
+        if (mainHandler == null) mainHandler = new Handler(context.getMainLooper());
     }
 
     /**

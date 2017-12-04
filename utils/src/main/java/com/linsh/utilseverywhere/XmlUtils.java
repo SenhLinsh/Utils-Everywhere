@@ -8,6 +8,10 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 
+import com.linsh.utilseverywhere.tools.ColorSelectorBuilder;
+import com.linsh.utilseverywhere.tools.DrawableSelectorBuilder;
+import com.linsh.utilseverywhere.tools.ShapeBuilder;
+
 /**
  * <pre>
  *    author : Senh Linsh
@@ -20,6 +24,18 @@ import android.os.Build;
 public class XmlUtils {
 
     private XmlUtils() {
+    }
+
+    public static ShapeBuilder buildShape() {
+        return new ShapeBuilder();
+    }
+
+    public static ColorSelectorBuilder buildColorSelector() {
+        return new ColorSelectorBuilder();
+    }
+
+    public static DrawableSelectorBuilder buildDrawableSelector() {
+        return new DrawableSelectorBuilder();
     }
 
     /**

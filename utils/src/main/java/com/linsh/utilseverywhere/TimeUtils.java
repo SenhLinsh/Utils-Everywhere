@@ -1,9 +1,9 @@
 package com.linsh.utilseverywhere;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * <pre>
@@ -19,147 +19,13 @@ public class TimeUtils {
     }
 
     /**
-     * 当前时间下, 获取格式化的时间字符串, 英式
-     *
-     * @return 时间字符串
-     */
-    public static String getCurrentTimeStringEN() {
-        return getTimeStringEN(System.currentTimeMillis());
-    }
-
-    /**
-     * 获取格式化的时间字符串, 英式
-     *
-     * @param time 指定时间
-     * @return 时间字符串
-     */
-    public static String getTimeStringEN(long time) {
-        return getTimeString(time, "yyyy-MM-dd HH:mm:ss");
-    }
-
-    /**
-     * 获取格式化的时间字符串, 英式
-     *
-     * @param date 指定时间
-     * @return 时间字符串
-     */
-    public static String getTimeStringEN(Date date) {
-        return getTimeString(date, "yyyy-MM-dd HH:mm:ss");
-    }
-
-    /**
-     * 获取格式化的时间字符串
-     *
-     * @param time    指定时间
-     * @param pattern 样式
-     * @return 时间字符串
-     */
-    public static String getTimeString(long time, String pattern) {
-        return getTimeString(new Date(time), pattern);
-    }
-
-    /**
-     * 获取格式化的时间字符串
-     *
-     * @param date    指定时间
-     * @param pattern 样式
-     * @return 时间字符串
-     */
-    public static String getTimeString(Date date, String pattern) {
-        return new SimpleDateFormat(pattern).format(date);
-    }
-
-    /**
-     * 解析时间字符串, 字符串需要符合格式: [yyyy-MM-dd HH:mm:ss]
-     *
-     * @param time 时间字符串
-     * @return 时间
-     */
-    public static long getTimeLong(String time) {
-        try {
-            Date parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
-            return parse.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    /**
-     * 解析时间字符串
-     *
-     * @param time    时间字符串
-     * @param pattern 格式
-     * @return 时间
-     */
-    public static long getTimeLong(String time, String pattern) {
-        try {
-            Date parse = new SimpleDateFormat(pattern).parse(time);
-            return parse.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-
-    /**
-     * 获取星期几的字符串
-     *
-     * @param milliseconds 时间
-     * @param prefix       前缀 如:需返回"周一"则传入"周", 返回"星期几"则传入"星期"
-     */
-    public static String getWeekDayString(long milliseconds, String prefix) {
-        return getWeekDayString(new Date(milliseconds), prefix);
-    }
-
-    /**
-     * 获取星期几的字符串
-     *
-     * @param date   日期对象
-     * @param prefix 前缀 如:需返回"周一"则传入"周", 返回"星期几"则传入"星期"
-     */
-    public static String getWeekDayString(Date date, String prefix) {
-        if (date == null || prefix == null) return "";
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
-        int dayIndex = calendar.get(Calendar.DAY_OF_WEEK);
-        switch (dayIndex) {
-            case Calendar.SUNDAY:
-                prefix += "日";
-                break;
-            case Calendar.MONDAY:
-                prefix += "一";
-                break;
-            case Calendar.TUESDAY:
-                prefix += "二";
-                break;
-            case Calendar.WEDNESDAY:
-                prefix += "三";
-                break;
-            case Calendar.THURSDAY:
-                prefix += "四";
-                break;
-            case Calendar.FRIDAY:
-                prefix += "五";
-                break;
-            case Calendar.SATURDAY:
-                prefix += "六";
-                break;
-        }
-        return prefix;
-    }
-
-    /**
      * 将以前的时间和现在对比, 转化成描述性时间字符串，并附上当时的时间后缀
      *
      * @param beforeDate 当前时间点以前的时间
      * @return 描述性时间字符串
      */
-    public static String dateBefore2StringDesc(Date beforeDate) {
-        return dateBefore2StringDesc(beforeDate, true);
+    public static String formatTimeDescToNowCn(Date beforeDate) {
+        return formatTimeDescToNowCn(beforeDate, true);
     }
 
     /**
@@ -168,7 +34,7 @@ public class TimeUtils {
      * @param beforeDate 当前时间点以前的时间
      * @return 描述性时间字符串
      */
-    public static String dateBefore2StringDesc(Date beforeDate, boolean isShowWeek) {
+    public static String formatTimeDescToNowCn(Date beforeDate, boolean isShowWeek) {
         long milliseconds = beforeDate.getTime();
         SimpleDateFormat formatBuilder = new SimpleDateFormat("HH:mm");
         String time = formatBuilder.format(milliseconds);
@@ -204,14 +70,14 @@ public class TimeUtils {
             } else if (day == 2) { // 前天
                 sb.append("前天 ");
             } else {
-                sb.append(getWeekDayString(milliseconds, "周"));
+                sb.append(DateUtils.getWeekdayStr(milliseconds, "周"));
             }
             // 添加后缀
             sb.append(time);
         } else if (day <= 30 && isShowWeek) { // 一周之前
             sb.append(day % 7 == 0 ? (day / 7) : (day / 7 + 1)).append("周前");
         } else { // 一个月之前
-            sb.append(new SimpleDateFormat("MM月dd日 ").format(beforeDate)).append(time);
+            sb.append(new SimpleDateFormat("MM月dd日 ", Locale.getDefault()).format(beforeDate)).append(time);
         }
         return sb.toString();
     }
@@ -223,7 +89,7 @@ public class TimeUtils {
      * @param isFull 是否全部显示： true 全部显示，如x年x月x日x时x分后； false 简单显示
      * @return 将时间间隔转换成描述性字符串，如2天前，3月1天后等。
      */
-    public static String date2StringCN(Date toDate, boolean isFull) {
+    public static String formatTimeLongToNowCn(Date toDate, boolean isFull) {
         String diffDesc = "";
         String fix = "";
         Long diffTime;
@@ -285,8 +151,8 @@ public class TimeUtils {
      *
      * @param timeLong 相对的日期
      */
-    public static String timeLong2StringCN(long timeLong) {
-        return timeLong2StringCN(timeLong, true, 0);
+    public static String formatTimeLongCn(long timeLong) {
+        return formatTimeLongCn(timeLong, true, 0);
     }
 
     /**
@@ -295,8 +161,8 @@ public class TimeUtils {
      * @param timeLong 相对的日期
      * @param isFull   是否全部显示： true 全部显示，如x年x月x日x时x分； false 简单显示,如4月 / 3天
      */
-    public static String timeLong2StringCN(long timeLong, boolean isFull) {
-        return timeLong2StringCN(timeLong, isFull, 0);
+    public static String formatTimeLongCn(long timeLong, boolean isFull) {
+        return formatTimeLongCn(timeLong, isFull, 0);
     }
 
     /**
@@ -305,8 +171,8 @@ public class TimeUtils {
      * @param timeLong 相对的日期
      * @param minUnit  最低显示单位, 6->年 5->月 4->日 3->时 2->分, 如3: 00时00分06秒
      */
-    public static String timeLong2StringCN(long timeLong, int minUnit) {
-        return timeLong2StringCN(timeLong, true, minUnit);
+    public static String formatTimeLongCn(long timeLong, int minUnit) {
+        return formatTimeLongCn(timeLong, true, minUnit);
     }
 
     /**
@@ -316,7 +182,7 @@ public class TimeUtils {
      * @param isFull   是否全部显示： true 全部显示，如x年x月x日x时x分； false 简单显示,如4月 / 3天
      * @param minUnit  最低显示单位, 6->年 5->月 4->日 3->时 2->分, 如3: 00时00分06秒
      */
-    public static String timeLong2StringCN(long timeLong, boolean isFull, int minUnit) {
+    public static String formatTimeLongCn(long timeLong, boolean isFull, int minUnit) {
         StringBuilder diffDesc = new StringBuilder();
 
         //换算秒，防止Int溢出
@@ -386,7 +252,7 @@ public class TimeUtils {
      * @param timeLong 指定的时间长度
      * @return 常规描述性的时间字符串
      */
-    public static String dayTime2StringNol(long timeLong) {
+    public static String formatTimeLongEn(long timeLong) {
         StringBuilder desc = new StringBuilder();
         //换算秒，防止Int溢出。
         timeLong = timeLong / 1000L;

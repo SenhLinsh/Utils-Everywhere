@@ -11,8 +11,6 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.view.View;
 
-import com.linsh.utilseverywhere.tools.XmlCreater;
-
 /**
  * <pre>
  *    author : Senh Linsh
@@ -126,7 +124,7 @@ public class BackgroundUtils {
             }
         }
         if (pressedDr != null) {
-            StateListDrawable selector = XmlCreater.createDrawableSelector()
+            StateListDrawable selector = XmlUtils.buildDrawableSelector()
                     .setPressedDrawable(pressedDr)
                     .setOtherStateDrawable(background)
                     .getSelector();
@@ -173,7 +171,7 @@ public class BackgroundUtils {
             }
         }
         if (pressedBg != null) {
-            return XmlCreater.createDrawableSelector()
+            return XmlUtils.buildDrawableSelector()
                     .setPressedDrawable(pressedBg)
                     .setOtherStateDrawable(background)
                     .getSelector();

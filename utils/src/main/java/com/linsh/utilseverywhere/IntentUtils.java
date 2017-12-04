@@ -13,6 +13,8 @@ import android.provider.Settings;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.Fragment;
 
+import com.linsh.utilseverywhere.tools.IntentBuilder;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +34,54 @@ public class IntentUtils {
 
     private IntentUtils() {
     }
+
+    //================================================ Intent 意图跳转相关 ================================================//
+
+    /**
+     * 创建 IntentBuilder 构建 Intent
+     *
+     * @return IntentBuilder
+     */
+    public static IntentBuilder buildIntent() {
+        return new IntentBuilder();
+    }
+
+    /**
+     * 创建 IntentBuilder 构建 Intent
+     *
+     * @param activity 需要启动的 Activity 类
+     * @return IntentBuilder
+     */
+    public static IntentBuilder buildIntent(Class<?> activity) {
+        return new IntentBuilder(activity);
+    }
+
+    /**
+     * 启动 Activity
+     *
+     * @param context  当前 Activity
+     * @param activity 需要启动的 Activity 类
+     */
+    public static void startActivity(Activity context, Class<?> activity) {
+        context.startActivity(new Intent(context, activity));
+    }
+
+    /**
+     * 启动 Activity, 并传递 String 类型数据
+     *
+     * @param context  当前 Activity
+     * @param activity 需要启动的 Activity 类
+     * @param data     需要传递的 String 类型数据, 获取数据时使用 {@link IntentBuilder#getStringExtra(Activity, int)} , 传入对应的 index 即可
+     */
+    public static void startActivityWithData(Activity context, Class<?> activity, String... data) {
+        IntentBuilder build = IntentBuilder.build(activity);
+        for (int i = 0; i < data.length; i++) {
+            build.putExtra(data[i], i);
+        }
+        build.startActivity(context);
+    }
+
+    //================================================ Intent 意图的获取 ================================================//
 
     /**
      * 获取分享文本的意图
@@ -380,7 +430,7 @@ public class IntentUtils {
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     }
 
-    //================================================ goto ================================================//
+    //================================================ Intent 意图的跳转 ================================================//
 
     /**
      * 跳转:「安装应用」界面
@@ -833,21 +883,5 @@ public class IntentUtils {
         }
         LogUtils.i("MiuiVersion = " + line);
         return line;
-    }
-
-    private interface Manufacturer {
-        String HUAWEI = "huawei";    // 华为
-        String MEIZU = "meizu";      // 魅族
-        String XIAOMI = "xiaomi";    // 小米
-        String SONY = "sony";        // 索尼
-        String SAMSUNG = "samsung";  // 三星
-        String LETV = "letv";        // 乐视
-        String ZTE = "zte";          // 中兴
-        String YULONG = "yulong";    // 酷派
-        String LENOVO = "lenovo";    // 联想
-        String LG = "lg";            // LG
-        String OPPO = "oppo";        // oppo
-        String VIVO = "vivo";        // vivo
-        String SMARTISAN = "smartisan";        // 锤子
     }
 }

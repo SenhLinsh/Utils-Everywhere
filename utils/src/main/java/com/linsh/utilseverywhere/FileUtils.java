@@ -1,5 +1,7 @@
 package com.linsh.utilseverywhere;
 
+import android.Manifest;
+import android.app.Activity;
 import android.os.Environment;
 import android.text.format.Formatter;
 
@@ -90,11 +92,19 @@ public class FileUtils {
 
     /**
      * 检查文件权限 (即外部存储的读写权限)
+     * <p>如果没有权限, 将自动发起权限申请</p>
      *
      * @return true 为拥有权限, false 为没有权限
      */
     public static boolean checkPermission() {
-        return PermissionUtils.Storage.checkPermission();
+        boolean check = PermissionUtils.Storage.checkPermission();
+        if (!check) {
+            Activity activity = ActivityLifecycleUtils.getTopActivitySafely();
+            if (activity != null) {
+                PermissionUtils.requestPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, null);
+            }
+        }
+        return check;
     }
 
     /**

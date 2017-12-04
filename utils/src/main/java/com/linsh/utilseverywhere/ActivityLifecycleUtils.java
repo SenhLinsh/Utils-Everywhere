@@ -13,7 +13,7 @@ import java.util.List;
  *    author : Senh Linsh
  *    github : https://github.com/SenhLinsh
  *    date   : 2017/11/09
- *    desc   : 工具类：Activity 生命周期回调相关，主要用于获取顶部 Activity 以及判断 APP 是否处于后台
+ *    desc   : 工具类：Activity 生命周期回调相关，目前主要用于获取顶部 Activity 以及判断 APP 是否处于后台
  * </pre>
  */
 public class ActivityLifecycleUtils {
@@ -111,6 +111,10 @@ public class ActivityLifecycleUtils {
      */
     public static Activity getTopActivity() {
         check();
+        return getTopActivitySafely();
+    }
+
+    static Activity getTopActivitySafely() {
         int size = sCreatedActivities.size();
         if (size > 0) {
             return sCreatedActivities.get(size - 1).get();

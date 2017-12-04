@@ -88,7 +88,7 @@ public class SimpleDate {
     }
 
     public String getNormalizedString(boolean hasYear) {
-        return DateUtils.getNormalizedStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
+        return DateUtils.getDateStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
     }
 
     public String getDisplayString() {

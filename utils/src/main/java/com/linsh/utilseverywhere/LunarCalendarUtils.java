@@ -129,6 +129,16 @@ public class LunarCalendarUtils {
     }
 
     /**
+     * 获取农历日期字符串, 默认不显示年份
+     *
+     * @param date    日期
+     * @return 农历日期字符串
+     */
+    public static String getLunarStr(Date date) {
+        return getLunarStr(date, false);
+    }
+
+    /**
      * 获取农历日期字符串
      *
      * @param date    日期

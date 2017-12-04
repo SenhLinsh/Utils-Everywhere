@@ -35,18 +35,6 @@ public class TestUtils {
     }
 
     /**
-     * 单行打印测试日志
-     *
-     * @param contents 消息内容
-     */
-    public static void print(int... contents) {
-        if (contents == null || contents.length == 0) return;
-        for (int i : contents) {
-            System.err.print(i + "    ");
-        }
-    }
-
-    /**
      * 隔行打印测试日志
      *
      * @param content 消息内容
@@ -61,7 +49,10 @@ public class TestUtils {
      * @param contents 消息内容
      */
     public static void printLn(Object... contents) {
-        if (contents == null || contents.length == 0) return;
+        if (contents == null || contents.length == 0) {
+            System.err.println();
+            return;
+        }
         for (Object object : contents) {
             System.err.println(object);
         }
