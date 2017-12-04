@@ -9,6 +9,8 @@ android {
         targetSdkVersion 25
         versionCode 12
         versionName "1.2.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
@@ -25,6 +27,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
     compile 'com.android.support:appcompat-v7:25.3.1'
 
     testCompile "com.google.truth:truth:0.34"
