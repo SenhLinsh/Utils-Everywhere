@@ -139,6 +139,27 @@ public class IntentBuilder {
         return activity.getIntent().getBooleanExtra(key, defValue);
     }
 
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 long 数据
+     *
+     * @param activity 当前 Activity
+     * @return 当前 Activity Intent 中的 long 数据
+     */
+    public static long getLongExtra(Activity activity) {
+        return activity.getIntent().getLongExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_long", 0);
+    }
+
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 long 数据
+     *
+     * @param activity 当前 Activity
+     * @param index    如果传递多个 long 数据或者指定了 index, 则需要在这里指定与传递时一致的 index
+     * @return 当前 Activity Intent 中的 long 数据
+     */
+    public static long getLongExtra(Activity activity, int index) {
+        return activity.getIntent().getLongExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_long" + index, 0);
+    }
+
     public IntentBuilder setClass(Class<?> cls) {
         intent.setClass(ContextUtils.get(), cls);
         return this;
@@ -189,13 +210,43 @@ public class IntentBuilder {
         return this;
     }
 
+    public IntentBuilder putExtra(long value) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "_long", value);
+        return this;
+    }
+
+    public IntentBuilder putExtra(long value, int index) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "_long" + index, value);
+        return this;
+    }
+
     public IntentBuilder putExtra(long value, String key) {
         intent.putExtra(key, value);
         return this;
     }
 
+    public IntentBuilder putExtra(float value) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "_float", value);
+        return this;
+    }
+
+    public IntentBuilder putExtra(float value, int index) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "_float" + index, value);
+        return this;
+    }
+
     public IntentBuilder putExtra(float value, String key) {
         intent.putExtra(key, value);
+        return this;
+    }
+
+    public IntentBuilder putExtra(double value) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "_double", value);
+        return this;
+    }
+
+    public IntentBuilder putExtra(double value, int index) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "_double" + index, value);
         return this;
     }
 
