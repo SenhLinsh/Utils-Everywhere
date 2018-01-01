@@ -270,8 +270,33 @@ public class IntentBuilder {
         return this;
     }
 
+    public IntentBuilder setClass(Context packageContext, Class<?> cls) {
+        intent.setClass(packageContext, cls);
+        return this;
+    }
+
+    public IntentBuilder setClassName(String packageName, String className) {
+        intent.setClassName(packageName, className);
+        return this;
+    }
+
+    public IntentBuilder setType(String type) {
+        intent.setType(type);
+        return this;
+    }
+
+    public IntentBuilder setDataAndType(Uri data, String type) {
+        intent.setDataAndType(data, type);
+        return this;
+    }
+
     public IntentBuilder addFlags(int flags) {
         intent.addFlags(flags);
+        return this;
+    }
+
+    public IntentBuilder addCategory(String category) {
+        intent.addCategory(category);
         return this;
     }
 
@@ -285,6 +310,7 @@ public class IntentBuilder {
     }
 
     public void startActivity() {
+        newTask();
         ContextUtils.get().startActivity(intent);
     }
 
