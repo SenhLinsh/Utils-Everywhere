@@ -2,7 +2,7 @@ package com.linsh.utilseverywhere.tools;
 
 import android.content.res.ColorStateList;
 
-import com.linsh.utilseverywhere.ArrayUtils;
+import com.linsh.utilseverywhere.ListUtils;
 
 import java.util.ArrayList;
 
@@ -90,8 +90,8 @@ public class ColorSelectorBuilder {
      * @return ColorStateList
      */
     public ColorStateList getSelector() {
-        int[][] states = ArrayUtils.toArray(mStates, int[].class);
-        int[] colors = ArrayUtils.toIntArray(mColors);
+        int[][] states = ListUtils.toArray(mStates, int[].class);
+        int[] colors = ListUtils.toIntArray(mColors);
         return new ColorStateList(states, colors);
     }
 }

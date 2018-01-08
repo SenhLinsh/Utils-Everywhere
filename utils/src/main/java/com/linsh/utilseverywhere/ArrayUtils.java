@@ -74,7 +74,7 @@ public class ArrayUtils {
     }
 
     /**
-     * 拼接数组中的所有元素
+     * 拼接数组中的元素
      *
      * @param arr     指定的数组
      * @param length  需要拼接的元素个数
@@ -117,56 +117,6 @@ public class ArrayUtils {
         ArrayList<T> list = new ArrayList<>();
         Collections.addAll(list, array);
         return list;
-    }
-
-    /**
-     * 将集合转化成数组
-     *
-     * @param list  指定的集合
-     * @param clazz 指定的数组类型的类
-     * @param <T>   泛型, 集合中的泛型或其父类
-     * @return 转化后得到的数组
-     */
-    public static <T> T[] toArray(List<? extends T> list, Class<T> clazz) {
-        if (list == null) {
-            return null;
-        }
-        int size = list.size();
-        T[] array = (T[]) Array.newInstance(clazz, size);
-        for (int i = 0; i < size; i++) {
-            array[i] = list.get(i);
-        }
-        return array;
-    }
-
-    /**
-     * 将集合转化成 int 数组
-     *
-     * @param list 指定的集合
-     * @return 转化后得到的 int 数组
-     */
-    public static int[] toIntArray(List<Integer> list) {
-        if (list == null) return null;
-        int[] array = new int[list.size()];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = list.get(i);
-        }
-        return array;
-    }
-
-    /**
-     * 将集合转化成 String 数组
-     *
-     * @param list 指定的集合
-     * @return 转化后得到的 String 数组
-     */
-    public static String[] toStringArray(List<String> list) {
-        if (list == null) return null;
-        String[] array = new String[list.size()];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = list.get(i);
-        }
-        return array;
     }
 
     /**

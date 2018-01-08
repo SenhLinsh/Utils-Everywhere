@@ -2,6 +2,7 @@ package com.linsh.utilseverywhere;
 
 import com.linsh.utilseverywhere.Rx.Action;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -51,15 +52,15 @@ public class ListUtils {
      * 将指定的集合转成 String 集合, 即将集合的元素转成或抽取成 String
      *
      * @param list            源集合
-     * @param getStringAction 将元素转成 String 的可执行任务
+     * @param action 将元素转成 String 的可执行任务
      * @return 新的 String 集合
      */
-    public static <T> List<String> getStringList(List<T> list, Action<String, T> getStringAction) {
+    public static <T> List<String> toStringList(List<T> list, Action<String, T> action) {
         List<String> stringList = new ArrayList<>();
 
-        if (list != null && getStringAction != null) {
+        if (list != null && action != null) {
             for (T t : list) {
-                String item = getStringAction.call(t);
+                String item = action.call(t);
                 if (item != null) {
                     stringList.add(item);
                 }
@@ -85,6 +86,56 @@ public class ListUtils {
             builder.append(list.get(i));
         }
         return builder.toString();
+    }
+
+    /**
+     * 将集合转化成 int 数组
+     *
+     * @param list 指定的集合
+     * @return 转化后得到的 int 数组
+     */
+    public static int[] toIntArray(List<Integer> list) {
+        if (list == null) return null;
+        int[] array = new int[list.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    /**
+     * 将集合转化成 String 数组
+     *
+     * @param list 指定的集合
+     * @return 转化后得到的 String 数组
+     */
+    public static String[] toStringArray(List<String> list) {
+        if (list == null) return null;
+        String[] array = new String[list.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    /**
+     * 将集合转化成数组
+     *
+     * @param list  指定的集合
+     * @param clazz 指定的数组类型的类
+     * @param <T>   泛型, 集合中的泛型或其父类
+     * @return 转化后得到的数组
+     */
+    public static <T> T[] toArray(List<? extends T> list, Class<T> clazz) {
+        if (list == null) {
+            return null;
+        }
+        int size = list.size();
+        T[] array = (T[]) Array.newInstance(clazz, size);
+        for (int i = 0; i < size; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
     }
 
     /**

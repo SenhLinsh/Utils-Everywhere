@@ -95,7 +95,7 @@ public class PermissionUtils {
                 }
             }
             if (list.size() > 0) {
-                requestPermissions(activity, ArrayUtils.toStringArray(list), listener);
+                requestPermissions(activity, ListUtils.toStringArray(list), listener);
             }
         } else {
             for (String permission : permissions) {
