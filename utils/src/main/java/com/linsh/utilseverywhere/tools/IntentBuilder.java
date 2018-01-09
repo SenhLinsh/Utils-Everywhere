@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 
 import com.linsh.utilseverywhere.ContextUtils;
+import com.linsh.utilseverywhere.interfaces.Convertible;
+
+import java.io.Serializable;
 
 /**
  * <pre>
@@ -160,6 +164,44 @@ public class IntentBuilder {
         return activity.getIntent().getLongExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_long" + index, 0);
     }
 
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 JsonBean 数据
+     *
+     * @param activity 当前 Activity
+     * @param clazz    JsonBean 的类, 用于 Json 的解析和转换
+     * @return 当前 Activity Intent 中的 JsonBean 数据
+     */
+    public static <T> T getJsonBeanExtra(Activity activity, Convertible<String, T> convertible, Class<T> clazz) {
+        return getJsonBeanExtra(activity, convertible, INTENT_EXTRA_PREFIX + "_" + clazz.getSimpleName());
+    }
+
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 JsonBean 数据
+     *
+     * @param activity    当前 Activity
+     * @param convertible 用于解析 json 为 Bean 类
+     * @param clazz       JsonBean 的类, 用于 Json 的解析和转换
+     * @param index       如果传递多个 JsonBean 数据或者指定了 index, 则需要在这里指定与传递时一致的 index
+     * @return 当前 Activity Intent 中的 JsonBean 数据
+     */
+    public static <T> T getJsonBeanExtra(Activity activity, Convertible<String, T> convertible, Class<?> clazz, int index) {
+        return getJsonBeanExtra(activity, convertible, INTENT_EXTRA_PREFIX + "_" + clazz.getSimpleName() + index);
+    }
+
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 JsonBean 数据
+     *
+     * @param activity    当前 Activity
+     * @param convertible 用于解析 json 为 Bean 类
+     * @param key         指定的 key
+     * @return 当前 Activity Intent 中的 JsonBean 数据
+     */
+    public static <T> T getJsonBeanExtra(Activity activity, Convertible<String, T> convertible, String key) {
+        String stringExtra = activity.getIntent().getStringExtra(key);
+        if (stringExtra == null) return null;
+        return convertible.convert(stringExtra);
+    }
+
     public IntentBuilder setClass(Class<?> cls) {
         intent.setClass(ContextUtils.get(), cls);
         return this;
@@ -260,6 +302,26 @@ public class IntentBuilder {
         return this;
     }
 
+    public IntentBuilder putExtra(Serializable serializable) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "_" + serializable.getClass().getSimpleName(), serializable);
+        return this;
+    }
+
+    public IntentBuilder putExtra(Parcelable parcelable) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "_" + parcelable.getClass().getSimpleName(), parcelable);
+        return this;
+    }
+
+    public <T> IntentBuilder putJsonExtra(T bean, Convertible<T, String> convertible) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "_" + bean.getClass().getSimpleName(), convertible.convert(bean));
+        return this;
+    }
+
+    public <T> IntentBuilder putJsonExtra(T bean, Convertible<T, String> convertible, String key) {
+        intent.putExtra(key, convertible.convert(bean));
+        return this;
+    }
+
     public IntentBuilder setData(Uri data) {
         intent.setData(data);
         return this;
@@ -336,5 +398,9 @@ public class IntentBuilder {
 
     public void startActivityForResult(android.app.Fragment fragment, int requestCode) {
         fragment.startActivityForResult(intent, requestCode);
+    }
+
+    public void startService() {
+        ContextUtils.get().startService(intent);
     }
 }

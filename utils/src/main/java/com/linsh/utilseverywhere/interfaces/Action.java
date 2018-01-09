@@ -1,4 +1,4 @@
-package com.linsh.utilseverywhere.Rx;
+package com.linsh.utilseverywhere.interfaces;
 
 public interface Action<R, P> {
 

@@ -1,6 +1,6 @@
 package com.linsh.utilseverywhere;
 
-import com.linsh.utilseverywhere.Rx.Action;
+import com.linsh.utilseverywhere.interfaces.Action;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
