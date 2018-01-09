@@ -193,7 +193,14 @@ public class ClassUtils {
      * @return 泛型类型
      */
     public static Type getGenericType(Class<?> clazz, int index) {
-        return ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[index];
+        Type genericSuperclass = clazz.getGenericSuperclass();
+        if (genericSuperclass instanceof ParameterizedType) {
+            Type[] actualTypeArguments = ((ParameterizedType) genericSuperclass).getActualTypeArguments();
+            if (actualTypeArguments.length > index) {
+                return actualTypeArguments[index];
+            }
+        }
+        return null;
     }
 
 }
