@@ -49,7 +49,16 @@ public class DateUtils {
     }
 
     /**
-     * 当前时间下, 获取格式化的时间字符串, 英式
+     * 当前时间下, 获取格式化的日期字符串, 英式, 如: 2000-01-01
+     *
+     * @return 时间字符串
+     */
+    public static String getCurDateStr() {
+        return getDateStr(System.currentTimeMillis());
+    }
+
+    /**
+     * 当前时间下, 获取格式化的时间字符串, 英式, 如: 2000-01-01 08:12:00
      *
      * @return 时间字符串
      */
