@@ -25,7 +25,7 @@ public class FileProviderUtils {
      * @return
      */
     public static Uri getUriForFile(File file) {
-        return FileProvider.getUriForFile(ContextUtils.get(), getFileProviderAuthority(), file);
+        return LshFileProvider.getUriForFile(ContextUtils.get(), getFileProviderAuthority(), file);
     }
 
     /**
