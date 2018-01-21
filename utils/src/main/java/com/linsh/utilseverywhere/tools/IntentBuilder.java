@@ -32,6 +32,10 @@ public class IntentBuilder {
         intent = new Intent();
     }
 
+    public IntentBuilder(Intent intent) {
+        this.intent = intent;
+    }
+
     public IntentBuilder(Class<?> cls) {
         intent = new Intent(ContextUtils.get(), cls);
     }
@@ -51,7 +55,14 @@ public class IntentBuilder {
      * @return 当前 Activity Intent 中的 String 数据
      */
     public static String getStringExtra(Activity activity) {
-        return activity.getIntent().getStringExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_string");
+        return getStringExtra(activity.getIntent());
+    }
+
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 String 数据
+     */
+    public static String getStringExtra(Intent intent) {
+        return intent.getStringExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_string");
     }
 
     /**
@@ -62,7 +73,14 @@ public class IntentBuilder {
      * @return 当前 Activity Intent 中的 String 数据
      */
     public static String getStringExtra(Activity activity, int index) {
-        return activity.getIntent().getStringExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_string" + index);
+        return getStringExtra(activity.getIntent(), index);
+    }
+
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 String 数据
+     */
+    public static String getStringExtra(Intent intent, int index) {
+        return intent.getStringExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_string" + index);
     }
 
     /**
@@ -83,7 +101,14 @@ public class IntentBuilder {
      * @return 当前 Activity Intent 中的 int 数据
      */
     public static int getIntExtra(Activity activity) {
-        return activity.getIntent().getIntExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_int", 0);
+        return getIntExtra(activity.getIntent());
+    }
+
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 int 数据
+     */
+    public static int getIntExtra(Intent intent) {
+        return intent.getIntExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_int", 0);
     }
 
     /**
@@ -94,7 +119,14 @@ public class IntentBuilder {
      * @return 当前 Activity Intent 中的 int 数据
      */
     public static int getIntExtra(Activity activity, int index) {
-        return activity.getIntent().getIntExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_int" + index, 0);
+        return getIntExtra(activity.getIntent(), index);
+    }
+
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 int 数据
+     */
+    public static int getIntExtra(Intent intent, int index) {
+        return intent.getIntExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_int" + index, 0);
     }
 
     /**
@@ -116,7 +148,14 @@ public class IntentBuilder {
      * @return 当前 Activity Intent 中的 boolean 数据
      */
     public static boolean getBooleanExtra(Activity activity, boolean defValue) {
-        return activity.getIntent().getBooleanExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_boolean", defValue);
+        return getBooleanExtra(activity.getIntent(), defValue);
+    }
+
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 boolean 数据
+     */
+    public static boolean getBooleanExtra(Intent intent, boolean defValue) {
+        return intent.getBooleanExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_boolean", defValue);
     }
 
     /**
@@ -128,7 +167,14 @@ public class IntentBuilder {
      * @return 当前 Activity Intent 中的 boolean 数据
      */
     public static boolean getBooleanExtra(Activity activity, int index, boolean defValue) {
-        return activity.getIntent().getBooleanExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_boolean" + index, defValue);
+        return getBooleanExtra(activity.getIntent(), index, defValue);
+    }
+
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 boolean 数据
+     */
+    public static boolean getBooleanExtra(Intent intent, int index, boolean defValue) {
+        return intent.getBooleanExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_boolean" + index, defValue);
     }
 
     /**
@@ -150,7 +196,14 @@ public class IntentBuilder {
      * @return 当前 Activity Intent 中的 long 数据
      */
     public static long getLongExtra(Activity activity) {
-        return activity.getIntent().getLongExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_long", 0);
+        return getLongExtra(activity.getIntent());
+    }
+
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 long 数据
+     */
+    public static long getLongExtra(Intent intent) {
+        return intent.getLongExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_long", 0);
     }
 
     /**
@@ -161,7 +214,14 @@ public class IntentBuilder {
      * @return 当前 Activity Intent 中的 long 数据
      */
     public static long getLongExtra(Activity activity, int index) {
-        return activity.getIntent().getLongExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_long" + index, 0);
+        return getLongExtra(activity.getIntent(), index);
+    }
+
+    /**
+     * 获取通过 {@link IntentBuilder} 传递过来的 long 数据
+     */
+    public static long getLongExtra(Intent intent, int index) {
+        return intent.getLongExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_long" + index, 0);
     }
 
     /**
@@ -212,9 +272,17 @@ public class IntentBuilder {
         return this;
     }
 
+    public String getStringExtra() {
+        return intent.getStringExtra(INTENT_EXTRA_PREFIX + "_string");
+    }
+
     public IntentBuilder putExtra(String value, int index) {
         intent.putExtra(INTENT_EXTRA_PREFIX + "_string" + index, value);
         return this;
+    }
+
+    public String getStringExtra(int index) {
+        return intent.getStringExtra(INTENT_EXTRA_PREFIX + "_string" + index);
     }
 
     public IntentBuilder putExtra(String value, String key) {
@@ -222,9 +290,17 @@ public class IntentBuilder {
         return this;
     }
 
+    public String getStringExtra(String key) {
+        return intent.getStringExtra(key);
+    }
+
     public IntentBuilder putExtra(boolean value) {
         intent.putExtra(INTENT_EXTRA_PREFIX + "_boolean", value);
         return this;
+    }
+
+    public boolean getBooleanExtra(boolean defaultValue) {
+        return intent.getBooleanExtra(INTENT_EXTRA_PREFIX + "_boolean", defaultValue);
     }
 
     public IntentBuilder putExtra(boolean value, int index) {
@@ -232,9 +308,17 @@ public class IntentBuilder {
         return this;
     }
 
+    public boolean getBooleanExtra(int index, boolean defaultValue) {
+        return intent.getBooleanExtra(INTENT_EXTRA_PREFIX + "_boolean" + index, defaultValue);
+    }
+
     public IntentBuilder putExtra(boolean value, String key) {
         intent.putExtra(key, value);
         return this;
+    }
+
+    public boolean getBooleanExtra(String key, boolean defaultValue) {
+        return intent.getBooleanExtra(key, defaultValue);
     }
 
     public IntentBuilder putExtra(int value) {
@@ -242,9 +326,17 @@ public class IntentBuilder {
         return this;
     }
 
+    public int getIntExtra() {
+        return intent.getIntExtra(INTENT_EXTRA_PREFIX + "_int", 0);
+    }
+
     public IntentBuilder putExtra(int value, int index) {
         intent.putExtra(INTENT_EXTRA_PREFIX + "_int" + index, value);
         return this;
+    }
+
+    public int getIntExtra(int index) {
+        return intent.getIntExtra(INTENT_EXTRA_PREFIX + "_int" + index, 0);
     }
 
     public IntentBuilder putExtra(int value, String key) {
@@ -252,9 +344,17 @@ public class IntentBuilder {
         return this;
     }
 
+    public int getIntExtra(String key) {
+        return intent.getIntExtra(key, 0);
+    }
+
     public IntentBuilder putExtra(long value) {
         intent.putExtra(INTENT_EXTRA_PREFIX + "_long", value);
         return this;
+    }
+
+    public long getLongExtra() {
+        return intent.getLongExtra(INTENT_EXTRA_PREFIX + "_long", 0);
     }
 
     public IntentBuilder putExtra(long value, int index) {
@@ -262,9 +362,17 @@ public class IntentBuilder {
         return this;
     }
 
+    public long getLongExtra(int index) {
+        return intent.getLongExtra(INTENT_EXTRA_PREFIX + "_long" + index, 0);
+    }
+
     public IntentBuilder putExtra(long value, String key) {
         intent.putExtra(key, value);
         return this;
+    }
+
+    public long getLongExtra(String key) {
+        return intent.getLongExtra(key, 0);
     }
 
     public IntentBuilder putExtra(float value) {
