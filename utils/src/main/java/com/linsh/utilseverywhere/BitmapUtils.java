@@ -1161,15 +1161,17 @@ public class BitmapUtils {
      * @return true 为保存成功; false 为失败
      */
     public static boolean saveBitmap(Bitmap bitmap, File output, int maxFileSize, boolean recycle) {
+        Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
+        if (output.getPath().endsWith(".png")) format = Bitmap.CompressFormat.PNG;
         // 进行有损压缩
         int quality = 100;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+        bitmap.compress(format, quality, baos);
 
         while (baos.toByteArray().length / 1024 > maxFileSize) { // 循环判断如果压缩后图片是否大于maxMemmorrySize,大于继续压缩
             baos.reset(); // 重置baos即让下一次的写入覆盖之前的内容
             quality = Math.max(0, quality - 10);//图片质量每次减少10
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos); // 将压缩后的图片保存到baos中
+            bitmap.compress(format, quality, baos); // 将压缩后的图片保存到baos中
             if (quality == 0) // 如果图片的质量已降到最低则，不再进行压缩
                 break;
         }
