@@ -231,7 +231,13 @@ public class IntentUtils {
         intent.putExtra("outputY", outputY);
         // 指定输出路径和文件类型
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        if (outputUri.getPath().endsWith(".jpg") || outputUri.getPath().endsWith(".jpeg")) {
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        } else if (outputUri.getPath().endsWith(".png") || inputUri.getPath().endsWith(".png")) {
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
+        } else {
+            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        }
         intent.putExtra("return-data", false);
         return intent;
     }
