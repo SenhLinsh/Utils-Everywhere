@@ -75,14 +75,24 @@ public class UnitConverseUtils {
      * @return 十六进制字符串
      */
     public static String toHexString(int value) {
-        if (value < 0) return null;
+        return Integer.toHexString(value);
+    }
 
-        char[] chars = "0123456789ABCDEF".toCharArray();
-        StringBuilder builder = new StringBuilder();
-        do {
-            builder.insert(0, chars[value % 16]);
-            value /= 16;
-        } while (value > 0);
-        return builder.toString();
+    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+
+    /**
+     * byte 数组 转 十六进制字符串
+     *
+     * @param bytes byte 数组
+     * @return 十六进制字符串
+     */
+    public static String bytesToHexString(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 }

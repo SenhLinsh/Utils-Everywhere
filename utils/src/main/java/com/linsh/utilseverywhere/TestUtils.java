@@ -19,7 +19,7 @@ public class TestUtils {
      * @param content 消息内容
      */
     public static void print(Object content) {
-        System.err.print(content);
+        System.err.print(content.toString());
     }
 
     /**
