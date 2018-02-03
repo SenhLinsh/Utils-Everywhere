@@ -1,5 +1,7 @@
 package com.linsh.utilseverywhere;
 
+import com.linsh.utilseverywhere.module.CommandResult;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -134,29 +136,5 @@ public final class ShellUtils {
                 successMsg == null ? null : successMsg.toString(),
                 errorMsg == null ? null : errorMsg.toString()
         );
-    }
-
-    /**
-     * 返回的命令结果
-     */
-    public static class CommandResult {
-        /**
-         * 结果码
-         **/
-        public int    result;
-        /**
-         * 成功信息
-         **/
-        public String successMsg;
-        /**
-         * 错误信息
-         **/
-        public String errorMsg;
-
-        public CommandResult(final int result, final String successMsg, final String errorMsg) {
-            this.result = result;
-            this.successMsg = successMsg;
-            this.errorMsg = errorMsg;
-        }
     }
 }
