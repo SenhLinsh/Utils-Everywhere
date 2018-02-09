@@ -6,6 +6,7 @@ import android.support.annotation.RequiresApi;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public class AccessibilityHelper {
         if (nodeInfo != null) {
             return nodeInfo.findAccessibilityNodeInfosByViewId(viewId);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     /**
@@ -69,7 +70,34 @@ public class AccessibilityHelper {
         if (nodeInfo != null) {
             return nodeInfo.findAccessibilityNodeInfosByText(text);
         }
-        return null;
+        return Collections.emptyList();
+    }
+
+    /**
+     * 通过文字内容查找节点信息
+     *
+     * @param text 文字内容
+     * @return 包含该文字内容的节点信息集合
+     */
+    public List<AccessibilityNodeInfo> findNodeInfosByContentDescriptions(String text) {
+        AccessibilityNodeInfo nodeInfo = mService.getRootInActiveWindow();
+        if (nodeInfo != null) {
+            ArrayList<AccessibilityNodeInfo> result = new ArrayList<>();
+            findNodeInfosByContentDescriptions(nodeInfo, text, result);
+            return result;
+        }
+        return Collections.emptyList();
+    }
+
+    private void findNodeInfosByContentDescriptions(AccessibilityNodeInfo nodeInfo, String text, ArrayList<AccessibilityNodeInfo> result) {
+        if (nodeInfo == null) return;
+        CharSequence description = nodeInfo.getContentDescription();
+        if (description != null && description.equals(text)) {
+            result.add(nodeInfo);
+        }
+        for (int i = 0; i < nodeInfo.getChildCount(); i++) {
+            findNodeInfosByContentDescriptions(nodeInfo.getChild(i), text, result);
+        }
     }
 
     /**
