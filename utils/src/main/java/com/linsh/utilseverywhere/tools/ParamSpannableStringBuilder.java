@@ -1,6 +1,5 @@
 package com.linsh.utilseverywhere.tools;
 
-import android.text.ParcelableSpan;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 
@@ -33,7 +32,7 @@ public class ParamSpannableStringBuilder {
      * @param text  文本
      * @param spans Span
      */
-    public ParamSpannableStringBuilder addText(String text, ParcelableSpan... spans) {
+    public ParamSpannableStringBuilder addText(String text, Object... spans) {
         int start = mBuilder.length();
         mBuilder.append(text);
         int end = mBuilder.length();
@@ -49,7 +48,7 @@ public class ParamSpannableStringBuilder {
      * @param spans      Span
      * @return 该文本所对应的参数
      */
-    public ParamSpannableStringBuilder addTextAsParam(String text, int paramIndex, ParcelableSpan... spans) {
+    public ParamSpannableStringBuilder addTextAsParam(String text, int paramIndex, Object... spans) {
         int start = mBuilder.length();
         mBuilder.append(text);
         int end = mBuilder.length();
@@ -69,7 +68,7 @@ public class ParamSpannableStringBuilder {
      * @param paramIndex 参数索引
      * @param spans      Span
      */
-    public ParamSpannableStringBuilder addTextAsParam(String text, int paramStart, int paramEnd, int paramIndex, ParcelableSpan... spans) {
+    public ParamSpannableStringBuilder addTextAsParam(String text, int paramStart, int paramEnd, int paramIndex, Object... spans) {
         int start = mBuilder.length();
         mBuilder.append(text);
         int end = mBuilder.length();
@@ -87,8 +86,8 @@ public class ParamSpannableStringBuilder {
      * @param end   结束索引
      * @param spans Span
      */
-    public ParamSpannableStringBuilder setSpan(int start, int end, ParcelableSpan... spans) {
-        for (ParcelableSpan span : spans) {
+    public ParamSpannableStringBuilder setSpan(int start, int end, Object... spans) {
+        for (Object span : spans) {
             mBuilder.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return this;
@@ -100,7 +99,7 @@ public class ParamSpannableStringBuilder {
      * @param paramIndex 参数索引
      * @param spans      Span
      */
-    public ParamSpannableStringBuilder setParam(int paramIndex, ParcelableSpan... spans) {
+    public ParamSpannableStringBuilder setParam(int paramIndex, Object... spans) {
         if (paramIndex < mParams.length) {
             Param param = mParams[paramIndex];
             if (param != null) {
@@ -117,7 +116,7 @@ public class ParamSpannableStringBuilder {
      * @param text       文本
      * @param spans      Span
      */
-    public ParamSpannableStringBuilder setParam(int paramIndex, String text, ParcelableSpan... spans) {
+    public ParamSpannableStringBuilder setParam(int paramIndex, String text, Object... spans) {
         if (paramIndex < mParams.length) {
             Param param = mParams[paramIndex];
             if (param != null) {
