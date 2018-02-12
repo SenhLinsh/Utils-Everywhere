@@ -40,7 +40,7 @@ public class SharedPreferenceUtils {
      * @return String 值
      */
     public static String getString(String key) {
-        return getSharedPreferences().getString(key, "");
+        return getSharedPreferences().getString(key, null);
     }
 
     /**
