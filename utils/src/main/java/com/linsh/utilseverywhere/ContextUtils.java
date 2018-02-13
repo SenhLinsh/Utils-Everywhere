@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -119,5 +120,9 @@ public class ContextUtils {
      */
     public static File getExternalCacheDir() {
         return get().getExternalCacheDir();
+    }
+
+    public static ContentResolver getContentResolver() {
+        return get().getContentResolver();
     }
 }
