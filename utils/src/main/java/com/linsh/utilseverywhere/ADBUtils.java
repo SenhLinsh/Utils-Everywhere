@@ -28,7 +28,7 @@ public class ADBUtils {
      */
     public static boolean checkRoot() {
         CommandResult result = ShellUtils.execCmd("", true);
-        return StringUtils.isEmpty(result.errorMsg);
+        return result.result != -1 && StringUtils.isEmpty(result.errorMsg);
     }
 
     //================================================ 应用管理 ================================================//
