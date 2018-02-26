@@ -51,6 +51,22 @@ public class HandlerUtils {
         getMainHandler().postDelayed(runnable, delay);
     }
 
+    public static void postRunnable(final Runnable runnable, long delay, final int times, final int interval) {
+        Runnable loop = new Runnable() {
+            private int mTimes;
+
+            @Override
+            public void run() {
+                if (mTimes < times) {
+                    runnable.run();
+                    getMainHandler().postDelayed(this, interval);
+                }
+                mTimes++;
+            }
+        };
+        getMainHandler().postDelayed(loop, delay);
+    }
+
     /**
      * 在主线程 Handler 中清除任务
      *
