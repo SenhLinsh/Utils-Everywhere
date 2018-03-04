@@ -28,7 +28,7 @@
 
  ```
  dependencies {
-     compile 'com.github.SenhLinsh:Utils-Everywhere:2.0.1'
+     compile 'com.github.SenhLinsh:Utils-Everywhere:2.0.2'
  }
   ```
 
