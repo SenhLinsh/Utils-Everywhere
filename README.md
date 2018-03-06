@@ -47,6 +47,7 @@
 | - | - | - |
 | AccessibilityUtils | 辅助功能（无障碍服务功能）相关 | - |
 | ActivityLifecycleUtils | Activity 生命周期回调相关，目前主要用于获取顶部 Activity 以及判断 APP 是否处于后台 | - |
+| ADBUtils | 执行 ADB 命令相关 | - |
 | AppUtils | APP 相关 | - |
 | ArrayUtils | 数组相关 | - |
 | BitmapUtils | Bitmap 相关，如对 Bitmap 对象的获取、处理、转化和保存 | - |
@@ -100,6 +101,7 @@
 | CursorHelper | 简化 Cursor 对象的操作 | - |
 | DrawableSelectorBuilder | 构建图像选择器的辅助类 | - |
 | IntentBuilder | Intent 构建辅助类，链式编程简化 Intent 构建，传递数据时可隐藏 key 的使用 | - |
+| ParamSpannableStringBuilder | 构建参数化 SpannableString 的辅助类 | - |
 | ShapeBuilder | 构建 Shape 的复制类 | - |
 | WhereBuilder | 构建 SQL 查询条件筛选语句的帮助类 | - |
 
