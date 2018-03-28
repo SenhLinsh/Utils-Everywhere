@@ -34,7 +34,7 @@ public class ScreenUtils {
     public static DisplayMetrics getScreenSize() {
         WindowManager wm = (WindowManager) ContextUtils.get().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
+        if (wm != null) wm.getDefaultDisplay().getMetrics(outMetrics);
         return outMetrics;
     }
 
@@ -46,7 +46,7 @@ public class ScreenUtils {
     public static int getScreenWidth() {
         WindowManager wm = (WindowManager) ContextUtils.get().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
+        if (wm != null) wm.getDefaultDisplay().getMetrics(outMetrics);
         return outMetrics.widthPixels;
     }
 
@@ -58,7 +58,7 @@ public class ScreenUtils {
     public static int getScreenHeight() {
         WindowManager wm = (WindowManager) ContextUtils.get().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
+        if (wm != null) wm.getDefaultDisplay().getMetrics(outMetrics);
         return outMetrics.heightPixels;
     }
 
@@ -108,7 +108,7 @@ public class ScreenUtils {
      */
     public static int getScreenRotation() {
         WindowManager wm = (WindowManager) ContextUtils.get().getSystemService(Context.WINDOW_SERVICE);
-        int rotation = wm.getDefaultDisplay().getRotation();
+        int rotation = wm != null ? wm.getDefaultDisplay().getRotation() : 0;
         switch (rotation) {
             default:
             case Surface.ROTATION_0:
@@ -186,6 +186,16 @@ public class ScreenUtils {
     public static boolean isScreenLock() {
         KeyguardManager km = (KeyguardManager) ContextUtils.getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
+    }
+
+    /**
+     * 设置屏幕方向
+     *
+     * @param activity    Activity
+     * @param orientation 屏幕方向, 详见 {@link android.content.pm.ActivityInfo#screenOrientation ActivityInfo.screenOrientation}.
+     */
+    public static void setScreenOrientation(Activity activity, int orientation) {
+        activity.setRequestedOrientation(orientation);
     }
 
     /**
