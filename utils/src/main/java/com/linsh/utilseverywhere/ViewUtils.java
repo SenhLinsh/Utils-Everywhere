@@ -1,5 +1,7 @@
 package com.linsh.utilseverywhere;
 
+import android.graphics.Rect;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -84,5 +86,50 @@ public class ViewUtils {
         locations[2] = location[0] + view.getWidth();
         locations[3] = location[1] + view.getHeight();
         return locations;
+    }
+
+
+    /**
+     * 扩大 View 的触摸和点击响应范围, 最大不超过其父View范围
+     *
+     * @param view   View
+     * @param top    顶部扩大的像素值
+     * @param bottom 底部扩大的像素值
+     * @param left   左边扩大的像素值
+     * @param right  右边扩大的像素值
+     */
+    public static void expandViewTouchDelegate(final View view, final int top,
+                                               final int bottom, final int left, final int right) {
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                if (View.class.isInstance(view.getParent())) {
+                    Rect bounds = new Rect();
+                    view.setEnabled(true);
+                    view.getHitRect(bounds);
+                    bounds.top -= top;
+                    bounds.bottom += bottom;
+                    bounds.left -= left;
+                    bounds.right += right;
+                    ((View) view.getParent()).setTouchDelegate(new TouchDelegate(bounds, view));
+                }
+            }
+        });
+    }
+
+    /**
+     * 还原 View 的触摸和点击响应范围, 最小不小于 View 自身范围
+     *
+     * @param view View
+     */
+    public static void restoreViewTouchDelegate(final View view) {
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                if (View.class.isInstance(view.getParent())) {
+                    ((View) view.getParent()).setTouchDelegate(new TouchDelegate(new Rect(), view));
+                }
+            }
+        });
     }
 }
