@@ -131,8 +131,30 @@ public class StringUtils {
      * @param obj 对象
      * @return 将 null 对象返回空字符串(""), 其他对象调用 toString() 返回的字符串
      */
-    public static String nullStrToEmpty(Object obj) {
+    public static String nullToEmpty(Object obj) {
         return (obj == null ? "" : (obj instanceof String ? (String) obj : obj.toString()));
+    }
+
+    /**
+     * null 转 指定的字符串
+     *
+     * @param obj             对象
+     * @param defaultEmptyStr 用于替换 null 对象的字符串
+     * @return 如果对象不为 null, 将返回该对象的 toString() 字符串; 如果对象为 null, 则返回指定的默认字符串
+     */
+    public static String nullToDefault(Object obj, String defaultEmptyStr) {
+        return obj == null ? defaultEmptyStr : obj.toString();
+    }
+
+    /**
+     * null 或空串 转 指定的字符串
+     *
+     * @param str             字符串
+     * @param defaultEmptyStr 用于替换 null 或空串的字符串
+     * @return 如果字符串不为 null 或空串, 将返回该字符串; 否则返回指定的默认字符串
+     */
+    public static String emptyToDefault(String str, String defaultEmptyStr) {
+        return str == null || str.length() == 0 ? defaultEmptyStr : str;
     }
 
     /**
