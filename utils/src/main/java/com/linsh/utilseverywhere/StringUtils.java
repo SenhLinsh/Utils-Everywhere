@@ -222,4 +222,26 @@ public class StringUtils {
         }
         return format;
     }
+
+    /**
+     * 获取中文空格 (宽度和中文字符一致)
+     *
+     * @param length 空格数
+     * @return 中文空格字符串
+     */
+    public static String getChineseSpaces(int length) {
+        if (length < 100) {
+            String spaces = "";
+            for (int i = 0; i < length; i++) {
+                spaces += (char) 12288;
+            }
+            return spaces;
+        } else {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < length; i++) {
+                builder.append((char) 12288);
+            }
+            return builder.toString();
+        }
+    }
 }
