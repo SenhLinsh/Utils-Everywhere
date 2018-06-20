@@ -5,8 +5,9 @@ import android.app.Application;
 import android.os.Bundle;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <pre>
@@ -19,7 +20,7 @@ import java.util.List;
 public class ActivityLifecycleUtils {
 
     private static int foregroundActivityCount = 0;
-    private static List<WeakReference<Activity>> sCreatedActivities;
+    private static LinkedHashMap<Integer, WeakReference<Activity>> sCreatedActivities;
     private static Application.ActivityLifecycleCallbacks sLifecycleCallbacks = null;
 
     private ActivityLifecycleUtils() {
@@ -30,11 +31,11 @@ public class ActivityLifecycleUtils {
      */
     public static void init(Application application) {
         if (sLifecycleCallbacks == null) {
-            sCreatedActivities = new ArrayList<>();
+            sCreatedActivities = new LinkedHashMap<>();
             sLifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
                 @Override
                 public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                    sCreatedActivities.add(new WeakReference<>(activity));
+                    sCreatedActivities.put(activity.hashCode(), new WeakReference<>(activity));
                 }
 
                 @Override
@@ -62,14 +63,7 @@ public class ActivityLifecycleUtils {
 
                 @Override
                 public void onActivityDestroyed(Activity activity) {
-                    for (int i = 0; i < sCreatedActivities.size(); ) {
-                        Activity savedActivity = sCreatedActivities.get(i).get();
-                        if (savedActivity == null || savedActivity == activity) {
-                            sCreatedActivities.remove(i);
-                        } else {
-                            i++;
-                        }
-                    }
+                    sCreatedActivities.remove(activity.hashCode());
                 }
             };
         }
@@ -88,23 +82,6 @@ public class ActivityLifecycleUtils {
     }
 
     /**
-     * 获取所有已经创建且没有被销毁的 Activities
-     *
-     * @return 已经创建的 Activity 集合
-     */
-    public static List<Activity> getCreatedActivities() {
-        check();
-        ArrayList<Activity> list = new ArrayList<>();
-        for (WeakReference<Activity> reference : sCreatedActivities) {
-            Activity activity = reference.get();
-            if (activity != null) {
-                list.add(activity);
-            }
-        }
-        return list;
-    }
-
-    /**
      * 获取处于栈顶的 Activity
      *
      * @return 栈顶 Activity
@@ -115,12 +92,15 @@ public class ActivityLifecycleUtils {
     }
 
     static Activity getTopActivitySafely() {
-        int size = sCreatedActivities.size();
-        if (size > 0) {
-            return sCreatedActivities.get(size - 1).get();
-        } else {
-            return null;
+        Activity top = null;
+        Set<Map.Entry<Integer, WeakReference<Activity>>> entries = sCreatedActivities.entrySet();
+        for (Map.Entry<Integer, WeakReference<Activity>> entry : entries) {
+            Activity activity = entry.getValue().get();
+            if (activity != null) {
+                top = activity;
+            }
         }
+        return top;
     }
 
     /**
