@@ -2,6 +2,7 @@ package com.linsh.utilseverywhere;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 
 /**
  * <pre>
@@ -20,7 +21,16 @@ public class HandlerUtils {
     }
 
     static void init(Context context) {
-        if (mainHandler == null) mainHandler = new Handler(context.getMainLooper());
+        if (mainHandler == null) mainHandler = new Handler(context.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Object obj = msg.obj;
+                if (obj instanceof Runnable) {
+                    ((Runnable) obj).run();
+                }
+            }
+        };
     }
 
     /**
@@ -51,6 +61,14 @@ public class HandlerUtils {
         getMainHandler().postDelayed(runnable, delay);
     }
 
+    /**
+     * 在主线程 Handler 中执行循环延迟任务
+     *
+     * @param runnable 可执行的任务
+     * @param delay    延迟时间
+     * @param times    次数
+     * @param interval 间隔时间
+     */
     public static void postRunnable(final Runnable runnable, long delay, final int times, final int interval) {
         Runnable loop = new Runnable() {
             private int mTimes;
@@ -74,5 +92,51 @@ public class HandlerUtils {
      */
     public static void removeRunnable(Runnable runnable) {
         getMainHandler().removeCallbacks(runnable);
+    }
+
+    /**
+     * 在主线程 Handler 中发送可执行任务的消息
+     * <p>
+     * 该消息封装了可执行的任务, 在处理消息时会自动执行.
+     * <p>
+     * 注意: 由于该 Handler 是全局的, 使用 what 进行消息区分时, 注意与全局其他消息的冲突,
+     * 防止清除消息时发生误清.
+     *
+     * @param what     消息 Id, 用于区分不同的消息 / 任务
+     * @param runnable 可执行任务
+     */
+    public static void sendMessage(int what, Runnable runnable) {
+        Message message = Message.obtain();
+        message.what = what;
+        message.obj = runnable;
+        getMainHandler().sendMessage(message);
+    }
+
+    /**
+     * 在主线程 Handler 中发送延迟的可执行任务的消息
+     * <p>
+     * 该消息封装了可执行的任务, 在处理消息时会自动执行.
+     * <p>
+     * 注意: 由于该 Handler 是全局的, 使用 what 进行消息区分时, 注意与全局其他消息的冲突,
+     * 防止清除消息时发生误清.
+     *
+     * @param what     消息 Id, 用于区分不同的消息 / 任务
+     * @param runnable 可执行任务
+     * @param delay    延迟时间
+     */
+    public static void sendMessage(int what, Runnable runnable, long delay) {
+        Message message = Message.obtain();
+        message.what = what;
+        message.obj = runnable;
+        getMainHandler().sendMessageDelayed(message, delay);
+    }
+
+    /**
+     * 清除该主线程 Handler 消息队列中标记为 what 的消息
+     *
+     * @param what 消息 Id
+     */
+    public static void removeMessages(int what) {
+        getMainHandler().removeMessages(what);
     }
 }
