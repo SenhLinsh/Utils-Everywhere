@@ -12,6 +12,9 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import com.linsh.utilseverywhere.tools.IntentBuilder;
 
@@ -122,7 +125,7 @@ public class IntentUtils {
      * @return 意图
      */
     public static Intent getPickFileIntent(String fileExtension) {
-        String type = MimeTypeUtils.getMimeTypeFromExtension(fileExtension);
+        String type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
         if (type == null) {
             return null;
         }
@@ -272,7 +275,7 @@ public class IntentUtils {
      * @return 意图
      */
     public static Intent getUninstallAppIntent(String packageName) {
-        if (StringUtils.isEmpty(packageName)) return null;
+        if (TextUtils.isEmpty(packageName)) return null;
 
         Intent intent = new Intent(Intent.ACTION_DELETE);
         intent.setData(Uri.parse("package:" + packageName));
@@ -462,7 +465,7 @@ public class IntentUtils {
      * @param packageName 应用包名
      */
     public static void gotoApp(String packageName) {
-        if (StringUtils.isEmpty(packageName))
+        if (TextUtils.isEmpty(packageName))
             return;
         startActivity(getLaunchAppIntent(packageName));
     }
@@ -762,7 +765,7 @@ public class IntentUtils {
         boolean success = true;
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        String packageName = AppUtils.getPackageName();
+        String packageName = ContextUtils.getPackageName();
 
         OSUtils.ROM romType = OSUtils.getRomType();
         switch (romType) {
@@ -813,7 +816,7 @@ public class IntentUtils {
                 break;
             default:
                 intent.setAction(Settings.ACTION_SETTINGS);
-                LogUtils.i("没有适配该机型, 跳转普通设置界面");
+                Log.i(IntentUtils.class.getSimpleName(),"没有适配该机型, 跳转普通设置界面");
                 success = false;
                 break;
         }
@@ -824,7 +827,7 @@ public class IntentUtils {
             // 跳转失败, 前往普通设置界面
             IntentUtils.gotoSetting();
             success = false;
-            LogUtils.i("无法跳转权限界面, 开始跳转普通设置界面");
+            Log.i(IntentUtils.class.getSimpleName(),"无法跳转权限界面, 开始跳转普通设置界面");
         }
         return success;
     }
@@ -887,7 +890,7 @@ public class IntentUtils {
                 }
             }
         }
-        LogUtils.i("MiuiVersion = " + line);
+        Log.i(IntentUtils.class.getSimpleName(),"MiuiVersion = " + line);
         return line;
     }
 }

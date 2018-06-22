@@ -8,8 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-import java.util.ArrayList;
-
 /**
  * <pre>
  *    author : Senh Linsh
@@ -80,18 +78,26 @@ public class PermissionUtils {
      */
     public static void checkAndRequestPermissions(Activity activity, String[] permissions, @NonNull PermissionListener listener) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ArrayList<String> list = new ArrayList<>();
+            String[] requests = new String[permissions.length];
+            int size = 0;
             for (String permission : permissions) {
                 if (checkPermission(permission)) {
                     listener.onGranted(permission);
                 } else if (isPermissionNeverAsked(activity, permission)) {
                     listener.onDenied(permission, true);
                 } else {
-                    list.add(permission);
+                    requests[size++] = permission;
                 }
             }
-            if (list.size() > 0) {
-                requestPermissions(activity, ListUtils.toStringArray(list), listener);
+            if (size > 0) {
+                String[] newRequests;
+                if (size == permissions.length) {
+                    newRequests = requests;
+                } else {
+                    newRequests = new String[size];
+                    System.arraycopy(requests, 0, newRequests, 0, size);
+                }
+                requestPermissions(activity, newRequests, listener);
             }
         } else {
             for (String permission : permissions) {

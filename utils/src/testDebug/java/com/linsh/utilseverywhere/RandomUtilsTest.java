@@ -20,10 +20,6 @@ public class RandomUtilsTest {
 
     @Test
     public void getNumberString() throws Exception {
-        int[] src = new int[]{1, 2, 3};
-        int[] dest = new int[]{4, 5, 6, 7};
-        ArrayUtils.copy(src, dest);
-        TestUtils.print(dest);
     }
 
     @Test

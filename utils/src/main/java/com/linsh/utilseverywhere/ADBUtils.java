@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 
 import com.linsh.utilseverywhere.module.CommandResult;
@@ -28,7 +29,7 @@ public class ADBUtils {
      */
     public static boolean checkRoot() {
         CommandResult result = ShellUtils.execCmd("", true);
-        return result.result != -1 && StringUtils.isEmpty(result.errorMsg);
+        return result.result != -1 && TextUtils.isEmpty(result.errorMsg);
     }
 
     //================================================ 应用管理 ================================================//
@@ -225,7 +226,7 @@ public class ADBUtils {
     private static String getIntentOptions(@NonNull Intent intent) {
         StringBuilder options = new StringBuilder();
         String action = intent.getAction();
-        if (StringUtils.notEmpty(action)) {
+        if (!TextUtils.isEmpty(action)) {
             options.append(" -a ").append(action);
         }
         Set<String> categories = intent.getCategories();

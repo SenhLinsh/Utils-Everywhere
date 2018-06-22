@@ -2,6 +2,7 @@ package com.linsh.utilseverywhere;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -88,7 +89,7 @@ public class ResourceUtils {
      * @return 文本内容
      */
     public static String getTextFromAssets(String fileName) {
-        if (StringUtils.isEmpty(fileName)) {
+        if (TextUtils.isEmpty(fileName)) {
             return null;
         }
         StringBuilder s = new StringBuilder("");
@@ -122,7 +123,7 @@ public class ResourceUtils {
      * @return 文本字符串集合
      */
     public static List<String> geTextListFromAssets(String fileName) {
-        if (StringUtils.isEmpty(fileName)) {
+        if (TextUtils.isEmpty(fileName)) {
             return null;
         }
         List<String> fileContent = new ArrayList<>();

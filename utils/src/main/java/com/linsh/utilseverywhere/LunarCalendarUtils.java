@@ -1,6 +1,7 @@
 package com.linsh.utilseverywhere;
 
 import android.support.annotation.IntRange;
+import android.text.TextUtils;
 
 import com.linsh.utilseverywhere.module.SimpleDate;
 
@@ -58,7 +59,7 @@ public class LunarCalendarUtils {
      * @return SimpleDate 表示的日期
      */
     public static SimpleDate parseLunarStr(String lunarStr) {
-        if (StringUtils.isEmpty(lunarStr)) return null;
+        if (TextUtils.isEmpty(lunarStr)) return null;
 
         Matcher matcher = Pattern.compile("^(((\\d{2,4})|([\\u4e00-\\u9fa5]{2,4}))年)?([\\u4e00-\\u9fa5]{1,2})月([\\u4e00-\\u9fa5]{1,3})日?$").matcher(lunarStr);
         if (matcher.find()) {
@@ -91,7 +92,7 @@ public class LunarCalendarUtils {
      * @return SimpleDate 表示的日期
      */
     public static SimpleDate parseNormalizedStr(String dateStr) {
-        if (StringUtils.isEmpty(dateStr)) return null;
+        if (TextUtils.isEmpty(dateStr)) return null;
         Matcher matcher = Pattern.compile("^((\\d{2,4})[年-])?(\\d{1,2})[月-](\\d{1,2})日?$").matcher(dateStr);
         if (matcher.find()) {
             String yearStr = matcher.group(2);

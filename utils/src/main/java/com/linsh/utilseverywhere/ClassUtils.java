@@ -155,7 +155,7 @@ public class ClassUtils {
      */
     public static Object invokeMethod(Object obj, String methodName, Class[] parameterTypes, Object[] args)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (ArrayUtils.isAnyOneEmpty(parameterTypes, args))
+        if (parameterTypes == null || parameterTypes.length == 0 || args == null || args.length == 0)
             return obj.getClass().getDeclaredMethod(methodName).invoke(obj);
         return obj.getClass().getDeclaredMethod(methodName, parameterTypes).invoke(obj, args);
     }

@@ -20,13 +20,6 @@ public class ActivityUtils {
     private ActivityUtils() {
     }
 
-    /**
-     * 获取栈顶 Activity 的名称
-     */
-    public static String getTopActivityName() {
-        return AppUtils.getTopActivityName();
-    }
-
     @IntDef({
             ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED,
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE,

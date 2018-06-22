@@ -1,8 +1,8 @@
 package com.linsh.utilseverywhere;
 
 import android.content.Context;
+import android.content.Intent;
 import android.provider.Settings;
-import android.widget.Toast;
 
 /**
  * <pre>
@@ -18,16 +18,11 @@ public class AccessibilityUtils {
     }
 
     /**
-     * 检查辅助功能（无障碍服务功能）是否开启，如果没有开启则自动跳转『无障碍服务』界面
-     * @return
+     * 跳转『无障碍服务』界面
      */
-    public static boolean checkAccessibility() {
-        if (isAccessibilitySettingsOn()) {
-            return true;
-        }
-        IntentUtils.gotoAccessibilitySetting();
-        Toast.makeText(ContextUtils.get(), "请先开启该无障碍服务功能", Toast.LENGTH_SHORT).show();
-        return false;
+    public static void gotoAccessibilitySetting() {
+        ContextUtils.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     /**

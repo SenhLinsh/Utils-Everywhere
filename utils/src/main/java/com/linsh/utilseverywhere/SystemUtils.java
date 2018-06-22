@@ -3,6 +3,7 @@ package com.linsh.utilseverywhere;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -35,7 +36,8 @@ public class SystemUtils {
                             | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                             | View.SYSTEM_UI_FLAG_IMMERSIVE);
         } else {
-            LogUtils.w("SDK(>=19)版本过低,不支持: API=" + Build.VERSION.SDK_INT);
+            Log.w(SystemUtils.class.getSimpleName(),
+                    "SDK(>=19)版本过低,不支持: API=" + Build.VERSION.SDK_INT);
         }
     }
 
@@ -54,7 +56,8 @@ public class SystemUtils {
             }
             view.setSystemUiVisibility(systemUiVisibility);
         } else {
-            LogUtils.w("SDK(>=16)版本过低,不支持: API=" + Build.VERSION.SDK_INT);
+            Log.w(SystemUtils.class.getSimpleName(),
+                    "SDK(>=16)版本过低,不支持: API=" + Build.VERSION.SDK_INT);
         }
     }
 

@@ -5,11 +5,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
-import com.linsh.utilseverywhere.module.SimpleDate;
-import com.linsh.utilseverywhere.IOUtils;
-import com.linsh.utilseverywhere.ArrayUtils;
 import com.linsh.utilseverywhere.ContextUtils;
 import com.linsh.utilseverywhere.OSUtils;
+import com.linsh.utilseverywhere.module.SimpleDate;
 
 /**
  * <pre>
@@ -44,7 +42,7 @@ public class ContactsEditor {
             cursor.moveToLast();
             contactId = cursor.getInt(0) + 1;
             putContactId(contactId);
-            IOUtils.close(cursor);
+            cursor.close();
         }
         return contactId;
     }
@@ -135,7 +133,7 @@ public class ContactsEditor {
             mValues.clear();
             mValues.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId);
             mValues.put(ContactsContract.Contacts.Data.MIMETYPE, mimeType);
-            if (!ArrayUtils.isEmpty(columns) && !ArrayUtils.isEmpty(columnValues)) {
+            if (columns != null && columns.length > 0 && columnValues != null && columnValues.length > 0) {
                 for (int i = 0; i < columns.length; i++) {
                     if (i < columnValues.length) {
                         mValues.put(columns[i], columnValues[i]);
@@ -191,7 +189,8 @@ public class ContactsEditor {
          */
         public ContactBuilder update(String mimeType, String[] whereColumns, String[] whereColumnValues, String[] updateColumns, String[] updateColumnValues) {
             mValues.clear();
-            if (!ArrayUtils.isEmpty(updateColumns) && !ArrayUtils.isEmpty(updateColumnValues)) {
+            if (whereColumns != null && whereColumns.length > 0
+                    && updateColumnValues != null && updateColumnValues.length > 0) {
                 for (int i = 0; i < updateColumns.length; i++) {
                     if (i < updateColumnValues.length) {
                         mValues.put(updateColumns[i], updateColumnValues[i]);
@@ -200,7 +199,8 @@ public class ContactsEditor {
             }
             WhereBuilder.Where where = new WhereBuilder().equalTo(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId)
                     .and().equalTo(ContactsContract.Contacts.Data.MIMETYPE, mimeType);
-            if (!ArrayUtils.isEmpty(whereColumns) && !ArrayUtils.isEmpty(whereColumnValues)) {
+            if (whereColumns != null && whereColumns.length > 0
+                    && whereColumnValues != null && whereColumnValues.length > 0) {
                 for (int i = 0; i < whereColumnValues.length; i++) {
                     if (i < whereColumnValues.length) {
                         where.and().equalTo(whereColumns[i], whereColumnValues[i]);
@@ -251,7 +251,8 @@ public class ContactsEditor {
         public ContactBuilder delete(String mimeType, String[] whereColumns, String[] whereColumnValues) {
             WhereBuilder.Where where = new WhereBuilder().equalTo(ContactsContract.Contacts.Data.RAW_CONTACT_ID, mContactId)
                     .and().equalTo(ContactsContract.Contacts.Data.MIMETYPE, mimeType);
-            if (!ArrayUtils.isEmpty(whereColumns) && !ArrayUtils.isEmpty(whereColumnValues)) {
+            if (whereColumns != null && whereColumns.length > 0
+                    && whereColumnValues != null && whereColumnValues.length > 0) {
                 for (int i = 0; i < whereColumnValues.length; i++) {
                     if (i < whereColumnValues.length) {
                         where.and().equalTo(whereColumns[i], whereColumnValues[i]);

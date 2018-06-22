@@ -2,7 +2,12 @@ package com.linsh.utilseverywhere;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.text.format.Formatter;
 
 import com.linsh.utilseverywhere.interfaces.Consumer;
@@ -53,7 +58,11 @@ public class FileUtils {
     private static boolean checkFile(File file) {
         if (file == null) return false;
         boolean isStorageFile = file.getAbsolutePath().contains(Environment.getExternalStorageDirectory().getAbsolutePath());
-        return !isStorageFile || SDCardUtils.isAvailable() && checkPermission();
+        return !isStorageFile || isSdAvailable() && checkPermissionAndRequest();
+    }
+
+    private static boolean isSdAvailable() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
     /**
@@ -101,11 +110,28 @@ public class FileUtils {
      * @return true 为拥有权限, false 为没有权限
      */
     public static boolean checkPermission() {
-        boolean check = UEPermission.Storage.check();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return ContextCompat.checkSelfPermission(ContextUtils.get(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(ContextUtils.get(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        }
+        return true;
+    }
+
+    /**
+     * 检查文件权限 (即外部存储的读写权限)
+     * <p>如果没有权限, 将自动发起权限申请</p>
+     *
+     * @return true 为拥有权限, false 为没有权限
+     */
+    public static boolean checkPermissionAndRequest() {
+        boolean check = checkPermission();
         if (!check) {
             Activity activity = ActivityLifecycleUtils.getTopActivitySafely();
             if (activity != null) {
-                PermissionUtils.requestPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE, null);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    ActivityCompat.requestPermissions(activity,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                }
             }
         }
         return check;
@@ -291,7 +317,7 @@ public class FileUtils {
      * @return 是否写入成功
      */
     public static boolean writeFile(File file, String content, boolean append, boolean endWithNewLine) {
-        if (StringUtils.isEmpty(content) || !checkFileAndMakeDirs(file)) {
+        if (TextUtils.isEmpty(content) || !checkFileAndMakeDirs(file)) {
             return false;
         }
 
@@ -453,7 +479,18 @@ public class FileUtils {
             e.printStackTrace();
             return false;
         } finally {
-            IOUtils.close(is, os);
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (os != null) {
+                    os.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -554,7 +591,7 @@ public class FileUtils {
      * @return 是否成功
      */
     public static boolean rename(File file, String newName) {
-        if (file == null || !file.exists() || StringUtils.isEmpty(newName))
+        if (file == null || !file.exists() || TextUtils.isEmpty(newName))
             return false;
         if (newName.equals(file.getName()))
             return true;
@@ -660,7 +697,7 @@ public class FileUtils {
      * @return 文件名
      */
     public static String getFileName(String filePath) {
-        if (StringUtils.isTrimEmpty(filePath)) return filePath;
+        if (TextUtils.isEmpty(filePath)) return filePath;
 
         int lastSep = filePath.lastIndexOf(File.separator);
         return lastSep == -1 ? filePath : filePath.substring(lastSep + 1);
@@ -685,7 +722,7 @@ public class FileUtils {
      * @return 文件名
      */
     public static String getFileNameWithoutExtension(String filePath) {
-        if (StringUtils.isTrimEmpty(filePath)) return filePath;
+        if (TextUtils.isEmpty(filePath)) return filePath;
 
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
@@ -717,7 +754,7 @@ public class FileUtils {
      * @return 文件扩展名
      */
     public static String getFileExtension(String filePath) {
-        if (StringUtils.isTrimEmpty(filePath)) return filePath;
+        if (TextUtils.isEmpty(filePath)) return filePath;
 
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);

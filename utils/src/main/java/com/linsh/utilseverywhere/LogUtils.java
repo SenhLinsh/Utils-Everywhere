@@ -3,6 +3,8 @@ package com.linsh.utilseverywhere;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
+import java.util.Arrays;
+
 /**
  * <pre>
  *    author : Senh Linsh
@@ -71,7 +73,7 @@ public class LogUtils {
      */
     public static void v(Object... array) {
         if (sIsDebug) {
-            log(Log.VERBOSE, sTag + getClassName(), ArrayUtils.toString(array));
+            log(Log.VERBOSE, sTag + getClassName(), Arrays.toString(array));
         }
     }
 
@@ -101,7 +103,7 @@ public class LogUtils {
      */
     public static void d(Object... array) {
         if (sIsDebug) {
-            log(Log.DEBUG, sTag + getClassName(), ArrayUtils.toString(array));
+            log(Log.DEBUG, sTag + getClassName(), Arrays.toString(array));
         }
     }
 
@@ -132,7 +134,7 @@ public class LogUtils {
      */
     public static void i(Object... array) {
         if (sIsDebug) {
-            log(Log.INFO, sTag + getClassName(), ArrayUtils.toString(array));
+            log(Log.INFO, sTag + getClassName(), Arrays.toString(array));
         }
     }
 
@@ -163,7 +165,7 @@ public class LogUtils {
      */
     public static void w(Object... array) {
         if (sIsDebug) {
-            log(Log.WARN, sTag + getClassName(), ArrayUtils.toString(array));
+            log(Log.WARN, sTag + getClassName(), Arrays.toString(array));
         }
     }
 
@@ -184,7 +186,7 @@ public class LogUtils {
      */
     public static void e(String... array) {
         if (sIsDebug) {
-            log(Log.ERROR, sTag + getClassName(), ArrayUtils.toString(array));
+            log(Log.ERROR, sTag + getClassName(), Arrays.toString(array));
         }
     }
 

@@ -1,6 +1,7 @@
 package com.linsh.utilseverywhere;
 
 import android.os.Environment;
+import android.text.TextUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -129,7 +130,7 @@ public class OSUtils {
                 rom = ROM.MIUI;
                 if (buildProperties.containsKey(KEY_MIUI_VERSION_NANE)) {
                     String versionName = buildProperties.getProperty(KEY_MIUI_VERSION_NANE);
-                    if (StringUtils.notEmpty(versionName) && versionName.matches("[Vv]\\d+")) { // V8
+                    if (!TextUtils.isEmpty(versionName) && versionName.matches("[Vv]\\d+")) { // V8
                         try {
                             rom.setBaseVersion(Integer.parseInt(versionName.split("[Vv]")[1]));
                         } catch (Exception e) {
@@ -139,7 +140,7 @@ public class OSUtils {
                 }
                 if (buildProperties.containsKey(KEY_MIUI_VERSION)) {
                     String versionStr = buildProperties.getProperty(KEY_MIUI_VERSION);
-                    if (StringUtils.notEmpty(versionStr) && versionStr.matches("[\\d.]+")) {
+                    if (!TextUtils.isEmpty(versionStr) && versionStr.matches("[\\d.]+")) {
                         rom.setVersion(versionStr);
                     }
                 }
@@ -150,7 +151,7 @@ public class OSUtils {
                 if (buildProperties.containsKey(KEY_EMUI_VERSION)) {
                     String versionStr = buildProperties.getProperty(KEY_EMUI_VERSION);
                     Matcher matcher = Pattern.compile("EmotionUI_([\\d.]+)").matcher(versionStr); // EmotionUI_3.0
-                    if (StringUtils.notEmpty(versionStr) && matcher.find()) {
+                    if (!TextUtils.isEmpty(versionStr) && matcher.find()) {
                         try {
                             String version = matcher.group(1);
                             rom.setVersion(version);
@@ -166,7 +167,7 @@ public class OSUtils {
                 if (buildProperties.containsKey(KEY_DISPLAY_ID)) {
                     String versionStr = buildProperties.getProperty(KEY_DISPLAY_ID);
                     Matcher matcher = Pattern.compile("Flyme[^\\d]*([\\d.]+)[^\\d]*").matcher(versionStr); // Flyme OS 4.5.4.2U
-                    if (StringUtils.notEmpty(versionStr) && matcher.find()) {
+                    if (!TextUtils.isEmpty(versionStr) && matcher.find()) {
                         try {
                             String version = matcher.group(1);
                             rom.setVersion(version);
@@ -183,7 +184,7 @@ public class OSUtils {
                 if (buildProperties.containsKey(KEY_COLOROS_ROM_VERSION)) {
                     String versionStr = buildProperties.getProperty(KEY_COLOROS_ROM_VERSION);
                     Matcher matcher = Pattern.compile("ColorOS([\\d.]+)").matcher(versionStr); // ColorOS2.1
-                    if (StringUtils.notEmpty(versionStr) && matcher.find()) {
+                    if (!TextUtils.isEmpty(versionStr) && matcher.find()) {
                         try {
                             String version = matcher.group(1);
                             rom.setVersion(version);
@@ -199,7 +200,7 @@ public class OSUtils {
                 rom = ROM.FuntouchOS;
                 if (buildProperties.containsKey(KEY_FUNTOUCHOS_OS_VERSION)) {
                     String versionStr = buildProperties.getProperty(KEY_FUNTOUCHOS_OS_VERSION);
-                    if (StringUtils.notEmpty(versionStr) && versionStr.matches("[\\d.]+")) { // 3.0
+                    if (!TextUtils.isEmpty(versionStr) && versionStr.matches("[\\d.]+")) { // 3.0
                         try {
                             rom.setVersion(versionStr);
                             rom.setBaseVersion(Integer.parseInt(versionStr.split("\\.")[0]));
@@ -215,7 +216,7 @@ public class OSUtils {
                 if (buildProperties.containsKey(KEY_EUI_VERSION)) {
                     String versionStr = buildProperties.getProperty(KEY_EUI_VERSION);
                     Matcher matcher = Pattern.compile("([\\d.]+)[^\\d]*").matcher(versionStr); // 5.9.023S
-                    if (StringUtils.notEmpty(versionStr) && matcher.find()) {
+                    if (!TextUtils.isEmpty(versionStr) && matcher.find()) {
                         try {
                             String version = matcher.group(1);
                             rom.setVersion(version);
@@ -231,7 +232,7 @@ public class OSUtils {
                 if (buildProperties.containsKey(KEY_DISPLAY_ID)) {
                     String versionStr = buildProperties.getProperty(KEY_DISPLAY_ID);
                     Matcher matcher = Pattern.compile("amigo([\\d.]+)[a-zA-Z]*").matcher(versionStr); // "amigo3.5.1"
-                    if (StringUtils.notEmpty(versionStr) && matcher.find()) {
+                    if (!TextUtils.isEmpty(versionStr) && matcher.find()) {
                         try {
                             String version = matcher.group(1);
                             rom.setVersion(version);
@@ -260,7 +261,7 @@ public class OSUtils {
                 rom = ROM.Lenovo;
             } else if (buildProperties.containsKey(KEY_DISPLAY_ID)) {
                 String displayId = buildProperties.getProperty(KEY_DISPLAY_ID);
-                if (StringUtils.notEmpty(displayId)) {
+                if (!TextUtils.isEmpty(displayId)) {
                     if (displayId.contains(VALUE_FLYME_DISPLAY_ID_CONTAIN)) {
                         return ROM.Flyme;
                     } else if (displayId.contains(VALUE_AMIGO_DISPLAY_ID_CONTAIN)) {
@@ -269,7 +270,7 @@ public class OSUtils {
                 }
             } else if (buildProperties.containsKey(KEY_BASE_OS_VERSION)) {
                 String baseOsVersion = buildProperties.getProperty(KEY_BASE_OS_VERSION);
-                if (StringUtils.notEmpty(baseOsVersion)) {
+                if (!TextUtils.isEmpty(baseOsVersion)) {
                     if (baseOsVersion.contains(VALUE_COLOROS_BASE_OS_VERSION_CONTAIN)) {
                         return ROM.ColorOS;
                     } else if (baseOsVersion.contains(VALUE_SAMSUNG_BASE_OS_VERSION_CONTAIN)) {

@@ -5,7 +5,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 
-import com.linsh.utilseverywhere.UnitConverseUtils;
+import com.linsh.utilseverywhere.ContextUtils;
 
 /**
  * <pre>
@@ -44,12 +44,12 @@ public class SpannableText extends SpannableString {
     }
 
     public SpannableText setTextSizeSp(int size) {
-        setSpan(new AbsoluteSizeSpan(UnitConverseUtils.sp2px(size)));
+        setSpan(new AbsoluteSizeSpan(sp2px(size)));
         return this;
     }
 
     public SpannableText setTextSizeSp(int size, int start, int end) {
-        setSpan(new AbsoluteSizeSpan(UnitConverseUtils.sp2px(size)), start, end);
+        setSpan(new AbsoluteSizeSpan(sp2px(size)), start, end);
         return this;
     }
 
@@ -86,5 +86,10 @@ public class SpannableText extends SpannableString {
     public SpannableText setSpan(Object what, int start, int end) {
         super.setSpan(what, start, end, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
         return this;
+    }
+
+    private static int sp2px(float sp) {
+        final float fontScale = ContextUtils.get().getResources().getDisplayMetrics().scaledDensity;
+        return (int) (sp * fontScale + 0.5f);
     }
 }

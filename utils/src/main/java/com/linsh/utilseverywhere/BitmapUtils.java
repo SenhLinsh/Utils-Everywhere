@@ -1161,6 +1161,8 @@ public class BitmapUtils {
      * @return true 为保存成功; false 为失败
      */
     public static boolean saveBitmap(Bitmap bitmap, File output, int maxFileSize, boolean recycle) {
+        if (output == null || output.isDirectory()) return false;
+
         Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
         if (output.getPath().endsWith(".png")) format = Bitmap.CompressFormat.PNG;
         // 进行有损压缩
@@ -1182,7 +1184,10 @@ public class BitmapUtils {
         // 将bitmap保存到指定路径
         FileOutputStream fos = null;
         try {
-            FileUtils.makeParentDirs(output);
+            File dir = output.getParentFile();
+            if (dir != null && !dir.exists()) {
+                return dir.mkdirs();
+            }
             fos = new FileOutputStream(output);
             // 包装缓冲流,提高写入速度
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fos);
@@ -1191,7 +1196,18 @@ public class BitmapUtils {
         } catch (Exception e) {
             return false;
         } finally {
-            IOUtils.close(baos, fos);
+            try {
+                baos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return true;
     }

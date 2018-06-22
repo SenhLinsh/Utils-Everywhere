@@ -31,7 +31,7 @@ public class DrawableUtils {
      * @return Drawable 对象
      */
     public static Drawable getDrawable(int resId) {
-        return ResourceUtils.getDrawable(resId);
+        return  ContextUtils.get().getResources().getDrawable(resId);
     }
 
     /**

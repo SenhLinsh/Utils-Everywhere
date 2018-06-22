@@ -217,8 +217,8 @@ public class UEPermission {
 
         public static boolean check() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return PermissionUtils.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                        || PermissionUtils.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                return ContextCompat.checkSelfPermission(ContextUtils.get(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(ContextUtils.get(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
             }
             return true;
         }

@@ -122,6 +122,20 @@ public class ListUtils {
      * 将集合转化成数组
      *
      * @param list  指定的集合
+     * @param <T>   泛型, 集合中的泛型或其父类
+     * @return 转化后得到的数组
+     */
+    public static <T> T[] toArray(List<? extends T> list) {
+        if (list == null) {
+            return null;
+        }
+        return (T[]) list.toArray();
+    }
+
+    /**
+     * 将集合转化成数组
+     *
+     * @param list  指定的集合
      * @param clazz 指定的数组类型的类
      * @param <T>   泛型, 集合中的泛型或其父类
      * @return 转化后得到的数组
@@ -130,12 +144,8 @@ public class ListUtils {
         if (list == null) {
             return null;
         }
-        int size = list.size();
-        T[] array = (T[]) Array.newInstance(clazz, size);
-        for (int i = 0; i < size; i++) {
-            array[i] = list.get(i);
-        }
-        return array;
+        T[] array = (T[]) Array.newInstance(clazz, list.size());
+        return list.toArray(array);
     }
 
     /**

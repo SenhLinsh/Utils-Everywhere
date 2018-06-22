@@ -35,7 +35,7 @@ public class FileProviderUtils {
      * @return
      */
     public static String getFileProviderAuthority() {
-        return AppUtils.getPackageName() + ".lshfileprovider";
+        return ContextUtils.getPackageName() + ".lshfileprovider";
     }
 
     public static class LshFileProvider extends FileProvider {

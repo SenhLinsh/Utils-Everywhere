@@ -57,16 +57,6 @@ public class PhoneUtils {
     }
 
     /**
-     * 获取 IP 地址
-     *
-     * @return IP 地址
-     */
-    public static String getIp() {
-        return NetworkUtils.getIPAddress();
-    }
-
-
-    /**
      * 获取设备厂商, 如: Xiaomi
      *
      * @return 设备厂商
