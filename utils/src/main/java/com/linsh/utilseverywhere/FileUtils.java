@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Environment;
 import android.text.format.Formatter;
 
+import com.linsh.utilseverywhere.interfaces.Consumer;
 import com.linsh.utilseverywhere.module.unit.FileSize;
 import com.linsh.utilseverywhere.module.unit.Unit;
 
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,6 +35,8 @@ import java.util.List;
  * </pre>
  */
 public class FileUtils {
+
+    private static final String DEFAULT_CHARSET = "UTF-8";
 
     private FileUtils() {
     }
@@ -97,7 +101,7 @@ public class FileUtils {
      * @return true 为拥有权限, false 为没有权限
      */
     public static boolean checkPermission() {
-        boolean check = PermissionUtils.Storage.checkPermission();
+        boolean check = UEPermission.Storage.check();
         if (!check) {
             Activity activity = ActivityLifecycleUtils.getTopActivitySafely();
             if (activity != null) {
@@ -156,7 +160,7 @@ public class FileUtils {
      * @return 文本内容, 读取失败返回 null
      */
     public static StringBuilder readFile(File file) {
-        return readFile(file, "UTF-8");
+        return readFile(file, DEFAULT_CHARSET);
     }
 
     /**
@@ -166,11 +170,11 @@ public class FileUtils {
      * @return 文本内容, 读取失败返回 null
      */
     public static StringBuilder readFile(String filePath) {
-        return readFile(new File(filePath), "UTF-8");
+        return readFile(new File(filePath), DEFAULT_CHARSET);
     }
 
     /**
-     * 读取文件, 默认编码 UTF-8
+     * 读取文件
      *
      * @param file        文件对象
      * @param charsetName 编码名称
@@ -181,19 +185,64 @@ public class FileUtils {
             return null;
         }
 
-        StringBuilder fileContent = new StringBuilder("");
+        StringBuilder fileContent = new StringBuilder();
         BufferedReader reader = null;
         try {
             InputStreamReader is = new InputStreamReader(new FileInputStream(file), charsetName);
             reader = new BufferedReader(is);
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
-                if (!fileContent.toString().equals("")) {
+                if (fileContent.length() != 0) {
                     fileContent.append("\r\n");
                 }
                 fileContent.append(line);
             }
             return fileContent;
+        } catch (IOException e) {
+            throw new RuntimeException("IOException occurred. ", e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 以集合形式读取文件, 每一行为一个元素, 默认编码 UTF-8
+     *
+     * @param file 文件对象
+     * @return 文本集合, 每一个元素代表一行
+     */
+    public static List<String> readFileAsList(File file) {
+        return readFileAsList(file, DEFAULT_CHARSET);
+    }
+
+    /**
+     * 以集合形式读取文件, 每一行为一个元素
+     *
+     * @param file        文件对象
+     * @param charsetName 编码名称
+     * @return 文本集合, 每一个元素代表一行
+     */
+    public static List<String> readFileAsList(File file, String charsetName) {
+        if (!checkFile(file) || !file.isFile()) {
+            return null;
+        }
+
+        List<String> contents = new ArrayList<>();
+        BufferedReader reader = null;
+        try {
+            InputStreamReader is = new InputStreamReader(new FileInputStream(file), charsetName);
+            reader = new BufferedReader(is);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                contents.add(line);
+            }
+            return contents;
         } catch (IOException e) {
             throw new RuntimeException("IOException occurred. ", e);
         } finally {
@@ -221,6 +270,52 @@ public class FileUtils {
     }
 
     /**
+     * 将字符串写入文件
+     *
+     * @param file    文件
+     * @param content 文本内容
+     * @param append  是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
+     * @return 是否写入成功
+     */
+    public static boolean writeFile(File file, String content, boolean append) {
+        return writeFile(file, content, append, false);
+    }
+
+    /**
+     * 将字符串写入文件
+     *
+     * @param file           文件
+     * @param content        文本内容
+     * @param append         是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
+     * @param endWithNewLine 是否在末尾添加换行
+     * @return 是否写入成功
+     */
+    public static boolean writeFile(File file, String content, boolean append, boolean endWithNewLine) {
+        if (StringUtils.isEmpty(content) || !checkFileAndMakeDirs(file)) {
+            return false;
+        }
+
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(file, append));
+            writer.append(content);
+            if (endWithNewLine)
+                writer.newLine();
+            return true;
+        } catch (IOException e) {
+            throw new RuntimeException("IOException occurred. ", e);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
      * 将字符串集合写入文件, 集合中每个元素占一行
      *
      * @param file     文件
@@ -240,37 +335,6 @@ public class FileUtils {
      */
     public static boolean writeFile(File file, String... contents) {
         return writeFile(file, Arrays.asList(contents), false);
-    }
-
-    /**
-     * 将字符串写入文件
-     *
-     * @param file    文件
-     * @param content 文本内容
-     * @param append  是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
-     * @return 是否写入成功
-     */
-    public static boolean writeFile(File file, String content, boolean append) {
-        if (StringUtils.isEmpty(content) || !checkFileAndMakeDirs(file)) {
-            return false;
-        }
-
-        BufferedWriter writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(file, append));
-            writer.append(content);
-            return true;
-        } catch (IOException e) {
-            throw new RuntimeException("IOException occurred. ", e);
-        } finally {
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     /**
@@ -298,6 +362,50 @@ public class FileUtils {
             return true;
         } catch (IOException e) {
             throw new RuntimeException("IOException occurred. ", e);
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 将字符串集合写入文件, 集合中每个元素占一行
+     *
+     * @param file     文件
+     * @param consumer 用于自定义写入操作的消费者
+     * @return 是否写入成功
+     */
+    public static boolean writeFile(File file, Consumer<BufferedWriter> consumer) {
+        return writeFile(file, consumer, false);
+    }
+
+    /**
+     * 将字符串集合写入文件, 集合中每个元素占一行
+     *
+     * @param file     文件
+     * @param consumer 用于自定义写入操作的消费者
+     * @param append   是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
+     * @return 是否写入成功
+     */
+    public static boolean writeFile(File file, Consumer<BufferedWriter> consumer, boolean append) {
+        if (consumer == null || !checkFileAndMakeDirs(file)) {
+            return false;
+        }
+
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(file, append));
+            consumer.accept(writer);
+            return true;
+        } catch (IOException e) {
+            throw new RuntimeException("IOException occurred. ", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Exception occurred. ", e);
         } finally {
             if (writer != null) {
                 try {
