@@ -99,6 +99,8 @@ public class AppUtils {
 
     /**
      * 获取当前 APP 的版本名称
+     * <p>
+     * 推荐使用自己项目的 BuildConfig.VERSION_NAME 来获取
      *
      * @return 当前 APP 的版本名称
      */
@@ -116,6 +118,8 @@ public class AppUtils {
 
     /**
      * 获取当前 APP 的版本号
+     * <p>
+     * 推荐使用自己项目的 BuildConfig.VERSION_CODE 来获取
      *
      * @return 当前 APP 的版本号
      */
