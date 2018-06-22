@@ -5,7 +5,9 @@ import android.app.Application;
 import android.os.Bundle;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,7 +22,7 @@ import java.util.Set;
 public class ActivityLifecycleUtils {
 
     private static int foregroundActivityCount = 0;
-    private static LinkedHashMap<Integer, WeakReference<Activity>> sCreatedActivities;
+    private static LinkedHashMap<Integer, ActivityStatus> sCreatedActivities;
     private static Application.ActivityLifecycleCallbacks sLifecycleCallbacks = null;
 
     private ActivityLifecycleUtils() {
@@ -35,25 +37,43 @@ public class ActivityLifecycleUtils {
             sLifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
                 @Override
                 public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                    sCreatedActivities.put(activity.hashCode(), new WeakReference<>(activity));
+                    ActivityStatus status = new ActivityStatus(activity);
+                    sCreatedActivities.put(activity.hashCode(), status);
+                    status.setStatus(ActivityStatus.STATUS_CREATED);
                 }
 
                 @Override
                 public void onActivityStarted(Activity activity) {
                     foregroundActivityCount++;
+                    ActivityStatus status = sCreatedActivities.get(activity.hashCode());
+                    if (status != null) {
+                        status.setStatus(ActivityStatus.STATUS_STARTED);
+                    }
                 }
 
                 @Override
                 public void onActivityResumed(Activity activity) {
+                    ActivityStatus status = sCreatedActivities.get(activity.hashCode());
+                    if (status != null) {
+                        status.setStatus(ActivityStatus.STATUS_RESUMED);
+                    }
                 }
 
                 @Override
                 public void onActivityPaused(Activity activity) {
+                    ActivityStatus status = sCreatedActivities.get(activity.hashCode());
+                    if (status != null) {
+                        status.setStatus(ActivityStatus.STATUS_PAUSED);
+                    }
                 }
 
                 @Override
                 public void onActivityStopped(Activity activity) {
                     foregroundActivityCount--;
+                    ActivityStatus status = sCreatedActivities.get(activity.hashCode());
+                    if (status != null) {
+                        status.setStatus(ActivityStatus.STATUS_STOPPED);
+                    }
                 }
 
                 @Override
@@ -63,6 +83,10 @@ public class ActivityLifecycleUtils {
 
                 @Override
                 public void onActivityDestroyed(Activity activity) {
+                    ActivityStatus status = sCreatedActivities.get(activity.hashCode());
+                    if (status != null) {
+                        status.setStatus(ActivityStatus.STATUS_DESTROYED);
+                    }
                     sCreatedActivities.remove(activity.hashCode());
                 }
             };
@@ -82,6 +106,50 @@ public class ActivityLifecycleUtils {
     }
 
     /**
+     * 获取指定 Activity 的生命周期状态
+     */
+    public ActivityStatus getActivityStatus(Activity activity) {
+        check();
+        return sCreatedActivities.get(activity.hashCode());
+    }
+
+    /**
+     * 获取指定 Activity 的生命周期状态
+     * <p>
+     * 如果存在多个该 Activity 的实例, 则返回栈顶 Activity 的状态
+     */
+    public ActivityStatus getActivityStatus(Class<? extends Activity> clazz) {
+        check();
+        ActivityStatus result = null;
+        for (Map.Entry<Integer, ActivityStatus> entry : sCreatedActivities.entrySet()) {
+            ActivityStatus status = entry.getValue();
+            Activity activity = status.activityRef.get();
+            if (activity != null && activity.getClass() == clazz) {
+                result = status;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 获取处于栈顶的 Activity 的生命周期状态
+     *
+     * @return 栈顶的 Activity 的生命周期状态
+     */
+    public static ActivityStatus getTopActivityStatus() {
+        check();
+        ActivityStatus result = null;
+        for (Map.Entry<Integer, ActivityStatus> entry : sCreatedActivities.entrySet()) {
+            ActivityStatus status = entry.getValue();
+            Activity activity = status.activityRef.get();
+            if (activity != null) {
+                result = status;
+            }
+        }
+        return result;
+    }
+
+    /**
      * 获取处于栈顶的 Activity
      *
      * @return 栈顶 Activity
@@ -93,14 +161,31 @@ public class ActivityLifecycleUtils {
 
     static Activity getTopActivitySafely() {
         Activity top = null;
-        Set<Map.Entry<Integer, WeakReference<Activity>>> entries = sCreatedActivities.entrySet();
-        for (Map.Entry<Integer, WeakReference<Activity>> entry : entries) {
-            Activity activity = entry.getValue().get();
-            if (activity != null) {
-                top = activity;
+        if (sCreatedActivities != null) {
+            Set<Map.Entry<Integer, ActivityStatus>> entries = sCreatedActivities.entrySet();
+            for (Map.Entry<Integer, ActivityStatus> entry : entries) {
+                Activity activity = entry.getValue().activityRef.get();
+                if (activity != null) {
+                    top = activity;
+                }
             }
         }
         return top;
+    }
+
+    /**
+     * 获取已经创建的 Activity
+     */
+    public static List<Activity> getCreatedActivities() {
+        check();
+        ArrayList<Activity> list = new ArrayList<>();
+        for (Map.Entry<Integer, ActivityStatus> entry : sCreatedActivities.entrySet()) {
+            Activity activity = entry.getValue().activityRef.get();
+            if (activity != null) {
+                list.add(activity);
+            }
+        }
+        return list;
     }
 
     /**
@@ -109,6 +194,55 @@ public class ActivityLifecycleUtils {
     private static void check() {
         if (sLifecycleCallbacks == null) {
             throw new RuntimeException(String.format("请先调用初始化方法 %s.init()", ActivityLifecycleUtils.class.getName()));
+        }
+    }
+
+    public static class ActivityStatus {
+
+        public static final int STATUS_DESTROYED = 0;
+        public static final int STATUS_CREATED = 1;
+        public static final int STATUS_STARTED = 2;
+        public static final int STATUS_RESUMED = 3;
+        public static final int STATUS_PAUSED = 4;
+        public static final int STATUS_STOPPED = 5;
+
+        private int status;
+        private WeakReference<Activity> activityRef;
+
+        public ActivityStatus(Activity activity) {
+            this.activityRef = new WeakReference<>(activity);
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        void setStatus(int status) {
+            this.status = status;
+        }
+
+        public boolean isCreated() {
+            return status >= STATUS_CREATED;
+        }
+
+        public boolean isStarted() {
+            return status >= STATUS_STARTED;
+        }
+
+        public boolean isResumed() {
+            return status >= STATUS_RESUMED;
+        }
+
+        public boolean isPaused() {
+            return status >= STATUS_PAUSED;
+        }
+
+        public boolean isStoped() {
+            return status >= STATUS_STOPPED;
+        }
+
+        public boolean isDestroyed() {
+            return status == STATUS_DESTROYED;
         }
     }
 }
