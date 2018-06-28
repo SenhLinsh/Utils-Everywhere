@@ -27,7 +27,7 @@ public class DateUtils {
      * @return 当前年份
      */
     public static int getCurYear() {
-        return new Date().getYear() + 1900;
+        return Calendar.getInstance().get(Calendar.YEAR);
     }
 
     /**
@@ -36,7 +36,7 @@ public class DateUtils {
      * @return 当前月份, 1 - 12
      */
     public static int getCurMonth() {
-        return new Date().getMonth() + 1;
+        return Calendar.getInstance().get(Calendar.MONTH) + 1;
     }
 
     /**
@@ -45,7 +45,7 @@ public class DateUtils {
      * @return 当前日份, 1 - 31
      */
     public static int getCurDay() {
-        return new Date().getDate();
+        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     }
 
     /**
@@ -152,7 +152,7 @@ public class DateUtils {
      * @return 日期字符串
      */
     public static String getDateStr(Date date) {
-        return getDateStr(date.getYear() + 1900, date.getMonth() + 1, date.getDate());
+        return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date);
     }
 
     /**
@@ -163,32 +163,10 @@ public class DateUtils {
      * @return 日期字符串
      */
     public static String getDateStr(Date date, boolean hasYear) {
-        return getDateStr(hasYear ? date.getYear() + 1900 : 0, date.getMonth() + 1, date.getDate());
+        String pattern = hasYear ? "yyyy-MM-dd" : "MM-dd";
+        return new SimpleDateFormat(pattern, Locale.getDefault()).format(date);
     }
 
-    /**
-     * 获取常规日期字符串, 如 2000-01-01
-     *
-     * @param year  年份, 如果年份小于等于 0, 将不显示年份
-     * @param month 月份
-     * @param day   日份
-     * @return 日期字符串
-     */
-    public static String getDateStr(int year, int month, int day) {
-        StringBuilder builder = new StringBuilder();
-        if (year > 0) {
-            builder.append(year).append('-');
-        }
-        if (month < 10) {
-            builder.append('0');
-        }
-        builder.append(month).append('-');
-        if (day < 10) {
-            builder.append('0');
-        }
-        builder.append(day);
-        return builder.toString();
-    }
 
     /**
      * 将日期格式化为字符串
@@ -244,10 +222,9 @@ public class DateUtils {
      * 获取星期几的字符串
      *
      * @param milliseconds 时间
-     * @param prefix       前缀 如:需返回"周一"则传入"周", 返回"星期几"则传入"星期"
      */
-    public static String getWeekdayStr(long milliseconds, String prefix) {
-        return getWeekdayStr(new Date(milliseconds), prefix);
+    public static String getWeekdayStr(long milliseconds) {
+        return getWeekdayStr(milliseconds, "星期");
     }
 
     /**
@@ -258,9 +235,20 @@ public class DateUtils {
      */
     public static String getWeekdayStr(Date date, String prefix) {
         if (date == null || prefix == null) return "";
+        return getWeekdayStr(date.getTime(), prefix);
+    }
+
+    /**
+     * 获取星期几的字符串
+     *
+     * @param milliseconds 时间
+     * @param prefix       前缀 如:需返回"周一"则传入"周", 返回"星期几"则传入"星期"
+     */
+    public static String getWeekdayStr(long milliseconds, String prefix) {
+        if (prefix == null) return "";
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        calendar.setTimeInMillis(milliseconds);
         calendar.setFirstDayOfWeek(Calendar.SUNDAY);
         int dayIndex = calendar.get(Calendar.DAY_OF_WEEK);
         switch (dayIndex) {

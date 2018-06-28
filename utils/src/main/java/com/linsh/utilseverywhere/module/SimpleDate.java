@@ -1,6 +1,5 @@
 package com.linsh.utilseverywhere.module;
 
-import com.linsh.utilseverywhere.DateUtils;
 import com.linsh.utilseverywhere.LunarCalendarUtils;
 
 import java.util.Date;
@@ -11,6 +10,7 @@ import java.util.Date;
  *    github : https://github.com/SenhLinsh
  *    date   : 2017/11/14
  *    desc   : 简单化的日期表示
+ *             注: 该类不考虑时区的转换, 使用前请注意是否要对时区进行适配
  * </pre>
  */
 public class SimpleDate {
@@ -88,7 +88,7 @@ public class SimpleDate {
     }
 
     public String getNormalizedString(boolean hasYear) {
-        return DateUtils.getDateStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
+        return getDateStr(hasYear ? mDate[0] : 0, mDate[1], mDate[2]);
     }
 
     public String getDisplayString() {
@@ -141,6 +141,30 @@ public class SimpleDate {
         }
         builder.append(month).append('月')
                 .append(day).append('日');
+        return builder.toString();
+    }
+
+    /**
+     * 获取常规日期字符串, 如 2000-01-01
+     *
+     * @param year  年份, 如果年份小于等于 0, 将不显示年份
+     * @param month 月份
+     * @param day   日份
+     * @return 日期字符串
+     */
+    private static String getDateStr(int year, int month, int day) {
+        StringBuilder builder = new StringBuilder();
+        if (year > 0) {
+            builder.append(year).append('-');
+        }
+        if (month < 10) {
+            builder.append('0');
+        }
+        builder.append(month).append('-');
+        if (day < 10) {
+            builder.append('0');
+        }
+        builder.append(day);
         return builder.toString();
     }
 }
