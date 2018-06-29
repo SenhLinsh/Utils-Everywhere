@@ -22,6 +22,50 @@ public class DateUtils {
     }
 
     /**
+     * 判断是否为同一天
+     *
+     * @param timeMillis1 时间毫秒值1
+     * @param timeMillis2 时间毫秒值2
+     * @return 是否为同一天
+     */
+    public static boolean isSameDay(int timeMillis1, int timeMillis2) {
+        return isSameDay(new Date(timeMillis1), new Date(timeMillis2));
+    }
+
+    /**
+     * 判断是否为同一天
+     *
+     * @param date1 日期对象1
+     * @param date2 日期对象2
+     * @return 是否为同一天
+     */
+    public static boolean isSameDay(Date date1, Date date2) {
+        return date1.getYear() == date2.getYear()
+                && date1.getMonth() == date2.getMonth()
+                && date1.getDate() == date2.getDate();
+    }
+
+    /**
+     * 转换至当天凌晨(00:00)的时间
+     *
+     * @param timeMillis 时间毫秒值
+     * @return 当天凌晨(00 : 00)的时间
+     */
+    public static long toDayBegin(long timeMillis) {
+        return toDayBegin(new Date(timeMillis)).getTime();
+    }
+
+    /**
+     * 转换至当天凌晨(00:00)的时间
+     *
+     * @param date 日期对象
+     * @return 新创建的当天凌晨(00 : 00)的时间
+     */
+    public static Date toDayBegin(Date date) {
+        return new Date(date.getYear(), date.getMonth(), date.getYear());
+    }
+
+    /**
      * 获取当前年份
      *
      * @return 当前年份
