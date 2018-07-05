@@ -31,7 +31,7 @@ public class DrawableUtils {
      * @return Drawable 对象
      */
     public static Drawable getDrawable(int resId) {
-        return  ContextUtils.get().getResources().getDrawable(resId);
+        return ContextUtils.get().getResources().getDrawable(resId);
     }
 
     /**
@@ -192,8 +192,10 @@ public class DrawableUtils {
                 } else {
                     copy.setCornerRadius((Float) ClassUtils.getField(gradientState, "mRadius"));
                 }
-                ClassUtils.invokeMethod(copy, "setGradientType", (Integer) ClassUtils.getField(gradientState, "mGradient"));
-                ClassUtils.invokeMethod(copy, "setShape", (Integer) ClassUtils.getField(gradientState, "mShape"));
+                ClassUtils.invokeMethod(copy, "setGradientType",
+                        new Class[]{int.class}, new Object[]{ClassUtils.getField(gradientState, "mGradient")});
+                ClassUtils.invokeMethod(copy, "setShape",
+                        new Class[]{int.class}, new Object[]{ClassUtils.getField(gradientState, "mShape")});
 
                 ColorStateList solidColors = (ColorStateList) ClassUtils.getField(gradientState, "mSolidColors");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
