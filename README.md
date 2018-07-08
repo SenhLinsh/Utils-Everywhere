@@ -25,10 +25,19 @@
  }
  ```
 2.在module里面添加依赖
+新版 Gradle 依赖 (Android Gradle 3.0.0 之后):
 
  ```
  dependencies {
-     compile 'com.github.SenhLinsh:Utils-Everywhere:2.0.2'
+     implementation 'com.github.SenhLinsh:Utils-Everywhere:2.1.0'
+ }
+  ```
+
+旧版 Gradle 依赖 (Android Gradle 3.0.0 之前):
+
+ ```
+ dependencies {
+     compile 'com.github.SenhLinsh:Utils-Everywhere:2.1.0'
  }
   ```
 
