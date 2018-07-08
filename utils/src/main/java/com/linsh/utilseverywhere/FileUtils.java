@@ -2,6 +2,7 @@ package com.linsh.utilseverywhere;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
@@ -44,6 +45,10 @@ public class FileUtils {
     private static final String DEFAULT_CHARSET = "UTF-8";
 
     private FileUtils() {
+    }
+
+    private static Context getContext() {
+        return ContextUtils.get();
     }
 
     /**
@@ -111,8 +116,8 @@ public class FileUtils {
      */
     public static boolean checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return ContextCompat.checkSelfPermission(ContextUtils.get(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(ContextUtils.get(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+            return ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
         return true;
     }
@@ -143,7 +148,7 @@ public class FileUtils {
      * @return 文件夹路径
      */
     public static String getPackageDir() {
-        return Environment.getExternalStorageDirectory() + "/" + ContextUtils.get().getPackageName() + "/";
+        return Environment.getExternalStorageDirectory() + "/" + getContext().getPackageName() + "/";
     }
 
     /**
@@ -800,6 +805,6 @@ public class FileUtils {
      * @return 格式化后的大小
      */
     public static String getFormattedFileSize(File file) {
-        return Formatter.formatFileSize(ContextUtils.get(), getFileSize(file));
+        return Formatter.formatFileSize(getContext(), getFileSize(file));
     }
 }

@@ -17,13 +17,17 @@ public class ClipboardUtils {
     private ClipboardUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 将文本复制到剪切板中
      *
      * @param text 需要复制的文字
      */
     public static void putText(String text) {
-        ClipboardManager manager = (ClipboardManager) ContextUtils.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         manager.setPrimaryClip(ClipData.newPlainText(null, text.trim()));
     }
 
@@ -33,7 +37,7 @@ public class ClipboardUtils {
      * @return 剪切板中的文字, 当剪贴板没有东西时或者是其他类型的数据时返回 null
      */
     public static String getText() {
-        ClipboardManager manager = (ClipboardManager) ContextUtils.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = manager.getPrimaryClip();
         if (clip != null && clip.getItemCount() > 0) {
             CharSequence text = clip.getItemAt(0).getText();

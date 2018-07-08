@@ -17,13 +17,17 @@ public class PhoneStateUtils {
     private PhoneStateUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 判断屏幕是否处于锁屏状态 (黑屏或锁屏)
      *
      * @return 是否处于锁屏状态
      */
     public static boolean isScreenLocked() {
-        KeyguardManager km = (KeyguardManager) ContextUtils.get().getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager km = (KeyguardManager) getContext().getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
     }
 
@@ -33,7 +37,7 @@ public class PhoneStateUtils {
      * @return 是否亮着
      */
     public static boolean isScreenOn() {
-        PowerManager pm = (PowerManager) ContextUtils.get().getSystemService(Context.POWER_SERVICE);
+        PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
         return pm.isScreenOn();
     }
 }

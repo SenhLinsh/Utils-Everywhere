@@ -22,13 +22,17 @@ public class PhoneUtils {
     private PhoneUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 判断当前设备是否为手机
      *
      * @return 是否为手机
      */
     public static boolean isPhone() {
-        TelephonyManager tm = (TelephonyManager) ContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null && tm.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE;
     }
 
@@ -40,7 +44,7 @@ public class PhoneUtils {
      */
     @SuppressLint({"HardwareIds", "MissingPermission"})
     public static String getIMEI() {
-        TelephonyManager tm = (TelephonyManager) ContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getDeviceId() : null;
     }
 
@@ -52,7 +56,7 @@ public class PhoneUtils {
      */
     @SuppressLint({"HardwareIds", "MissingPermission"})
     public static String getIMSI() {
-        TelephonyManager tm = (TelephonyManager) ContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getSubscriberId() : null;
     }
 

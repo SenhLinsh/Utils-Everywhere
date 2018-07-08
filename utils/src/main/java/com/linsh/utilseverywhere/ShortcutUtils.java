@@ -21,6 +21,10 @@ public class ShortcutUtils {
     private ShortcutUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 创建桌面快捷方式, 点击跳转本应用
      * <p>需要权限: <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
@@ -32,7 +36,7 @@ public class ShortcutUtils {
         if (hasShortcut(name)) {
             return;
         }
-        Context context = ContextUtils.get();
+        Context context = getContext();
         // 指定动作名称
         Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
         // 快捷方式名称
@@ -63,7 +67,7 @@ public class ShortcutUtils {
         if (hasShortcut(name)) {
             return;
         }
-        Context context = ContextUtils.get();
+        Context context = getContext();
         Intent intent = new Intent();
         // 指定动作名称
         intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
@@ -93,7 +97,7 @@ public class ShortcutUtils {
         if (!hasShortcut(name)) {
             return;
         }
-        Context context = ContextUtils.get();
+        Context context = getContext();
         Intent shortcut = new Intent("com.android.launcher.action.UNINSTALL_SHORTCUT");
         shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
         Intent shortcutIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
@@ -111,7 +115,7 @@ public class ShortcutUtils {
      */
     @Deprecated
     public static boolean hasShortcut(String shortcutName) {
-        Context context = ContextUtils.get();
+        Context context = getContext();
         boolean result = false;
 
         final String uriStr;

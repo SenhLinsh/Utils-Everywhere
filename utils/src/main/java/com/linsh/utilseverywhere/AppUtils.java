@@ -26,6 +26,10 @@ public class AppUtils {
     private AppUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 判断服务是否正在运行
      *
@@ -33,7 +37,7 @@ public class AppUtils {
      * @return true 为正在运行; 其他为 false
      */
     public static boolean isServiceRunning(String serviceClassName) {
-        ActivityManager activityManager = (ActivityManager) ContextUtils.get().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
 
         for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
@@ -64,7 +68,7 @@ public class AppUtils {
      */
     @RequiresPermission(Manifest.permission.GET_TASKS)
     public static boolean isAppOnForeground(String packageName) {
-        ActivityManager activityManager = (ActivityManager) ContextUtils.get().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> tasksInfo = activityManager.getRunningTasks(1);
         if (tasksInfo.size() > 0) {
             // 应用程序位于堆栈的顶层
@@ -81,7 +85,7 @@ public class AppUtils {
      * @return 栈顶 Activity 的名称
      */
     public static String getTopActivityName() {
-        ActivityManager activityManager = (ActivityManager) ContextUtils.get().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
         if (activityManager != null) {
             return activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
         }
@@ -94,7 +98,7 @@ public class AppUtils {
      * @return 当前 APP 的包名
      */
     public static String getPackageName() {
-        return ContextUtils.get().getPackageName();
+        return getContext().getPackageName();
     }
 
     /**
@@ -105,7 +109,7 @@ public class AppUtils {
      * @return 当前 APP 的版本名称
      */
     public static String getVersionName() {
-        PackageManager packageManager = ContextUtils.get().getPackageManager();
+        PackageManager packageManager = getContext().getPackageManager();
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
             // 获取版本名称
@@ -124,7 +128,7 @@ public class AppUtils {
      * @return 当前 APP 的版本号
      */
     public static int getVersionCode() {
-        PackageManager packageManager = ContextUtils.get().getPackageManager();
+        PackageManager packageManager = getContext().getPackageManager();
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
             // 获取版本名称
@@ -141,7 +145,7 @@ public class AppUtils {
      * @return 当前 APP 的应用名称
      */
     public String getAppName() {
-        PackageManager pm = ContextUtils.get().getPackageManager();
+        PackageManager pm = getContext().getPackageManager();
         try {
             ApplicationInfo info = pm.getApplicationInfo(getPackageName(), 0);
             return info.loadLabel(pm).toString();
@@ -157,7 +161,7 @@ public class AppUtils {
      * @return 当前 APP 的应用签名
      */
     public static String getAppSignature() {
-        PackageManager pm = ContextUtils.get().getPackageManager();
+        PackageManager pm = getContext().getPackageManager();
         try {
             PackageInfo packinfo = pm.getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
             return packinfo.signatures[0].toCharsString();
@@ -195,7 +199,7 @@ public class AppUtils {
      */
     public static boolean isAppInstalled(String packageName) {
         try {
-            ContextUtils.get().getPackageManager().getPackageInfo(packageName, 0);
+            getContext().getPackageManager().getPackageInfo(packageName, 0);
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
@@ -219,7 +223,7 @@ public class AppUtils {
      * @param requestCode
      */
     public static void launchApp(Activity activity, String packageName, int requestCode) {
-        Intent launchIntent = ContextUtils.getPackageManager().getLaunchIntentForPackage(packageName);
+        Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
         activity.startActivityForResult(launchIntent, requestCode);
     }
 
@@ -232,7 +236,7 @@ public class AppUtils {
      */
     public static boolean checkAndStartInstalledApp(Activity activity, String packageName) {
         if (isAppInstalled(packageName)) {
-            Intent intent = ContextUtils.get().getPackageManager().getLaunchIntentForPackage(packageName);
+            Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
             activity.startActivity(intent);
             return true;
         } else {
@@ -257,7 +261,7 @@ public class AppUtils {
      */
     public static boolean isAppDebug(String packageName) {
         try {
-            PackageManager pm = ContextUtils.getPackageManager();
+            PackageManager pm = getContext().getPackageManager();
             ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
             return ai != null && (ai.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         } catch (PackageManager.NameNotFoundException e) {

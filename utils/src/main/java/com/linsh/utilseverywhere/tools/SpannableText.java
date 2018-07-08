@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere.tools;
 
+import android.content.Context;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BackgroundColorSpan;
@@ -89,7 +90,11 @@ public class SpannableText extends SpannableString {
     }
 
     private static int sp2px(float sp) {
-        final float fontScale = ContextUtils.get().getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = getContext().getResources().getDisplayMetrics().scaledDensity;
         return (int) (sp * fontScale + 0.5f);
+    }
+
+    private static Context getContext() {
+        return ContextUtils.get();
     }
 }

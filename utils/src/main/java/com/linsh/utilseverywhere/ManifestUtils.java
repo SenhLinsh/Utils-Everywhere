@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
@@ -14,6 +15,10 @@ import android.content.pm.PackageManager;
 public class ManifestUtils {
 
     private ManifestUtils() {
+    }
+
+    private static Context getContext() {
+        return ContextUtils.get();
     }
 
     /**
@@ -88,8 +93,8 @@ public class ManifestUtils {
      */
     public static Object getMetaData(String key) {
         try {
-            ApplicationInfo aiApplicationInfo = ContextUtils.get().getPackageManager().getApplicationInfo(
-                    ContextUtils.get().getPackageName(), PackageManager.GET_META_DATA);
+            ApplicationInfo aiApplicationInfo = getContext().getPackageManager().getApplicationInfo(
+                    getContext().getPackageName(), PackageManager.GET_META_DATA);
             if (null != aiApplicationInfo) {
                 if (null != aiApplicationInfo.metaData) {
                     return aiApplicationInfo.metaData.get(key);

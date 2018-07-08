@@ -2,6 +2,7 @@ package com.linsh.utilseverywhere.tools;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
@@ -35,7 +36,7 @@ public class ContactsEditor {
      */
     public long getNewContactId() {
         long contactId = -1;
-        ContentResolver resolver = ContextUtils.get().getContentResolver();
+        ContentResolver resolver = getContext().getContentResolver();
         Cursor cursor = resolver.query(ContactsContract.RawContacts.CONTENT_URI,
                 new String[]{ContactsContract.Contacts.Data._ID}, null, null, null);
         if (cursor != null) {
@@ -477,5 +478,9 @@ public class ContactsEditor {
             }
         }
         return birthday;
+    }
+
+    private static Context getContext() {
+        return ContextUtils.get();
     }
 }

@@ -1,9 +1,11 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * <pre>
@@ -16,6 +18,10 @@ import java.util.Arrays;
 public class LogUtils {
 
     private LogUtils() {
+    }
+
+    private static Context getContext() {
+        return ContextUtils.get();
     }
 
     /**
@@ -218,13 +224,7 @@ public class LogUtils {
      * @param msg      打印信息
      */
     private static void checkAndLog(int priority, String tag, Object msg) {
-        if (msg instanceof Iterable) {
-            log(priority, tag, ListUtils.toString((Iterable) msg));
-        } else if (msg.getClass().isArray()) {
-            log(priority, tag, ArrayUtils.toString(msg));
-        } else {
-            log(priority, tag, msg);
-        }
+        log(priority, tag, toString(msg));
     }
 
     /**
@@ -256,7 +256,7 @@ public class LogUtils {
      * 自动检查当前是否为 Debug 模式
      */
     private static boolean checkDebugMode() {
-        ApplicationInfo applicationInfo = ContextUtils.get().getApplicationInfo();
+        ApplicationInfo applicationInfo = getContext().getApplicationInfo();
         boolean debug = applicationInfo != null && (applicationInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         Log.i("LshLog", "checkDebugMode: " + debug);
         return debug;
@@ -275,5 +275,46 @@ public class LogUtils {
             e.printStackTrace();
         }
         return result;
+    }
+
+    private static String toString(Object obj) {
+        if (obj == null) return "null";
+        if (obj instanceof int[]) {
+            return Arrays.toString((int[]) obj);
+        } else if (obj instanceof long[]) {
+            return Arrays.toString((long[]) obj);
+        } else if (obj instanceof short[]) {
+            return Arrays.toString((short[]) obj);
+        } else if (obj instanceof char[]) {
+            return Arrays.toString((char[]) obj);
+        } else if (obj instanceof byte[]) {
+            return Arrays.toString((byte[]) obj);
+        } else if (obj instanceof boolean[]) {
+            return Arrays.toString((boolean[]) obj);
+        } else if (obj instanceof float[]) {
+            return Arrays.toString((float[]) obj);
+        } else if (obj instanceof double[]) {
+            return Arrays.toString((double[]) obj);
+        } else if (obj instanceof Object[]) {
+            return Arrays.toString((Object[]) obj);
+        } else if (obj instanceof Iterable) {
+            return toString((Iterable) obj);
+        } else {
+            return obj.toString();
+        }
+    }
+
+    private static String toString(Iterable iterable) {
+        Iterator iterator = iterable.iterator();
+        if (!iterator.hasNext()) return "[]";
+        StringBuilder builder = new StringBuilder();
+        builder.append('[');
+        for (; ; ) {
+            Object element = iterator.next();
+            builder.append(element);
+            if (!iterator.hasNext())
+                return builder.append(']').toString();
+            builder.append(',').append(' ');
+        }
     }
 }

@@ -29,6 +29,10 @@ public class ToastUtils {
     private ToastUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 使用软引用保存 Context 为 Application 的 Toast 的实例
      */
@@ -40,7 +44,7 @@ public class ToastUtils {
      * @param text 消息内容
      */
     public static void show(String text) {
-        show(ContextUtils.get(), text, Toast.LENGTH_SHORT);
+        show(getContext(), text, Toast.LENGTH_SHORT);
     }
 
     /**
@@ -59,7 +63,7 @@ public class ToastUtils {
      * @param text 消息内容
      */
     public static void showLong(String text) {
-        show(ContextUtils.get(), text, Toast.LENGTH_LONG);
+        show(getContext(), text, Toast.LENGTH_LONG);
     }
 
     /**
@@ -78,7 +82,7 @@ public class ToastUtils {
      * @param text 消息内容
      */
     public static void showNew(String text) {
-        showNew(ContextUtils.get(), text, Toast.LENGTH_SHORT);
+        showNew(getContext(), text, Toast.LENGTH_SHORT);
     }
 
     /**
@@ -97,7 +101,7 @@ public class ToastUtils {
      * @param text 消息内容
      */
     public static void showNewLong(String text) {
-        showNew(ContextUtils.get(), text, Toast.LENGTH_LONG);
+        showNew(getContext(), text, Toast.LENGTH_LONG);
     }
 
     /**

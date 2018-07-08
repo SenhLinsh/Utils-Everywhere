@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 
@@ -17,13 +18,17 @@ public class CameraUtils {
     private CameraUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 检查摄像头硬件是否可用 (部分手机或 Pad 没有摄像头)
      *
      * @return true 为可用; false 为不可用
      */
     public static boolean checkCameraHardware() {
-        if (ContextUtils.get().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+        if (getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             return true;
         } else {
             return false;

@@ -1,6 +1,8 @@
 package com.linsh.utilseverywhere;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
@@ -19,6 +21,10 @@ import android.view.WindowManager;
 public class SystemUtils {
 
     private SystemUtils() {
+    }
+
+    private static Context getContext() {
+        return ContextUtils.get();
     }
 
     /**
@@ -95,7 +101,7 @@ public class SystemUtils {
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         ViewGroup contentView = (ViewGroup) activity.getWindow().getDecorView();
-        int statusBarHeight = ScreenUtils.getStatusBarHeight();
+        int statusBarHeight = getStatusBarHeight();
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight);
         View statusBarBg = new View(activity);
         statusBarBg.setBackgroundColor(statusBarColor);
@@ -119,7 +125,7 @@ public class SystemUtils {
         activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         ViewGroup contentView = (ViewGroup) activity.getWindow().getDecorView();
-        int statusBarHeight = ScreenUtils.getStatusBarHeight();
+        int statusBarHeight = getStatusBarHeight();
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, statusBarHeight);
         View statusBarBg = new View(activity);
         View statusBarFg = new View(activity);
@@ -131,4 +137,14 @@ public class SystemUtils {
         contentView.addView(statusBarFg, params);
     }
 
+    /**
+     * 获取屏幕状态栏高度
+     * <p>
+     * 见 {@link ScreenUtils#getStatusBarHeight()}
+     */
+    private static int getStatusBarHeight() {
+        Resources resources = getContext().getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        return resources.getDimensionPixelSize(resourceId);
+    }
 }

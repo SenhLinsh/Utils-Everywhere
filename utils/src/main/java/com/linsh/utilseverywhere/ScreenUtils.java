@@ -26,13 +26,17 @@ public class ScreenUtils {
     private ScreenUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 获取屏幕尺寸
      *
      * @return DisplayMetrics 对象
      */
     public static DisplayMetrics getScreenSize() {
-        WindowManager wm = (WindowManager) ContextUtils.get().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         if (wm != null) wm.getDefaultDisplay().getMetrics(outMetrics);
         return outMetrics;
@@ -44,7 +48,7 @@ public class ScreenUtils {
      * @return 屏幕宽
      */
     public static int getScreenWidth() {
-        WindowManager wm = (WindowManager) ContextUtils.get().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         if (wm != null) wm.getDefaultDisplay().getMetrics(outMetrics);
         return outMetrics.widthPixels;
@@ -56,7 +60,7 @@ public class ScreenUtils {
      * @return 屏幕高
      */
     public static int getScreenHeight() {
-        WindowManager wm = (WindowManager) ContextUtils.get().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         if (wm != null) wm.getDefaultDisplay().getMetrics(outMetrics);
         return outMetrics.heightPixels;
@@ -68,7 +72,7 @@ public class ScreenUtils {
      * @return 短边尺寸
      */
     public static int getScreenShortSize() {
-        DisplayMetrics outMetrics = ContextUtils.get().getResources().getDisplayMetrics();
+        DisplayMetrics outMetrics = getContext().getResources().getDisplayMetrics();
         return Math.min(outMetrics.widthPixels, outMetrics.heightPixels);
     }
 
@@ -78,7 +82,7 @@ public class ScreenUtils {
      * @return 长边尺寸
      */
     public static int getScreenLongSize() {
-        DisplayMetrics outMetrics = ContextUtils.get().getResources().getDisplayMetrics();
+        DisplayMetrics outMetrics = getContext().getResources().getDisplayMetrics();
         return Math.max(outMetrics.widthPixels, outMetrics.heightPixels);
     }
 
@@ -88,7 +92,7 @@ public class ScreenUtils {
      * @return 是否横屏
      */
     public static boolean isLandscape() {
-        return ContextUtils.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        return getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     /**
@@ -97,7 +101,7 @@ public class ScreenUtils {
      * @return 是否竖屏
      */
     public static boolean isPortrait() {
-        return ContextUtils.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        return getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
     /**
@@ -107,7 +111,7 @@ public class ScreenUtils {
      * @return 屏幕选择角度
      */
     public static int getScreenRotation() {
-        WindowManager wm = (WindowManager) ContextUtils.get().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         int rotation = wm != null ? wm.getDefaultDisplay().getRotation() : 0;
         switch (rotation) {
             default:
@@ -128,7 +132,7 @@ public class ScreenUtils {
      * @return 状态栏高度
      */
     public static int getStatusBarHeight() {
-        Resources resources = ContextUtils.get().getResources();
+        Resources resources = getContext().getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
     }
@@ -184,7 +188,7 @@ public class ScreenUtils {
      * @return 是否锁屏
      */
     public static boolean isScreenLock() {
-        KeyguardManager km = (KeyguardManager) ContextUtils.getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager km = (KeyguardManager) getContext().getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
     }
 

@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -10,18 +11,26 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.util.Log;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 /**
  * <pre>
  *    author : Senh Linsh
  *    github : https://github.com/SenhLinsh
  *    date   : 2017/11/10
  *    desc   : 工具类: 处理 Drawable 相关
- *             如果需要处理非 Drawable 但与图像相关的方法, 请前往 {@link BitmapUtils} 或 {@link ImageUtils} 查看是否有相应的 API;
+ *             如果需要处理非 Drawable 但与图像相关的方法, 请前往 {@link BitmapUtils} 查看是否有相应的 API;
  * </pre>
  */
 public class DrawableUtils {
 
     private DrawableUtils() {
+    }
+
+    private static Context getContext() {
+        return ContextUtils.get();
     }
 
     /**
@@ -31,7 +40,7 @@ public class DrawableUtils {
      * @return Drawable 对象
      */
     public static Drawable getDrawable(int resId) {
-        return ContextUtils.get().getResources().getDrawable(resId);
+        return getContext().getResources().getDrawable(resId);
     }
 
     /**
@@ -77,7 +86,7 @@ public class DrawableUtils {
             GradientDrawable pressedDr = copyGradientDrawable((GradientDrawable) background);
             if (pressedDr != null) {
                 try {
-                    Object gradientState = ClassUtils.getField(pressedDr, "mGradientState");
+                    Object gradientState = getField(pressedDr, "mGradientState");
                     if (gradientState == null) {
                         pressedDr.setColor(color);
                     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -97,13 +106,13 @@ public class DrawableUtils {
                             }
                         }
                     } else {
-                        ColorStateList solidColors = (ColorStateList) ClassUtils.getField(gradientState, "mSolidColors");
+                        ColorStateList solidColors = (ColorStateList) getField(gradientState, "mSolidColors");
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             if (solidColors != null) {
                                 int normalColor = solidColors.getColorForState(new int[]{}, Color.TRANSPARENT);
                                 pressedDr.setColor(ColorUtils.coverColor(normalColor, color));
                             } else {
-                                int[] gradientColors = (int[]) ClassUtils.getField(gradientState, "mGradientColors");
+                                int[] gradientColors = (int[]) getField(gradientState, "mGradientColors");
                                 if (gradientColors != null) {
                                     for (int i = 0; i < gradientColors.length; i++) {
                                         gradientColors[i] = ColorUtils.coverColor(gradientColors[i], color);
@@ -118,7 +127,7 @@ public class DrawableUtils {
                                 pressedDr.setColor(ColorUtils.coverColor((solidColors).getColorForState(new int[0], 0), color));
                             } else {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                                    int[] gradientColors = (int[]) ClassUtils.getField(gradientState, "mGradientColors");
+                                    int[] gradientColors = (int[]) getField(gradientState, "mGradientColors");
                                     if (gradientColors != null) {
                                         for (int i = 0; i < gradientColors.length; i++) {
                                             gradientColors[i] = ColorUtils.coverColor(gradientColors[i], color);
@@ -147,23 +156,23 @@ public class DrawableUtils {
     static GradientDrawable copyGradientDrawable(GradientDrawable drawable) {
         try {
             GradientDrawable copy = new GradientDrawable();
-            Object gradientState = ClassUtils.getField(drawable, "mGradientState");
+            Object gradientState = getField(drawable, "mGradientState");
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 copy.setOrientation(drawable.getOrientation());
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 copy.setAlpha(drawable.getAlpha());
-                copy.setStroke((Integer) ClassUtils.getField(gradientState, "mStrokeWidth"),
-                        (ColorStateList) ClassUtils.getField(gradientState, "mStrokeColors"),
-                        (Float) ClassUtils.getField(gradientState, "mStrokeDashWidth"),
-                        (Float) ClassUtils.getField(gradientState, "mStrokeDashGap"));
+                copy.setStroke((Integer) getField(gradientState, "mStrokeWidth"),
+                        (ColorStateList) getField(gradientState, "mStrokeColors"),
+                        (Float) getField(gradientState, "mStrokeDashWidth"),
+                        (Float) getField(gradientState, "mStrokeDashGap"));
             } else {
-                copy.setAlpha((Integer) ClassUtils.getField(drawable, "mAlpha"));
-                copy.setStroke((Integer) ClassUtils.getField(gradientState, "mStrokeWidth"),
-                        ((ColorStateList) ClassUtils.getField(gradientState, "mStrokeColors")).getColorForState(new int[0], 0),
-                        (Float) ClassUtils.getField(gradientState, "mStrokeDashWidth"),
-                        (Float) ClassUtils.getField(gradientState, "mStrokeDashGap"));
+                copy.setAlpha((Integer) getField(drawable, "mAlpha"));
+                copy.setStroke((Integer) getField(gradientState, "mStrokeWidth"),
+                        ((ColorStateList) getField(gradientState, "mStrokeColors")).getColorForState(new int[0], 0),
+                        (Float) getField(gradientState, "mStrokeDashWidth"),
+                        (Float) getField(gradientState, "mStrokeDashGap"));
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 float[] cornerRadii = null;
@@ -186,30 +195,30 @@ public class DrawableUtils {
                 copy.setGradientType(drawable.getGradientType());
                 copy.setShape(drawable.getShape());
             } else {
-                float[] cornerRadii = (float[]) ClassUtils.getField(gradientState, "mRadiusArray");
+                float[] cornerRadii = (float[]) getField(gradientState, "mRadiusArray");
                 if (cornerRadii != null) {
                     copy.setCornerRadii(cornerRadii);
                 } else {
-                    copy.setCornerRadius((Float) ClassUtils.getField(gradientState, "mRadius"));
+                    copy.setCornerRadius((Float) getField(gradientState, "mRadius"));
                 }
-                ClassUtils.invokeMethod(copy, "setGradientType",
-                        new Class[]{int.class}, new Object[]{ClassUtils.getField(gradientState, "mGradient")});
-                ClassUtils.invokeMethod(copy, "setShape",
-                        new Class[]{int.class}, new Object[]{ClassUtils.getField(gradientState, "mShape")});
+                invokeMethod(copy, "setGradientType",
+                        new Class[]{int.class}, new Object[]{getField(gradientState, "mGradient")});
+                invokeMethod(copy, "setShape",
+                        new Class[]{int.class}, new Object[]{getField(gradientState, "mShape")});
 
-                ColorStateList solidColors = (ColorStateList) ClassUtils.getField(gradientState, "mSolidColors");
+                ColorStateList solidColors = (ColorStateList) getField(gradientState, "mSolidColors");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (solidColors != null) {
                         copy.setColor(solidColors);
                     } else {
-                        copy.setColors((int[]) ClassUtils.getField(gradientState, "mGradientColors"));
+                        copy.setColors((int[]) getField(gradientState, "mGradientColors"));
                     }
                 } else {
                     if (solidColors != null) {
                         copy.setColor((solidColors).getColorForState(new int[0], 0));
                     } else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            Object gradientColors = ClassUtils.getField(gradientState, "mGradientColors");
+                            Object gradientColors = getField(gradientState, "mGradientColors");
                             if (gradientColors != null) {
                                 copy.setColors((int[]) gradientColors);
                             }
@@ -223,5 +232,18 @@ public class DrawableUtils {
             Log.e("LshLog", "copyGradientDrawable: ", e);
         }
         return null;
+    }
+
+    private static Object getField(Object obj, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+        Field field = obj.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        return field.get(obj);
+    }
+
+    private static Object invokeMethod(Object obj, String methodName, Class[] parameterTypes, Object[] args)
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method method = obj.getClass().getDeclaredMethod(methodName, parameterTypes);
+        method.setAccessible(true);
+        return method.invoke(obj, args);
     }
 }

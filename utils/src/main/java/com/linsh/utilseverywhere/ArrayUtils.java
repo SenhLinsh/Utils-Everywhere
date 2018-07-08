@@ -227,6 +227,8 @@ public class ArrayUtils {
             return Arrays.toString((float[]) array);
         } else if (array instanceof double[]) {
             return Arrays.toString((double[]) array);
+        } else if (array instanceof Object[]) {
+            return Arrays.toString((Object[]) array);
         } else {
             return "not an array";
         }

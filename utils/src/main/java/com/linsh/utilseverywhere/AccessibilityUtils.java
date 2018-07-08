@@ -17,11 +17,15 @@ public class AccessibilityUtils {
     private AccessibilityUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 跳转『无障碍服务』界面
      */
     public static void gotoAccessibilitySetting() {
-        ContextUtils.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        getContext().startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
@@ -30,7 +34,7 @@ public class AccessibilityUtils {
      */
     public static boolean isAccessibilitySettingsOn() {
         int result;
-        Context context = ContextUtils.get();
+        Context context = getContext();
         try {
             result = Settings.Secure.getInt(context.getContentResolver(), "accessibility_enabled");
             if (result != 1)

@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
 
@@ -18,6 +19,10 @@ public class FileProviderUtils {
     private FileProviderUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * Android N 以上获取文件 Uri (通过 FileProvider)
      *
@@ -25,7 +30,7 @@ public class FileProviderUtils {
      * @return
      */
     public static Uri getUriForFile(File file) {
-        return LshFileProvider.getUriForFile(ContextUtils.get(), getFileProviderAuthority(), file);
+        return LshFileProvider.getUriForFile(getContext(), getFileProviderAuthority(), file);
     }
 
     /**
@@ -35,7 +40,7 @@ public class FileProviderUtils {
      * @return
      */
     public static String getFileProviderAuthority() {
-        return ContextUtils.getPackageName() + ".lshfileprovider";
+        return getContext().getPackageName() + ".lshfileprovider";
     }
 
     public static class LshFileProvider extends FileProvider {

@@ -1,5 +1,7 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
+
 /**
  * <pre>
  *    author : Senh Linsh
@@ -13,6 +15,10 @@ public class UnitConverseUtils {
     private UnitConverseUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * dp 转 px
      *
@@ -20,7 +26,7 @@ public class UnitConverseUtils {
      * @return px 值
      */
     public static int dp2px(int dp) {
-        float density = ContextUtils.get().getResources().getDisplayMetrics().density;
+        float density = getContext().getResources().getDisplayMetrics().density;
         return (int) (dp * density + 0.5f);
     }
 
@@ -31,7 +37,7 @@ public class UnitConverseUtils {
      * @return px 值
      */
     public static int dp2px(float dp) {
-        float density = ContextUtils.get().getResources().getDisplayMetrics().density;
+        float density = getContext().getResources().getDisplayMetrics().density;
         return (int) (dp * density + 0.5f);
     }
 
@@ -42,7 +48,7 @@ public class UnitConverseUtils {
      * @return dp 值
      */
     public static int px2dp(int px) {
-        float density = ContextUtils.get().getResources().getDisplayMetrics().density;
+        float density = getContext().getResources().getDisplayMetrics().density;
         return (int) (px / density + 0.5f);
     }
 
@@ -53,7 +59,7 @@ public class UnitConverseUtils {
      * @return dp 值
      */
     public static int px2sp(float px) {
-        final float fontScale = ContextUtils.get().getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = getContext().getResources().getDisplayMetrics().scaledDensity;
         return (int) (px / fontScale + 0.5f);
     }
 
@@ -64,7 +70,7 @@ public class UnitConverseUtils {
      * @return px 值
      */
     public static int sp2px(float sp) {
-        final float fontScale = ContextUtils.get().getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = getContext().getResources().getDisplayMetrics().scaledDensity;
         return (int) (sp * fontScale + 0.5f);
     }
 

@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
 import android.os.Environment;
 
 import java.io.File;
@@ -20,6 +21,10 @@ public final class CleanUtils {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 清除内部缓存
      * <p>/data/data/com.xxx.xxx/cache</p>
@@ -27,7 +32,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanInternalCache() {
-        return deleteFilesInDir(ContextUtils.getCacheDir());
+        return deleteFilesInDir(getContext().getCacheDir());
     }
 
     /**
@@ -37,7 +42,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanInternalFiles() {
-        return deleteFilesInDir(ContextUtils.getFilesDir());
+        return deleteFilesInDir(getContext().getFilesDir());
     }
 
     /**
@@ -47,7 +52,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanInternalDbs() {
-        return deleteFilesInDir(ContextUtils.getFilesDir().getParent() + File.separator + "databases");
+        return deleteFilesInDir(getContext().getFilesDir().getParent() + File.separator + "databases");
     }
 
     /**
@@ -58,7 +63,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanInternalDbByName(final String dbName) {
-        return ContextUtils.get().deleteDatabase(dbName);
+        return getContext().deleteDatabase(dbName);
     }
 
     /**
@@ -68,7 +73,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanInternalSP() {
-        return deleteFilesInDir(ContextUtils.getFilesDir().getParent() + File.separator + "shared_prefs");
+        return deleteFilesInDir(getContext().getFilesDir().getParent() + File.separator + "shared_prefs");
     }
 
     /**
@@ -78,7 +83,7 @@ public final class CleanUtils {
      * @return {@code true}: 清除成功<br>{@code false}: 清除失败
      */
     public static boolean cleanExternalCache() {
-        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && deleteFilesInDir(ContextUtils.getExternalCacheDir());
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && deleteFilesInDir(getContext().getExternalCacheDir());
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -18,6 +19,10 @@ public class UriUtils {
     private UriUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 从 Uri 中获取文件路径
      *
@@ -30,7 +35,7 @@ public class UriUtils {
             final String column = "_data";
             final String[] projection = {column};
             try {
-                cursor = ContextUtils.get().getContentResolver().query(uri, projection, null, null, null);
+                cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
                 if (cursor != null && cursor.moveToFirst()) {
                     final int column_index = cursor.getColumnIndexOrThrow(column);
                     return cursor.getString(column_index);

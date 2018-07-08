@@ -1,5 +1,7 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
+
 import java.lang.reflect.Field;
 
 /**
@@ -15,6 +17,10 @@ public class GradleUtils {
     private GradleUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 通过反射获取 BuildConfig 指定属性的值
      * 注意1: 如果是当前 module 的 BuildConfig, 可以直接获取, 此方法旨在从依赖库中获取 app 的 BuildConfig 值
@@ -25,7 +31,7 @@ public class GradleUtils {
      */
     public static Object getBuildConfigValue(String fieldName) {
         try {
-            String packageName = ContextUtils.getPackageName();
+            String packageName = getContext().getPackageName();
             Class<?> clazz = Class.forName(packageName + ".BuildConfig");
             Field field = clazz.getField(fieldName);
             return field.get(null);

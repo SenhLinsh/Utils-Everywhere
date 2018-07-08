@@ -21,6 +21,10 @@ public class ServiceUtils {
     private ServiceUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 判断服务是否正在运行
      *
@@ -28,7 +32,7 @@ public class ServiceUtils {
      * @return 是否正在运行
      */
     public static boolean isRunning(Class<? extends Service> service) {
-        ActivityManager manager = (ActivityManager) ContextUtils.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager manager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
         // 获取运行中服务
         List<ActivityManager.RunningServiceInfo> services = manager.getRunningServices(1000);
         String serviceName = service.getName();
@@ -49,7 +53,7 @@ public class ServiceUtils {
      * @param clazz 服务类
      */
     public static void startService(Class<?> clazz) {
-        ContextUtils.startService(new Intent(ContextUtils.get(), clazz));
+        getContext().startService(new Intent(getContext(), clazz));
     }
 
     /**
@@ -58,6 +62,6 @@ public class ServiceUtils {
      * @param clazz 服务类
      */
     public static boolean stopService(Class<?> clazz) {
-        return ContextUtils.stopService(new Intent(ContextUtils.get(), clazz));
+        return getContext().stopService(new Intent(getContext(), clazz));
     }
 }

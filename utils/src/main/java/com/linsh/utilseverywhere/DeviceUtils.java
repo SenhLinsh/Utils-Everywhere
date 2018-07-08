@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
 import android.content.res.Configuration;
 
 /**
@@ -15,13 +16,17 @@ public class DeviceUtils {
     private DeviceUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 判断是否为手机设备
      *
      * @return true 为手机, false 为平板
      */
     public static boolean isPhoneDevice() {
-        return (ContextUtils.get().getResources().getConfiguration().screenLayout
+        return (getContext().getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK) < Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 }

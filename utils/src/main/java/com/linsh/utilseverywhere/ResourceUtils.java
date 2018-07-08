@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -23,13 +24,17 @@ public class ResourceUtils {
     private ResourceUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 获取资源对象
      *
      * @return 资源对象
      */
     public static Resources getResources() {
-        return ContextUtils.get().getResources();
+        return getContext().getResources();
     }
 
     /**
@@ -39,7 +44,7 @@ public class ResourceUtils {
      * @return 字符串
      */
     public static String getString(int resId) {
-        return ContextUtils.get().getResources().getString(resId);
+        return getContext().getResources().getString(resId);
     }
 
     /**
@@ -49,7 +54,7 @@ public class ResourceUtils {
      * @return 字符串数组
      */
     public static String[] getStringArray(int resId) {
-        return ContextUtils.get().getResources().getStringArray(resId);
+        return getContext().getResources().getStringArray(resId);
     }
 
     /**
@@ -59,7 +64,7 @@ public class ResourceUtils {
      * @return Drawable 对象
      */
     public static Drawable getDrawable(int resId) {
-        return ContextUtils.get().getResources().getDrawable(resId);
+        return getContext().getResources().getDrawable(resId);
     }
 
     /**
@@ -69,7 +74,7 @@ public class ResourceUtils {
      * @return 颜色值
      */
     public static int getColor(int resId) {
-        return ContextUtils.get().getResources().getColor(resId);
+        return getContext().getResources().getColor(resId);
     }
 
     /**
@@ -79,7 +84,7 @@ public class ResourceUtils {
      * @return Dimens 值
      */
     public static int getDimens(int resId) {
-        return ContextUtils.get().getResources().getDimensionPixelSize(resId);
+        return getContext().getResources().getDimensionPixelSize(resId);
     }
 
     /**
@@ -95,7 +100,7 @@ public class ResourceUtils {
         StringBuilder s = new StringBuilder("");
         InputStreamReader in = null;
         try {
-            in = new InputStreamReader(ContextUtils.get().getResources().getAssets().open(fileName));
+            in = new InputStreamReader(getContext().getResources().getAssets().open(fileName));
             BufferedReader br = new BufferedReader(in);
             String line;
             while ((line = br.readLine()) != null) {
@@ -129,7 +134,7 @@ public class ResourceUtils {
         List<String> fileContent = new ArrayList<>();
         InputStreamReader in = null;
         try {
-            in = new InputStreamReader(ContextUtils.get().getResources().getAssets().open(fileName));
+            in = new InputStreamReader(getContext().getResources().getAssets().open(fileName));
             BufferedReader br = new BufferedReader(in);
             String line;
             while ((line = br.readLine()) != null) {
@@ -161,7 +166,7 @@ public class ResourceUtils {
         StringBuilder s = new StringBuilder();
         InputStreamReader in = null;
         try {
-            in = new InputStreamReader(ContextUtils.get().getResources().openRawResource(resId));
+            in = new InputStreamReader(getContext().getResources().openRawResource(resId));
             BufferedReader br = new BufferedReader(in);
             String line;
             while ((line = br.readLine()) != null) {
@@ -192,7 +197,7 @@ public class ResourceUtils {
         List<String> fileContent = new ArrayList<String>();
         InputStreamReader in = null;
         try {
-            in = new InputStreamReader(ContextUtils.get().getResources().openRawResource(resId));
+            in = new InputStreamReader(getContext().getResources().openRawResource(resId));
             BufferedReader reader = new BufferedReader(in);
             String line = null;
             while ((line = reader.readLine()) != null) {

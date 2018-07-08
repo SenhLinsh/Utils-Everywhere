@@ -28,6 +28,10 @@ public class NetworkUtils {
     private NetworkUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 判断网络是否可用
      *
@@ -55,7 +59,7 @@ public class NetworkUtils {
      */
     public static boolean getDataEnabled() {
         try {
-            TelephonyManager tm = (TelephonyManager) ContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
             Method getMobileDataEnabledMethod = tm.getClass().getDeclaredMethod("getDataEnabled");
             if (null != getMobileDataEnabledMethod) {
                 return (boolean) getMobileDataEnabledMethod.invoke(tm);
@@ -97,7 +101,7 @@ public class NetworkUtils {
      * @return 是否打开
      */
     public static boolean isWifiEnabled() {
-        WifiManager wifiManager = (WifiManager) ContextUtils.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
         return wifiManager.isWifiEnabled();
     }
 
@@ -122,7 +126,7 @@ public class NetworkUtils {
      * @return 是否已连接
      */
     public static boolean isWifiConnected() {
-        ConnectivityManager cm = (ConnectivityManager) ContextUtils.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm != null && cm.getActiveNetworkInfo() != null
                 && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
     }
@@ -135,7 +139,7 @@ public class NetworkUtils {
      */
     @RequiresPermission(Manifest.permission.CHANGE_WIFI_STATE)
     public static void setWifiEnabled(boolean enabled) {
-        WifiManager wifiManager = (WifiManager) ContextUtils.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
         if (enabled) {
             if (!wifiManager.isWifiEnabled()) {
                 wifiManager.setWifiEnabled(true);
@@ -154,7 +158,7 @@ public class NetworkUtils {
      * @return 网络运营商名称
      */
     public static String getNetworkOperatorName() {
-        TelephonyManager tm = (TelephonyManager) ContextUtils.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tm != null ? tm.getNetworkOperatorName() : null;
     }
 
@@ -202,7 +206,7 @@ public class NetworkUtils {
     }
 
     private static NetworkInfo getNetworkInfo() {
-        ConnectivityManager cm = (ConnectivityManager) ContextUtils.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo();
     }
 }

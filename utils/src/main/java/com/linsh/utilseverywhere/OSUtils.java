@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
  *             API  : 获取 ROM 类型等
  * </pre>
  */
+@Deprecated
 public class OSUtils {
 
     private OSUtils() {

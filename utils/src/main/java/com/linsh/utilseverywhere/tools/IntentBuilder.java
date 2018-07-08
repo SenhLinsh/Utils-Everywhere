@@ -37,7 +37,7 @@ public class IntentBuilder {
     }
 
     public IntentBuilder(Class<?> cls) {
-        intent = new Intent(ContextUtils.get(), cls);
+        intent = new Intent(getContext(), cls);
     }
 
     public static IntentBuilder build() {
@@ -263,7 +263,7 @@ public class IntentBuilder {
     }
 
     public IntentBuilder setClass(Class<?> cls) {
-        intent.setClass(ContextUtils.get(), cls);
+        intent.setClass(getContext(), cls);
         return this;
     }
 
@@ -481,7 +481,7 @@ public class IntentBuilder {
 
     public void startActivity() {
         newTask();
-        ContextUtils.get().startActivity(intent);
+        getContext().startActivity(intent);
     }
 
     public void startActivity(Context context) {
@@ -509,6 +509,10 @@ public class IntentBuilder {
     }
 
     public void startService() {
-        ContextUtils.get().startService(intent);
+        getContext().startService(intent);
+    }
+
+    private static Context getContext() {
+        return ContextUtils.get();
     }
 }

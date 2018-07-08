@@ -18,6 +18,10 @@ public class SharedPreferenceUtils {
     private SharedPreferenceUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * SharedPreferences 软引用
      */
@@ -26,8 +30,7 @@ public class SharedPreferenceUtils {
     public static SharedPreferences getSharedPreferences() {
         SharedPreferences sp = sReference.get();
         if (sp == null) {
-            Context context = ContextUtils.get();
-            sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
+            sp = getContext().getSharedPreferences("config", Context.MODE_PRIVATE);
             sReference = new SoftReference<>(sp);
         }
         return sp;

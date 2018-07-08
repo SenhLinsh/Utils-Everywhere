@@ -3,6 +3,7 @@ package com.linsh.utilseverywhere;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -38,6 +39,9 @@ public class IntentUtils {
     private IntentUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
     //================================================ Intent 意图跳转相关 ================================================//
 
     /**
@@ -290,7 +294,7 @@ public class IntentUtils {
      * @return 意图
      */
     public static Intent getLaunchAppIntent(String packageName) {
-        return ContextUtils.getPackageManager().getLaunchIntentForPackage(packageName);
+        return getContext().getPackageManager().getLaunchIntentForPackage(packageName);
     }
 
 
@@ -711,7 +715,7 @@ public class IntentUtils {
      * 跳转:「设置」界面
      */
     public static void gotoSetting() {
-        ContextUtils.startActivity(getSettingIntent());
+        getContext().startActivity(getSettingIntent());
     }
 
     /**
@@ -720,21 +724,21 @@ public class IntentUtils {
      * @param packageName 应用包名
      */
     public static void gotoAppDetailSetting(String packageName) {
-        ContextUtils.startActivity(getAppDetailsSettingsIntent(packageName));
+        getContext().startActivity(getAppDetailsSettingsIntent(packageName));
     }
 
     /**
      * 跳转:「应用程序列表」界面
      */
     public static void gotoAppsSetting() {
-        ContextUtils.startActivity(getAppsIntent());
+        getContext().startActivity(getAppsIntent());
     }
 
     /**
      * 跳转:「Wifi列表」设置
      */
     public static void gotoWifiSetting() {
-        ContextUtils.startActivity(getWifiSettingIntent());
+        getContext().startActivity(getWifiSettingIntent());
     }
 
 
@@ -742,14 +746,14 @@ public class IntentUtils {
      * 跳转:「飞行模式，无线网和网络设置」界面
      */
     public static void gotoWirelessSetting() {
-        ContextUtils.startActivity(getWirelessSettingIntent());
+        getContext().startActivity(getWirelessSettingIntent());
     }
 
     /**
      * 跳转:「无障碍设置」界面
      */
     public static void gotoAccessibilitySetting() {
-        ContextUtils.startActivity(getAccessibilitySettingIntent());
+        getContext().startActivity(getAccessibilitySettingIntent());
     }
 
 
@@ -761,11 +765,12 @@ public class IntentUtils {
      *
      * @return 成功跳转权限设置, 返回 true; 没有适配该厂商或不能跳转, 则自动默认跳转设置界面, 并返回 false
      */
+    @Deprecated
     public static boolean gotoPermissionSetting() {
         boolean success = true;
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        String packageName = ContextUtils.getPackageName();
+        String packageName = getContext().getPackageName();
 
         OSUtils.ROM romType = OSUtils.getRomType();
         switch (romType) {
@@ -816,18 +821,18 @@ public class IntentUtils {
                 break;
             default:
                 intent.setAction(Settings.ACTION_SETTINGS);
-                Log.i(IntentUtils.class.getSimpleName(),"没有适配该机型, 跳转普通设置界面");
+                Log.i(IntentUtils.class.getSimpleName(), "没有适配该机型, 跳转普通设置界面");
                 success = false;
                 break;
         }
         try {
-            ContextUtils.startActivity(intent);
+            getContext().startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
             // 跳转失败, 前往普通设置界面
             IntentUtils.gotoSetting();
             success = false;
-            Log.i(IntentUtils.class.getSimpleName(),"无法跳转权限界面, 开始跳转普通设置界面");
+            Log.i(IntentUtils.class.getSimpleName(), "无法跳转权限界面, 开始跳转普通设置界面");
         }
         return success;
     }
@@ -837,7 +842,7 @@ public class IntentUtils {
      */
     private static void startActivity(Intent intent) {
         if (intent != null) {
-            ContextUtils.startActivity(intent);
+            getContext().startActivity(intent);
         }
     }
 
@@ -890,7 +895,7 @@ public class IntentUtils {
                 }
             }
         }
-        Log.i(IntentUtils.class.getSimpleName(),"MiuiVersion = " + line);
+        Log.i(IntentUtils.class.getSimpleName(), "MiuiVersion = " + line);
         return line;
     }
 }

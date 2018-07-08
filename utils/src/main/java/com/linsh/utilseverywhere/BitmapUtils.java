@@ -1,6 +1,7 @@
 package com.linsh.utilseverywhere;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -43,7 +44,7 @@ import java.io.InputStream;
  *    date   : 2017/11/09
  *    desc   : 工具类: Bitmap 相关;
  *             API 包括 Bitmap 对象的转化、Bitmap 对象的处理、Bitmap 对象获取和保存等;
- *             如果需要处理非 Bitmap 但与图像相关的方法, 请前往 {@link DrawableUtils} 或 {@link ImageUtils} 查看是否有相应的 API;
+ *             如果需要处理非 Bitmap 但与图像相关的方法, 请前往 {@link DrawableUtils} 查看是否有相应的 API;
  *
  *             注: 部分 API 直接参考或使用 https://github.com/Blankj/AndroidUtilCode 中 ImageUtils 类里面的方法
  * </pre>
@@ -53,6 +54,10 @@ public class BitmapUtils {
     private BitmapUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 读取资源文件中图片
      *
@@ -60,7 +65,7 @@ public class BitmapUtils {
      * @return Bitmap 对象
      */
     public static Bitmap getBitmap(int resId) {
-        return BitmapFactory.decodeResource(ContextUtils.getResources(), resId);
+        return BitmapFactory.decodeResource(getContext().getResources(), resId);
     }
 
     /**
@@ -318,7 +323,7 @@ public class BitmapUtils {
      * @return Drawable 对象
      */
     public static Drawable toDrawable(Bitmap bitmap) {
-        return bitmap == null ? null : new BitmapDrawable(ContextUtils.getResources(), bitmap);
+        return bitmap == null ? null : new BitmapDrawable(getContext().getResources(), bitmap);
     }
 
     /**
@@ -617,7 +622,7 @@ public class BitmapUtils {
         if (isEmptyBitmap(src)) return null;
         RenderScript rs = null;
         try {
-            rs = RenderScript.create(ContextUtils.get());
+            rs = RenderScript.create(getContext());
             rs.setMessageHandler(new RenderScript.RSMessageHandler());
             Allocation input = Allocation.createFromBitmap(rs, src, Allocation.MipmapControl.MIPMAP_NONE, Allocation
                     .USAGE_SCRIPT);

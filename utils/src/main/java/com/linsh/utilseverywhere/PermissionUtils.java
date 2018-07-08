@@ -1,6 +1,7 @@
 package com.linsh.utilseverywhere;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -26,6 +27,10 @@ public class PermissionUtils {
     private PermissionUtils() {
     }
 
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     //================================================ Android 6.0 权限申请 ================================================//
 
     /**
@@ -37,7 +42,7 @@ public class PermissionUtils {
      * @return 是否通过
      */
     public static boolean checkPermission(String permission) {
-        return ContextCompat.checkSelfPermission(ContextUtils.get(), permission)
+        return ContextCompat.checkSelfPermission(getContext(), permission)
                 == PackageManager.PERMISSION_GRANTED;
     }
 

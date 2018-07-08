@@ -2,6 +2,7 @@ package com.linsh.utilseverywhere;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
@@ -28,6 +29,13 @@ public class UEPermission {
 
     public static final int REQUEST_CODE = 666;
 
+    private UEPermission() {
+    }
+
+    private static Context getContext() {
+        return ContextUtils.get();
+    }
+
     /**
      * 相机权限 {@link Manifest.permission#CAMERA}
      */
@@ -40,7 +48,7 @@ public class UEPermission {
          */
         @RequiresApi(api = Build.VERSION_CODES.M)
         public static boolean check() {
-            return ContextCompat.checkSelfPermission(ContextUtils.get(),
+            return ContextCompat.checkSelfPermission(getContext(),
                     Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
         }
 
@@ -138,7 +146,7 @@ public class UEPermission {
 
         @RequiresApi(api = Build.VERSION_CODES.M)
         public static boolean check() {
-            return ContextCompat.checkSelfPermission(ContextUtils.get(),
+            return ContextCompat.checkSelfPermission(getContext(),
                     Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
         }
 
@@ -217,8 +225,8 @@ public class UEPermission {
 
         public static boolean check() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return ContextCompat.checkSelfPermission(ContextUtils.get(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                        || ContextCompat.checkSelfPermission(ContextUtils.get(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+                return ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                        || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
             }
             return true;
         }
