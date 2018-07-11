@@ -240,7 +240,8 @@ public class UEPermission {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public static void request(Activity activity, @IntRange(from = 0) int requestCode) {
             ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.RECORD_AUDIO}, requestCode);
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
         }
 
         /**
@@ -250,7 +251,8 @@ public class UEPermission {
          */
         public static boolean checkResult(@NonNull String[] permissions, @NonNull int[] grantResults) {
             for (int i = 0; i < permissions.length; i++) {
-                if (Manifest.permission.RECORD_AUDIO.equals(permissions[i])) {
+                if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])
+                        || Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i])) {
                     return grantResults[i] == PackageManager.PERMISSION_GRANTED;
                 }
             }
@@ -265,7 +267,7 @@ public class UEPermission {
         @RequiresApi(api = Build.VERSION_CODES.M)
         public static boolean isNeverAsked(Activity activity) {
             return !ActivityCompat.shouldShowRequestPermissionRationale(
-                    activity, Manifest.permission.RECORD_AUDIO);
+                    activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
     }
 }
