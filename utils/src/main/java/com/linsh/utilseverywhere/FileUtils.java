@@ -185,13 +185,27 @@ public class FileUtils {
     //================================================ 读取文件 ================================================//
 
     /**
-     * 读取文件, 默认编码 UTF-8
-     *
-     * @param file 文件对象
-     * @return 文本内容, 读取失败返回 null
+     * see {@link #readAsStringBuilder(File)}
      */
+    @Deprecated
     public static StringBuilder readFile(File file) {
-        return readFile(file, DEFAULT_CHARSET);
+        return readAsStringBuilder(file);
+    }
+
+    /**
+     * see {@link #readAsStringBuilder(String)}
+     */
+    @Deprecated
+    public static StringBuilder readFile(String filePath) {
+        return readAsStringBuilder(filePath);
+    }
+
+    /**
+     * see {@link #readAsStringBuilder(File, String)}
+     */
+    @Deprecated
+    public static StringBuilder readFile(File file, String charsetName) {
+        return readAsStringBuilder(file, charsetName);
     }
 
     /**
@@ -200,8 +214,20 @@ public class FileUtils {
      * @param filePath 文件路径
      * @return 文本内容, 读取失败返回 null
      */
-    public static StringBuilder readFile(String filePath) {
-        return readFile(new File(filePath), DEFAULT_CHARSET);
+    public static String readAsString(String filePath) {
+        StringBuilder builder = readAsStringBuilder(filePath);
+        return builder != null ? builder.toString() : null;
+    }
+
+    /**
+     * 读取文件, 默认编码 UTF-8
+     *
+     * @param file 文件对象
+     * @return 文本内容, 读取失败返回 null
+     */
+    public static String readAsString(File file) {
+        StringBuilder builder = readAsStringBuilder(file);
+        return builder != null ? builder.toString() : null;
     }
 
     /**
@@ -211,7 +237,40 @@ public class FileUtils {
      * @param charsetName 编码名称
      * @return 文本内容, 读取失败返回 null
      */
-    public static StringBuilder readFile(File file, String charsetName) {
+    public static String readAsString(File file, String charsetName) {
+        StringBuilder builder = readAsStringBuilder(file, charsetName);
+        return builder != null ? builder.toString() : null;
+    }
+
+    /**
+     * 读取文件, 默认编码 UTF-8
+     *
+     * @param file 文件对象
+     * @return 文本内容, 读取失败返回 null
+     */
+    public static StringBuilder readAsStringBuilder(File file) {
+        return readAsStringBuilder(file, DEFAULT_CHARSET);
+    }
+
+    /**
+     * 读取文件, 默认编码 UTF-8
+     *
+     * @param filePath 文件路径
+     * @return 文本内容, 读取失败返回 null
+     */
+    public static StringBuilder readAsStringBuilder(String filePath) {
+        if (TextUtils.isEmpty(filePath)) return null;
+        return readAsStringBuilder(new File(filePath), DEFAULT_CHARSET);
+    }
+
+    /**
+     * 读取文件
+     *
+     * @param file        文件对象
+     * @param charsetName 编码名称
+     * @return 文本内容, 读取失败返回 null
+     */
+    public static StringBuilder readAsStringBuilder(File file, String charsetName) {
         if (!checkFile(file) || !file.isFile()) {
             return null;
         }
@@ -243,13 +302,29 @@ public class FileUtils {
     }
 
     /**
+     * see: {@link #readLines(File)}
+     */
+    @Deprecated
+    public static List<String> readFileAsList(File file) {
+        return readLines(file);
+    }
+
+    /**
+     * see: {@link #readLines(File, String)}
+     */
+    @Deprecated
+    public static List<String> readFileAsList(File file, String charsetName) {
+        return readLines(file, charsetName);
+    }
+
+    /**
      * 以集合形式读取文件, 每一行为一个元素, 默认编码 UTF-8
      *
      * @param file 文件对象
      * @return 文本集合, 每一个元素代表一行
      */
-    public static List<String> readFileAsList(File file) {
-        return readFileAsList(file, DEFAULT_CHARSET);
+    public static List<String> readLines(File file) {
+        return readLines(file, DEFAULT_CHARSET);
     }
 
     /**
@@ -259,7 +334,7 @@ public class FileUtils {
      * @param charsetName 编码名称
      * @return 文本集合, 每一个元素代表一行
      */
-    public static List<String> readFileAsList(File file, String charsetName) {
+    public static List<String> readLines(File file, String charsetName) {
         if (!checkFile(file) || !file.isFile()) {
             return null;
         }
@@ -290,14 +365,111 @@ public class FileUtils {
     //================================================ 写入文件 ================================================//
 
     /**
+     * see: {@link #writeString(File, String)}
+     */
+    @Deprecated
+    public static boolean writeFile(File file, String content) {
+        return writeString(file, content);
+    }
+
+    /**
+     * see: {@link #writeString(File, String, boolean)}
+     */
+    @Deprecated
+    public static boolean writeFile(File file, String content, boolean append) {
+        return writeString(file, content, append);
+    }
+
+    /**
+     * see: {@link #writeString(File, String, boolean, boolean)}
+     */
+    @Deprecated
+    public static boolean writeFile(File file, String content, boolean append, boolean endWithNewLine) {
+        return writeString(file, content, append, endWithNewLine);
+    }
+
+    /**
+     * see: {@link #writeLines(File, List)}
+     */
+    @Deprecated
+    public static boolean writeFile(File file, List<String> contents) {
+        return writeLines(file, contents);
+    }
+
+    /**
+     * see: {@link #writeLines(File, String...)}
+     */
+    @Deprecated
+    public static boolean writeFile(File file, String... contents) {
+        return writeLines(file, contents);
+    }
+
+    /**
+     * see: {@link #writeLines(File, List, boolean)}
+     */
+    @Deprecated
+    public static boolean writeFile(File file, List<String> contents, boolean append) {
+        return writeLines(file, contents, append);
+    }
+
+    /**
+     * see: {@link #writeCustom(File, Consumer)}
+     */
+    @Deprecated
+    public static boolean writeFile(File file, Consumer<BufferedWriter> consumer) {
+        return writeCustom(file, consumer);
+    }
+
+    /**
+     * see: {@link #writeCustom(File, Consumer, boolean)}
+     */
+    @Deprecated
+    public static boolean writeFile(File file, Consumer<BufferedWriter> consumer, boolean append) {
+        return writeCustom(file, consumer, append);
+    }
+
+    /**
+     * see: {@link #writeStream(File, InputStream)}
+     */
+    @Deprecated
+    public static boolean writeFile(File file, InputStream is) {
+        return writeStream(file, is);
+    }
+
+    /**
+     * see: {@link #writeStream(File, InputStream, boolean)}
+     */
+    @Deprecated
+    public static boolean writeFile(File file, InputStream is, boolean append) {
+        return writeStream(file, is, append);
+    }
+
+
+    /**
+     * see: {@link #writeBytes(File, byte[])}
+     */
+    @Deprecated
+    public static boolean writeFile(File file, byte[] bytes) {
+        return writeBytes(file, bytes);
+    }
+
+    /**
+     * see: {@link #writeBytes(File, byte[], boolean)}
+     */
+    @Deprecated
+    public static boolean writeFile(final File file, final byte[] bytes, final boolean append) {
+        return writeBytes(file, bytes, append);
+    }
+
+    /**
      * 将字符串写入文件
      *
      * @param file    文件
      * @param content 文本内容
      * @return 是否写入成功
      */
-    public static boolean writeFile(File file, String content) {
-        return writeFile(file, content, false);
+    public static boolean writeString(File file, String content) {
+        return writeString(file, content, false);
     }
 
     /**
@@ -308,8 +480,8 @@ public class FileUtils {
      * @param append  是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
      * @return 是否写入成功
      */
-    public static boolean writeFile(File file, String content, boolean append) {
-        return writeFile(file, content, append, false);
+    public static boolean writeString(File file, String content, boolean append) {
+        return writeString(file, content, append, false);
     }
 
     /**
@@ -321,7 +493,7 @@ public class FileUtils {
      * @param endWithNewLine 是否在末尾添加换行
      * @return 是否写入成功
      */
-    public static boolean writeFile(File file, String content, boolean append, boolean endWithNewLine) {
+    public static boolean writeString(File file, String content, boolean append, boolean endWithNewLine) {
         if (TextUtils.isEmpty(content) || !checkFileAndMakeDirs(file)) {
             return false;
         }
@@ -353,8 +525,8 @@ public class FileUtils {
      * @param contents 文本内容集合
      * @return 是否写入成功
      */
-    public static boolean writeFile(File file, List<String> contents) {
-        return writeFile(file, contents, false);
+    public static boolean writeLines(File file, List<String> contents) {
+        return writeLines(file, contents, false);
     }
 
     /**
@@ -364,8 +536,8 @@ public class FileUtils {
      * @param contents 文本内容数组
      * @return 是否写入成功
      */
-    public static boolean writeFile(File file, String... contents) {
-        return writeFile(file, Arrays.asList(contents), false);
+    public static boolean writeLines(File file, String... contents) {
+        return writeLines(file, Arrays.asList(contents), false);
     }
 
     /**
@@ -376,7 +548,7 @@ public class FileUtils {
      * @param append   是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
      * @return 是否写入成功
      */
-    public static boolean writeFile(File file, List<String> contents, boolean append) {
+    public static boolean writeLines(File file, List<String> contents, boolean append) {
         if (contents == null || !checkFileAndMakeDirs(file)) {
             return false;
         }
@@ -405,25 +577,25 @@ public class FileUtils {
     }
 
     /**
-     * 将字符串集合写入文件, 集合中每个元素占一行
+     * 自定义文本写入操作
      *
      * @param file     文件
      * @param consumer 用于自定义写入操作的消费者
      * @return 是否写入成功
      */
-    public static boolean writeFile(File file, Consumer<BufferedWriter> consumer) {
-        return writeFile(file, consumer, false);
+    public static boolean writeCustom(File file, Consumer<BufferedWriter> consumer) {
+        return writeCustom(file, consumer, false);
     }
 
     /**
-     * 将字符串集合写入文件, 集合中每个元素占一行
+     * 自定义文本写入操作
      *
      * @param file     文件
      * @param consumer 用于自定义写入操作的消费者
      * @param append   是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
      * @return 是否写入成功
      */
-    public static boolean writeFile(File file, Consumer<BufferedWriter> consumer, boolean append) {
+    public static boolean writeCustom(File file, Consumer<BufferedWriter> consumer, boolean append) {
         if (consumer == null || !checkFileAndMakeDirs(file)) {
             return false;
         }
@@ -455,8 +627,8 @@ public class FileUtils {
      * @param is   输入流
      * @return 是否写入成功
      */
-    public static boolean writeFile(File file, InputStream is) {
-        return writeFile(file, is, false);
+    public static boolean writeStream(File file, InputStream is) {
+        return writeStream(file, is, false);
     }
 
     /**
@@ -467,7 +639,7 @@ public class FileUtils {
      * @param append 是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
      * @return 是否写入成功
      */
-    public static boolean writeFile(File file, InputStream is, boolean append) {
+    public static boolean writeStream(File file, InputStream is, boolean append) {
         if (is == null || !checkFileAndMakeDirs(file)) return false;
 
         OutputStream os = null;
@@ -506,8 +678,8 @@ public class FileUtils {
      * @param bytes 字节数组
      * @return 是否写入成功
      */
-    public static boolean writeFile(File file, byte[] bytes) {
-        return writeFile(file, bytes, false);
+    public static boolean writeBytes(File file, byte[] bytes) {
+        return writeBytes(file, bytes, false);
     }
 
     /**
@@ -518,7 +690,7 @@ public class FileUtils {
      * @param append 是否为追加 (true 在文本末尾写入, false 清除原有文本重新写入)
      * @return 是否写入成功
      */
-    public static boolean writeFile(final File file, final byte[] bytes, final boolean append) {
+    public static boolean writeBytes(File file, byte[] bytes, boolean append) {
         if (bytes == null || !checkFileAndMakeDirs(file)) return false;
 
         BufferedOutputStream bos = null;
