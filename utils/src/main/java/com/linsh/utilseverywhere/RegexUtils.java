@@ -1,5 +1,11 @@
 package com.linsh.utilseverywhere;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * <pre>
  *    author : Senh Linsh
@@ -70,4 +76,57 @@ public class RegexUtils {
     public static boolean isURL(String string) {
         return string.matches(URL);
     }
+
+    /**
+     * 查找字符串
+     *
+     * @param input 用于匹配的输入源
+     * @param regex 正则字符串
+     * @param group 所查找的字符串在正则中的分组索引
+     * @return 目标字符串, 匹配失败返回 null
+     */
+    public static String find(String input, String regex, int group) {
+        Matcher matcher = Pattern.compile(regex).matcher(input);
+        if (matcher.find()) {
+            return matcher.group(group);
+        }
+        return null;
+    }
+
+    /**
+     * 查找字符串
+     *
+     * @param input  用于匹配的输入源
+     * @param regex  正则字符串
+     * @param groups 所查找的字符串在正则中的分组索引
+     * @return 目标字符串的数组, 匹配失败返回 null
+     */
+    public static String[] find(String input, String regex, int[] groups) {
+        if (groups == null) return null;
+        Matcher matcher = Pattern.compile(regex).matcher(input);
+        if (matcher.find()) {
+            String[] matches = new String[groups.length];
+            for (int i = 0; i < groups.length; i++) {
+                matches[i] = matcher.group(groups[i]);
+            }
+            return matches;
+        }
+        return null;
+    }
+
+    /**
+     * 查找字符串
+     *
+     * @param input 用于匹配的输入源
+     * @param regex 正则字符串
+     * @return 如果匹配成功则返回该正则匹配对象, 匹配失败返回 null
+     */
+    public static Matcher find(String input, String regex) {
+        Matcher matcher = Pattern.compile(regex).matcher(input);
+        if (matcher.find()) {
+            return matcher;
+        }
+        return null;
+    }
+
 }
