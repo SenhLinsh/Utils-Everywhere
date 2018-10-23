@@ -5,6 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Stack;
 
 /**
  * <pre>
@@ -21,15 +23,93 @@ public class ClassUtils {
     }
 
     /**
+     * 判断指定的类名是否存在
+     *
+     * @param className 类名
+     * @return 是否存在
+     */
+    public static boolean isClassExist(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    /**
+     * @see ClassUtils#getClass(String)
+     */
+    @Deprecated
+    public static Class<?> getReflectedClass(String className) {
+        try {
+            return getClass(className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 获取类的字节码对象 (反射)
      *
      * @param className 类名
      * @return 类名对应的类的字节码对象, 如果该类不存在或获取失败则返回 null
      */
-    public static Class<?> getReflectedClass(String className) {
+    public static Class<?> getClass(String className) throws ClassNotFoundException {
+        return Class.forName(className);
+    }
+
+    /**
+     * 获取无参构造的类的实例 (反射)
+     *
+     * @param className 类名
+     * @return 类实例, 如果该类不存在或获取失败则返回 null
+     */
+    @Deprecated
+    public static Object getInstance(String className) {
         try {
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
+            return newInstance(className);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * @see ClassUtils#newInstance(Class)
+     */
+    @Deprecated
+    public static Object getInstance(Class<?> clazz) {
+        try {
+            return newInstance(clazz);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * @see ClassUtils#newInstance(String, Object...)
+     */
+    @Deprecated
+    public static Object getInstance(String className, Object... args) {
+        try {
+            return newInstance(className, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * @see ClassUtils#newInstance(String, Class[], Object[])
+     */
+    @Deprecated
+    public static Object getInstance(String className, Class[] parameterTypes, Object[] args) {
+        try {
+            return newInstance(className, parameterTypes, args);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -41,20 +121,20 @@ public class ClassUtils {
      * @param className 类名
      * @return 类实例, 如果该类不存在或获取失败则返回 null
      */
-    public static Object getInstance(String className) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            try {
-                return clazz.newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Object newInstance(String className)
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        return Class.forName(className).newInstance();
+    }
+
+    /**
+     * 获取无参构造的类的实例 (反射)
+     *
+     * @param clazz 类
+     * @return 类实例, 如果该类不存在或获取失败则返回 null
+     */
+    public static Object newInstance(Class<?> clazz)
+            throws IllegalAccessException, InstantiationException {
+        return clazz.newInstance();
     }
 
     /**
@@ -64,20 +144,29 @@ public class ClassUtils {
      * @param args      构造参数值, 构造参数类型直接获取传入的参数的类型
      * @return 类实例, 如果该类不存在或获取失败则返回 null
      */
-    public static Object getInstance(String className, Object... args) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            if (args == null) return clazz.newInstance();
-            Class[] parameterTypes = new Class[args.length];
-            for (int i = 0; i < args.length; i++) {
-                parameterTypes[i] = args[i].getClass();
-            }
-            return clazz.getConstructor(parameterTypes)
-                    .newInstance(args);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static Object newInstance(String className, Object... args)
+            throws ClassNotFoundException, InvocationTargetException,
+            NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return newInstance(Class.forName(className), args);
+    }
+
+    /**
+     * 获取有参构造的类的实例 (反射)
+     *
+     * @param clazz 类
+     * @param args  构造参数值, 构造参数类型直接获取传入的参数的类型
+     * @return 类实例, 如果该类不存在或获取失败则返回 null
+     */
+    public static Object newInstance(Class<?> clazz, Object... args)
+            throws IllegalAccessException,
+            InstantiationException, NoSuchMethodException, InvocationTargetException {
+        if (args == null) return clazz.newInstance();
+        Class[] parameterTypes = new Class[args.length];
+        for (int i = 0; i < args.length; i++) {
+            parameterTypes[i] = args[i].getClass();
         }
-        return null;
+        return clazz.getConstructor(parameterTypes)
+                .newInstance(args);
     }
 
     /**
@@ -88,30 +177,42 @@ public class ClassUtils {
      * @param args           构造参数值
      * @return 类实例, 如果该类不存在或获取失败则返回 null
      */
-    public static Object getInstance(String className, Class[] parameterTypes, Object[] args) {
-        try {
-            Class<?> clazz = Class.forName(className);
-            if (parameterTypes == null || args == null) return clazz.newInstance();
-            return clazz.getConstructor(parameterTypes)
-                    .newInstance(args);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Object newInstance(String className, Class[] parameterTypes, Object[] args)
+            throws ClassNotFoundException, InvocationTargetException,
+            NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return newInstance(Class.forName(className), parameterTypes, args);
+    }
+
+    /**
+     * 获取有参构造的类的实例 (反射)
+     *
+     * @param clazz          类
+     * @param parameterTypes 构造参数类型
+     * @param args           构造参数值
+     * @return 类实例, 如果该类不存在或获取失败则返回 null
+     */
+    public static Object newInstance(Class<?> clazz, Class[] parameterTypes, Object[] args)
+            throws IllegalAccessException, InstantiationException,
+            NoSuchMethodException, InvocationTargetException {
+        if (parameterTypes == null || args == null) return clazz.newInstance();
+        return clazz.getConstructor(parameterTypes)
+                .newInstance(args);
     }
 
     /**
      * 获取对象指定的字段值(属性值) (通过反射)
      * <p>
-     * 注意: 该方法无法获取继承于父类的属性, 如果需要获取父类的属性, 请使用 {@link ClassUtils#getField(Class, Object, String)}
+     * 注意: 该方法无法获取继承于父类的属性, 如果需要获取父类的属性,
+     * 请使用 {@link ClassUtils#getField(Class, Object, String)}
      * 来传入包含该方法的字节码对象
      *
      * @param obj       对象
      * @param fieldName 字段名
      * @return 字段的值
      */
-    public static Object getField(Object obj, String fieldName) throws NoSuchFieldException, IllegalAccessException {
-        return getField(obj, fieldName, true);
+    public static Object getField(Object obj, String fieldName)
+            throws NoSuchFieldException, IllegalAccessException {
+        return getField(obj, fieldName, false);
     }
 
     /**
@@ -122,7 +223,8 @@ public class ClassUtils {
      * @param accessible 当没有访问权限时, 是否强行反射
      * @return 字段的值
      */
-    public static Object getField(Object obj, String fieldName, boolean accessible) throws NoSuchFieldException, IllegalAccessException {
+    public static Object getField(Object obj, String fieldName, boolean accessible)
+            throws NoSuchFieldException, IllegalAccessException {
         Class<?> clazz = obj.getClass();
         NoSuchFieldException exception = null;
         while (clazz != null) {
@@ -148,8 +250,9 @@ public class ClassUtils {
      * @param fieldName 字段名
      * @return 字段的值
      */
-    public static Object getField(Class<?> clazz, Object obj, String fieldName) throws NoSuchFieldException, IllegalAccessException {
-        return getField(clazz, obj, fieldName, true);
+    public static Object getField(Class<?> clazz, Object obj, String fieldName)
+            throws NoSuchFieldException, IllegalAccessException {
+        return getField(clazz, obj, fieldName, false);
     }
 
     /**
@@ -161,7 +264,8 @@ public class ClassUtils {
      * @param accessible 当没有访问权限时, 是否强行反射
      * @return 字段的值
      */
-    public static Object getField(Class<?> clazz, Object obj, String fieldName, boolean accessible) throws NoSuchFieldException, IllegalAccessException {
+    public static Object getField(Class<?> clazz, Object obj, String fieldName, boolean accessible)
+            throws NoSuchFieldException, IllegalAccessException {
         Field field = clazz.getDeclaredField(fieldName);
         field.setAccessible(accessible);
         return field.get(obj);
@@ -174,8 +278,9 @@ public class ClassUtils {
      * @param fieldName 字段名
      * @param value     字段值
      */
-    public static void setField(Object obj, String fieldName, Object value) throws NoSuchFieldException, IllegalAccessException {
-        setField(obj.getClass(), obj, fieldName, value, true);
+    public static void setField(Object obj, String fieldName, Object value)
+            throws NoSuchFieldException, IllegalAccessException {
+        setField(obj, fieldName, value, false);
     }
 
     /**
@@ -186,12 +291,14 @@ public class ClassUtils {
      * @param value      字段值
      * @param accessible 当没有访问权限时, 是否强行反射
      */
-    public static void setField(Object obj, String fieldName, Object value, boolean accessible) throws NoSuchFieldException, IllegalAccessException {
+    public static void setField(Object obj, String fieldName, Object value, boolean accessible)
+            throws NoSuchFieldException, IllegalAccessException {
         Class<?> clazz = obj.getClass();
         NoSuchFieldException exception = null;
         while (clazz != null) {
             try {
-                setField(obj.getClass(), obj, fieldName, value, accessible);
+                setField(clazz, obj, fieldName, value, accessible);
+                return;
             } catch (NoSuchFieldException e) {
                 if (exception == null) {
                     exception = e;
@@ -201,7 +308,7 @@ public class ClassUtils {
         }
         if (exception != null)
             throw exception;
-        throw new RuntimeException("未知错误");
+        throw new IllegalArgumentException("未知错误");
     }
 
     /**
@@ -212,8 +319,9 @@ public class ClassUtils {
      * @param fieldName 字段名
      * @param value     字段值
      */
-    public static void setField(Class<?> clazz, Object obj, String fieldName, Object value) throws NoSuchFieldException, IllegalAccessException {
-        setField(clazz, obj, fieldName, value, true);
+    public static void setField(Class<?> clazz, Object obj, String fieldName, Object value)
+            throws NoSuchFieldException, IllegalAccessException {
+        setField(clazz, obj, fieldName, value, false);
     }
 
     /**
@@ -225,7 +333,9 @@ public class ClassUtils {
      * @param value      字段值
      * @param accessible 当没有访问权限时, 是否强行反射
      */
-    public static void setField(Class<?> clazz, Object obj, String fieldName, Object value, boolean accessible) throws NoSuchFieldException, IllegalAccessException {
+    public static void setField(Class<?> clazz, Object obj, String fieldName,
+                                Object value, boolean accessible)
+            throws NoSuchFieldException, IllegalAccessException {
         Field field = clazz.getDeclaredField(fieldName);
         field.setAccessible(accessible);
         field.set(obj, value);
@@ -239,8 +349,9 @@ public class ClassUtils {
      * @return 所调用的方法返回的参数
      */
     public static Object invokeMethod(Object obj, String methodName)
-            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IllegalArgumentException {
-        return invokeMethod(obj, methodName, null, true);
+            throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException, IllegalArgumentException {
+        return invokeMethod(obj, methodName, null, false);
     }
 
     /**
@@ -252,7 +363,8 @@ public class ClassUtils {
      * @return 所调用的方法返回的参数
      */
     public static Object invokeMethod(Object obj, String methodName, boolean accessible)
-            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IllegalArgumentException {
+            throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException, IllegalArgumentException {
         return invokeMethod(obj, methodName, null, accessible);
     }
 
@@ -265,8 +377,9 @@ public class ClassUtils {
      * @return 所调用的方法返回的参数
      */
     public static Object invokeMethod(Object obj, String methodName, Object[] args)
-            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IllegalArgumentException {
-        return invokeMethod(obj, methodName, args, true);
+            throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException, IllegalArgumentException {
+        return invokeMethod(obj, methodName, args, false);
     }
 
     /**
@@ -279,7 +392,8 @@ public class ClassUtils {
      * @return 所调用的方法返回的参数
      */
     public static Object invokeMethod(Object obj, String methodName, Object[] args, boolean accessible)
-            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IllegalArgumentException {
+            throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException, IllegalArgumentException {
         if (args == null || args.length == 0)
             return invokeMethod(obj, methodName, null, null, accessible);
         Class[] parameterTypes = new Class[args.length];
@@ -303,7 +417,7 @@ public class ClassUtils {
      */
     public static Object invokeMethod(Object obj, String methodName, Class[] parameterTypes, Object[] args)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        return invokeMethod(obj, methodName, parameterTypes, args, true);
+        return invokeMethod(obj, methodName, parameterTypes, args, false);
     }
 
     /**
@@ -322,7 +436,7 @@ public class ClassUtils {
         NoSuchMethodException exception = null;
         while (clazz != null) {
             try {
-                return invokeMethod(obj.getClass(), obj, methodName, parameterTypes, args, accessible);
+                return invokeMethod(clazz, obj, methodName, parameterTypes, args, accessible);
             } catch (NoSuchMethodException e) {
                 if (exception == null) {
                     exception = e;
@@ -332,7 +446,7 @@ public class ClassUtils {
         }
         if (exception != null)
             throw exception;
-        throw new RuntimeException("未知错误");
+        throw new IllegalArgumentException("未知错误");
     }
 
     /**
@@ -345,9 +459,10 @@ public class ClassUtils {
      * @param args           方法参数值
      * @return 所调用的方法返回的参数
      */
-    public static Object invokeMethod(Class<?> clazz, Object obj, String methodName, Class[] parameterTypes, Object[] args)
+    public static Object invokeMethod(Class<?> clazz, Object obj, String methodName,
+                                      Class[] parameterTypes, Object[] args)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        return invokeMethod(clazz, obj, methodName, parameterTypes, args, true);
+        return invokeMethod(clazz, obj, methodName, parameterTypes, args, false);
     }
 
     /**
@@ -375,26 +490,12 @@ public class ClassUtils {
     }
 
     /**
-     * 判断指定的类名是否存在
-     *
-     * @param className 类名
-     * @return 是否存在
-     */
-    public static boolean isClassExist(String className) {
-        try {
-            Class.forName(className);
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
-    /**
      * 获取指定字节码对象中泛型(首个)的类型
      *
      * @param clazz 字节码对象
      * @return 泛型类型
      */
+    @Deprecated
     public static Type getGenericType(Class<?> clazz) {
         return getGenericType(clazz, 0);
     }
@@ -406,6 +507,7 @@ public class ClassUtils {
      * @param index 索引
      * @return 泛型类型
      */
+    @Deprecated
     public static Type getGenericType(Class<?> clazz, int index) {
         Type genericSuperclass = clazz.getGenericSuperclass();
         if (genericSuperclass instanceof ParameterizedType) {
@@ -417,4 +519,92 @@ public class ClassUtils {
         return null;
     }
 
+    /**
+     * 获取指定字节码对象对于目标字节码的泛型的实现类型
+     *
+     * @param clazz     字节码对象
+     * @param typeClass 目标字节码对象
+     * @return 泛型类型, 如果没有实现该泛型则返回 null
+     */
+    public static <T> Type getGenericType(Class<? extends T> clazz, Class<T> typeClass) {
+        return getGenericType(clazz, typeClass, 0);
+    }
+
+    /**
+     * 获取指定字节码对象对于目标字节码的泛型的实现类型
+     *
+     * @param clazz     字节码对象
+     * @param typeClass 目标字节码对象
+     * @param index     泛型在目标字节码对象中的索引
+     * @return 泛型类型, 如果没有实现该泛型则返回 null
+     */
+    public static <T> Type getGenericType(Class<? extends T> clazz, Class<T> typeClass, int index) {
+        if (clazz == typeClass) {
+            return null;
+        }
+        TypeVariable[] typeParameters = typeClass.getTypeParameters();
+        if (index >= typeParameters.length) {
+            return null;
+        }
+        TypeVariable typeParameter = typeParameters[index];
+        Class curClass = clazz;
+        Stack<Class> stack = new Stack<>();
+        if (typeClass.isInterface()) {
+            out:
+            while (curClass != null) {
+                stack.add(curClass);
+                Class<?>[] interfaces = curClass.getInterfaces();
+                for (Class<?> anInterface : interfaces) {
+                    if (anInterface == typeClass) {
+                        Type[] genericInterfaces = curClass.getGenericInterfaces();
+                        for (Type genericInterface : genericInterfaces) {
+                            if (genericInterface instanceof ParameterizedType
+                                    && ((ParameterizedType) genericInterface).getRawType() == typeClass) {
+                                Type type = ((ParameterizedType) genericInterface).getActualTypeArguments()[index];
+                                if (type instanceof TypeVariable) {
+                                    typeParameter = (TypeVariable) type;
+                                } else {
+                                    return type;
+                                }
+                            }
+                        }
+                        break out;
+                    }
+                }
+                curClass = curClass.getSuperclass();
+            }
+        } else {
+            while (curClass != null) {
+                stack.add(curClass);
+                curClass = curClass.getSuperclass();
+                if (curClass == typeClass) {
+                    stack.add(curClass);
+                    break;
+                }
+            }
+        }
+        int curIndex = index;
+        while (!stack.isEmpty()) {
+            curClass = stack.pop();
+            typeParameters = curClass.getTypeParameters();
+            for (int i = 0; i < typeParameters.length; i++) {
+                if (typeParameters[i] == typeParameter) {
+                    curIndex = i;
+                }
+            }
+            if (!stack.isEmpty()) {
+                curClass = stack.peek();
+                Type genericSuperclass = curClass.getGenericSuperclass();
+                if (genericSuperclass instanceof ParameterizedType) {
+                    Type type = ((ParameterizedType) genericSuperclass).getActualTypeArguments()[curIndex];
+                    if (type instanceof TypeVariable) {
+                        typeParameter = (TypeVariable) type;
+                    } else {
+                        return type;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }
