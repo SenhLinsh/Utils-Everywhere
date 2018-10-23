@@ -63,6 +63,9 @@ public class ArrayUtils {
      * @return 拼接好的字符串
      */
     public static String joint(Object[] arr, String divider) {
+        if (arr == null) {
+            throw new NullPointerException("arr can not be null");
+        }
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < arr.length; i++) {
             if (i != 0) {
@@ -82,6 +85,12 @@ public class ArrayUtils {
      * @return 拼接好的字符串
      */
     public static String joint(Object[] arr, int length, String divider) {
+        if (arr == null) {
+            throw new NullPointerException("arr can not be null");
+        }
+        if (length < 0) {
+            throw new IllegalArgumentException("length must be positive");
+        }
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < Math.min(arr.length, length); i++) {
             if (i != 0) {
@@ -122,7 +131,7 @@ public class ArrayUtils {
     /**
      * 将源数组的元素复制目标数组中<br/>
      * 如果源数组比目标数组长, 源数组超出部分的元素将不被复制;
-     * 如果目标数组比源数组长, 目标数组超出部分的原色将不会被改变
+     * 如果目标数组比源数组长, 目标数组超出部分的元素将不会被改变
      *
      * @param srcArray  源数组; 为 null 将抛出 IllegalArgumentException 异常
      * @param destArray 目标数组; wei null 将抛出 IllegalArgumentException 异常
@@ -177,7 +186,6 @@ public class ArrayUtils {
         if (srcArrays == null)
             return null;
         int length = 0;
-        length += srcArrays.length;
         for (T[] srcArray : srcArrays) {
             length += srcArray.length;
         }
