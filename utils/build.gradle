@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 15
@@ -51,5 +51,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    testImplementation "com.google.truth:truth:0.34"
+    testImplementation "com.google.truth:truth:0.42"
 }
