@@ -41,7 +41,7 @@ public class RandomUtils {
      * @return int 随机数
      */
     public static int nextInt(int max) {
-        return new Random().nextInt(max + 1);
+        return new Random().nextInt(max);
     }
 
     /**
@@ -52,7 +52,7 @@ public class RandomUtils {
     public static int getInt(int min, int max) {
         int diff = max - min;
         if (diff < 0) {
-            throw new IllegalArgumentException("max should bigger than min");
+            throw new IllegalArgumentException("max should greater than min");
         } else if (diff == 0) {
             return min;
         }
@@ -65,7 +65,7 @@ public class RandomUtils {
      * @param length 字符串长度
      * @return 随机数字字符串
      */
-    public static String getNumber(int length) {
+    public static String getNumbers(int length) {
         String letters = "0123456789";
         return getRandom(letters, length);
     }
@@ -76,7 +76,7 @@ public class RandomUtils {
      * @param length 字符串长度
      * @return 随机小写字母字字符串
      */
-    public static String getLowerCaseLetter(int length) {
+    public static String getLowerCaseLetters(int length) {
         String letters = "abcdefghijklmnopqrstuvwxyz";
         return getRandom(letters, length);
     }
@@ -87,7 +87,7 @@ public class RandomUtils {
      * @param length 字符串长度
      * @return 随机大写字母字字符串
      */
-    public static String getUpperCaseLetterString(int length) {
+    public static String getUpperCaseLetters(int length) {
         String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         return getRandom(letters, length);
     }
@@ -98,7 +98,7 @@ public class RandomUtils {
      * @param length 字符串长度
      * @return 随机大小写字母字字符串
      */
-    public static String getLetter(int length) {
+    public static String getLetters(int length) {
         String letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         return getRandom(letters, length);
     }
@@ -109,7 +109,7 @@ public class RandomUtils {
      * @param length 字符串长度
      * @return 随机字母+大小写字母字符串
      */
-    public static String getNumberAndLetter(int length) {
+    public static String getNumbersAndLetters(int length) {
         String letters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         return getRandom(letters, length);
     }
@@ -122,6 +122,9 @@ public class RandomUtils {
      * @return 随机字符串
      */
     public static String getRandom(String source, int length) {
+        if (source == null) {
+            throw new NullPointerException("source can not be null");
+        }
         return getRandom(source.toCharArray(), length);
     }
 
@@ -133,6 +136,15 @@ public class RandomUtils {
      * @return 随机字符串
      */
     public static String getRandom(char[] source, int length) {
+        if (source == null) {
+            throw new NullPointerException("source can not be null");
+        }
+        if (source.length == 0) {
+            throw new IllegalArgumentException("source length must be positive");
+        }
+        if (length < 0) {
+            throw new IllegalArgumentException("length can not be negative");
+        }
         StringBuilder str = new StringBuilder(length);
         Random random = new Random();
         for (int i = 0; i < length; i++) {
