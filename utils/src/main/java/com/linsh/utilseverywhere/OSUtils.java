@@ -22,7 +22,9 @@ import java.util.regex.Pattern;
  *
  *    Deprecated :
  *              在工具类中对 ROM 类型进行判断，显得有些力不从心，所以单独创建了新的项目，用于判断 ROM，获取其版本号。
+ *
  *              敬请期待：
+ *                      https://github.com/SenhLinsh/Android-ROM-Identifier
  * </pre>
  */
 @Deprecated
