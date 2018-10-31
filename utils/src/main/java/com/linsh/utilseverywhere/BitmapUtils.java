@@ -58,13 +58,53 @@ public class BitmapUtils {
         return ContextUtils.get();
     }
 
+    @Deprecated
+    public static Bitmap getBitmap(int resId) {
+        return from(resId);
+    }
+
+    @Deprecated
+    public static Bitmap getBitmap(Drawable drawable) {
+        return from(drawable);
+    }
+
+    @Deprecated
+    public static Bitmap getBitmap(byte[] bytes) {
+        return from(bytes);
+    }
+
+    @Deprecated
+    public static Bitmap getBitmap(byte[] bytes, int offset, int length, int reqWidth, int reqHeight) {
+        return from(bytes, offset, length, reqWidth, reqHeight);
+    }
+
+    @Deprecated
+    public static Bitmap getBitmap(View view) {
+        return from(view);
+    }
+
+    @Deprecated
+    public static Bitmap getBitmap(File file) {
+        return from(file);
+    }
+
+    @Deprecated
+    public static Bitmap getBitmap(File file, int maxWidth, int maxHeight) {
+        return from(file, maxWidth, maxHeight);
+    }
+
+    @Deprecated
+    public static Bitmap getBitmap(InputStream is, int maxWidth, int maxHeight) {
+        return from(is, maxWidth, maxHeight);
+    }
+
     /**
      * 读取资源文件中图片
      *
      * @param resId 资源 Id
      * @return Bitmap 对象
      */
-    public static Bitmap getBitmap(int resId) {
+    public static Bitmap from(int resId) {
         return BitmapFactory.decodeResource(getContext().getResources(), resId);
     }
 
@@ -74,7 +114,7 @@ public class BitmapUtils {
      * @param drawable Drawable 对象
      * @return Bitmap 对象
      */
-    public static Bitmap getBitmap(Drawable drawable) {
+    public static Bitmap from(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
             if (bitmapDrawable.getBitmap() != null) {
@@ -101,7 +141,7 @@ public class BitmapUtils {
      * @param bytes byte 数组
      * @return Bitmap 对象
      */
-    public static Bitmap getBitmap(byte[] bytes) {
+    public static Bitmap from(byte[] bytes) {
         if (bytes == null || bytes.length == 0)
             return null;
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
@@ -117,7 +157,7 @@ public class BitmapUtils {
      * @param reqHeight 目标高度
      * @return Bitmap 对象
      */
-    public static Bitmap getBitmap(byte[] bytes, int offset, int length, int reqWidth, int reqHeight) {
+    public static Bitmap from(byte[] bytes, int offset, int length, int reqWidth, int reqHeight) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(bytes, offset, length, options);
@@ -131,7 +171,7 @@ public class BitmapUtils {
      * @param view View 对象
      * @return Bitmap 对象
      */
-    public static Bitmap getBitmap(View view) {
+    public static Bitmap from(View view) {
         if (view == null) return null;
         Bitmap ret = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(ret);
@@ -151,7 +191,7 @@ public class BitmapUtils {
      * @param file 图片文件
      * @return Bitmap 对象
      */
-    public static Bitmap getBitmap(File file) {
+    public static Bitmap from(File file) {
         if (file == null || !file.exists() || !file.isFile())
             return null;
 
@@ -182,7 +222,7 @@ public class BitmapUtils {
      * @param maxHeight 最长高
      * @return Bitmap 对象
      */
-    public static Bitmap getBitmap(File file, int maxWidth, int maxHeight) {
+    public static Bitmap from(File file, int maxWidth, int maxHeight) {
         if (file == null || !file.exists() || !file.isFile())
             return null;
 
@@ -217,7 +257,7 @@ public class BitmapUtils {
      * @param maxHeight 最长高
      * @return Bitmap 对象
      */
-    public static Bitmap getBitmap(InputStream is, int maxWidth, int maxHeight) {
+    public static Bitmap from(InputStream is, int maxWidth, int maxHeight) {
         if (is == null) return null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
