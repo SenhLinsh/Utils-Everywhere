@@ -22,7 +22,7 @@ public class PermissionUtils {
     /**
      * 默认的请求码
      */
-    public static final int REQUEST_CODE_PERMISSION = 101;
+    private static final int REQUEST_CODE_PERMISSION = 666;
 
     private PermissionUtils() {
     }
