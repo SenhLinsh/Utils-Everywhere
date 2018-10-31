@@ -70,7 +70,7 @@ public class PermissionUtils {
      * @param permission 系统权限
      * @param listener   权限回调
      */
-    public static void checkAndRequestPermission(Activity activity, String permission, @NonNull PermissionListener listener) {
+    public static void checkAndRequestPermission(Activity activity, String permission, @Nullable PermissionListener listener) {
         checkAndRequestPermissions(activity, new String[]{permission}, listener);
     }
 
@@ -81,15 +81,15 @@ public class PermissionUtils {
      * @param permissions 多个系统权限
      * @param listener    权限回调
      */
-    public static void checkAndRequestPermissions(Activity activity, String[] permissions, @NonNull PermissionListener listener) {
+    public static void checkAndRequestPermissions(Activity activity, String[] permissions, @Nullable PermissionListener listener) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String[] requests = new String[permissions.length];
             int size = 0;
             for (String permission : permissions) {
                 if (checkPermission(permission)) {
-                    listener.onGranted(permission);
+                    if (listener != null) listener.onGranted(permission);
                 } else if (isPermissionNeverAsked(activity, permission)) {
-                    listener.onDenied(permission, true);
+                    if (listener != null) listener.onDenied(permission, true);
                 } else {
                     requests[size++] = permission;
                 }
@@ -106,7 +106,7 @@ public class PermissionUtils {
             }
         } else {
             for (String permission : permissions) {
-                listener.onBeforeAndroidM(permission);
+                if (listener != null) listener.onBeforeAndroidM(permission);
             }
         }
     }
