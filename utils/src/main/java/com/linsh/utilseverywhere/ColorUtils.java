@@ -95,4 +95,67 @@ public class ColorUtils {
 //    public static int parseColor(String color) {
 //        return 0;
 //    }
+
+    /**
+     * 平衡颜色
+     * <p>
+     * 根据基准颜色, 计算出能够平均分配色环的剩余颜色, 保证明度值一致颜色不同
+     *
+     * @param baseColor 基准颜色
+     * @param num       总颜色数
+     * @return 平均分配好的颜色, 基准颜色的 index 为 0, 其余颜色按顺时针排列
+     */
+    public static int[] getBalancedColors(int baseColor, int num) {
+        if (num < 0) {
+            throw new IllegalArgumentException("num can't be negative");
+        }
+        if (num == 0) {
+            return new int[0];
+        }
+        int alpha = Color.alpha(baseColor);
+        float[] rgb = new float[]{Color.red(baseColor), Color.green(baseColor), Color.blue(baseColor)};
+        float width = (Math.abs(rgb[0] - rgb[1]) + Math.abs(rgb[1] - rgb[2]) +
+                Math.abs(rgb[2] - rgb[0])) / 2;
+        float total = width * 6;
+
+        int[] res = new int[num];
+        res[0] = baseColor;
+        // r == g == b, 灰色, 剩余颜色均为该色值
+        if (total == 0) {
+            for (int i = 1; i < res.length; i++) {
+                res[i] = baseColor;
+            }
+            return res;
+        }
+
+        int midIndex = 0;
+        if ((rgb[0] - rgb[1]) * (rgb[1] - rgb[2]) > 0
+                || rgb[0] == rgb[1]) {
+            midIndex = 1;
+        } else if ((rgb[1] - rgb[2]) * (rgb[2] - rgb[0]) > 0
+                || rgb[1] == rgb[2]) {
+            midIndex = 2;
+        }
+        float aver = total * 1f / num;
+        for (int i = 1; i < res.length; i++) {
+            float cur = aver;
+            while (cur > 0) {
+                float diff = rgb[(midIndex + 2) % 3] - rgb[midIndex % 3];
+                int sign = diff > 0 ? 1 : -1;
+                if (diff * sign > cur) {
+                    rgb[midIndex % 3] += cur * sign;
+                    cur = 0;
+                } else {
+                    rgb[midIndex % 3] += diff;
+                    midIndex += 2;
+                    cur -= diff * sign;
+                }
+                if (cur == 0) {
+                    res[i] = Color.argb(alpha, Math.round(rgb[0]),
+                            Math.round(rgb[1]), Math.round(rgb[2]));
+                }
+            }
+        }
+        return res;
+    }
 }
