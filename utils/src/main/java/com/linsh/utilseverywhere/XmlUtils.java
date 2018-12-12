@@ -19,8 +19,11 @@ import com.linsh.utilseverywhere.tools.ShapeBuilder;
  *    date   : 2017/11/14
  *    desc   : 工具类: XML 相关
  *             API  : 代码生成XML文件或属性 等
+ *
+ * @deprecated XmlUtils 被拆分成 Shapes & DrawableSelectors & ColorSelectors
  * </pre>
  */
+@Deprecated
 public class XmlUtils {
 
     private XmlUtils() {
