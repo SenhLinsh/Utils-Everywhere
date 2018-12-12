@@ -58,4 +58,14 @@ public class ObjectUtils {
     public static boolean isAnyOneNull(Object... objects) {
         return !isAllNotNull(objects);
     }
+
+    /**
+     * 检查非空, 否则返回默认值
+     *
+     * @param value        检查值
+     * @param defaultValue 默认值
+     */
+    public static <T> T checkNotNull(T value, T defaultValue) {
+        return value != null ? value : defaultValue;
+    }
 }
