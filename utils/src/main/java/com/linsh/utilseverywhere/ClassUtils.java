@@ -1,5 +1,6 @@
 package com.linsh.utilseverywhere;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -138,6 +139,21 @@ public class ClassUtils {
     }
 
     /**
+     * 获取无参构造的类的实例 (反射)
+     *
+     * @param clazz      类
+     * @param accessible 当没有访问权限时, 是否强行反射
+     * @return 类实例, 如果该类不存在或获取失败则返回 null
+     */
+    public static Object newInstance(Class<?> clazz, boolean accessible)
+            throws IllegalAccessException, InstantiationException,
+            NoSuchMethodException, InvocationTargetException {
+        Constructor<?> constructor = clazz.getConstructor();
+        constructor.setAccessible(accessible);
+        return constructor.newInstance();
+    }
+
+    /**
      * 获取有参构造的类的实例 (反射)
      *
      * @param className 类名
@@ -195,8 +211,25 @@ public class ClassUtils {
             throws IllegalAccessException, InstantiationException,
             NoSuchMethodException, InvocationTargetException {
         if (parameterTypes == null || args == null) return clazz.newInstance();
-        return clazz.getConstructor(parameterTypes)
-                .newInstance(args);
+        return clazz.getConstructor(parameterTypes).newInstance(args);
+    }
+
+    /**
+     * 获取有参构造的类的实例 (反射)
+     *
+     * @param clazz          类
+     * @param parameterTypes 构造参数类型
+     * @param args           构造参数值
+     * @param accessible     当没有访问权限时, 是否强行反射
+     * @return 类实例, 如果该类不存在或获取失败则返回 null
+     */
+    public static Object newInstance(Class<?> clazz, Class[] parameterTypes, Object[] args, boolean accessible)
+            throws IllegalAccessException, InstantiationException,
+            NoSuchMethodException, InvocationTargetException {
+        if (parameterTypes == null || args == null) return clazz.newInstance();
+        Constructor<?> constructor = clazz.getConstructor(parameterTypes);
+        constructor.setAccessible(accessible);
+        return constructor.newInstance(args);
     }
 
     /**
