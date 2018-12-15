@@ -62,7 +62,7 @@ public class DateUtils {
      * @return 新创建的当天凌晨(00 : 00)的时间
      */
     public static Date toDayBegin(Date date) {
-        return new Date(date.getYear(), date.getMonth(), date.getYear());
+        return new Date(date.getYear(), date.getMonth(), date.getDate());
     }
 
     /**
