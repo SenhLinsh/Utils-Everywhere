@@ -33,38 +33,38 @@ public class ADBUtils {
     }
 
     //================================================ 应用管理 ================================================//
-//
-//    /**
-//     * 安装 APK
-//     *
-//     * @param path apk 文件路径
-//     * @return 命令执行结果
-//     */
-//    public static CommandResult installApk(String path) {
-//        return ShellUtils.execCmd("install " + path, true);
-//    }
-//
-//    /**
-//     * 卸载应用
-//     *
-//     * @param packageName 应用包名
-//     * @return 命令执行结果
-//     */
-//    public static CommandResult uninstallApp(String packageName) {
-//        return ShellUtils.execCmd("uninstall " + packageName, true);
-//    }
-//
-//    /**
-//     * 卸载应用
-//     *
-//     * @param packageName             应用包名
-//     * @param isRetainingDataAndCache 是否保留数据和缓存目录
-//     * @return 命令执行结果
-//     */
-//    public static CommandResult uninstallApp(String packageName, boolean isRetainingDataAndCache) {
-//        String option = isRetainingDataAndCache ? "-k " : "";
-//        return ShellUtils.execCmd("uninstall " + option + packageName, true);
-//    }
+
+    /**
+     * 安装 APK [需要 root 权限]
+     *
+     * @param path apk 文件路径
+     * @return 命令执行结果
+     */
+    public static CommandResult installApk(String path) {
+        return ShellUtils.execCmd("pm install " + path, true);
+    }
+
+    /**
+     * 卸载应用 [需要 root 权限]
+     *
+     * @param packageName 应用包名
+     * @return 命令执行结果
+     */
+    public static CommandResult uninstallApp(String packageName) {
+        return ShellUtils.execCmd("pm uninstall " + packageName, true);
+    }
+
+    /**
+     * 卸载应用 [需要 root 权限]
+     *
+     * @param packageName             应用包名
+     * @param isRetainingDataAndCache 是否保留数据和缓存目录
+     * @return 命令执行结果
+     */
+    public static CommandResult uninstallApp(String packageName, boolean isRetainingDataAndCache) {
+        String option = isRetainingDataAndCache ? "-k " : "";
+        return ShellUtils.execCmd("pm uninstall " + option + packageName, true);
+    }
 
     /**
      * 清除应用数据与缓存 [不需要 root 权限]
