@@ -39,4 +39,13 @@ public class ThreadUtils {
     public static boolean isMainThread(int tid) {
         return sMainTid == tid;
     }
+
+    /**
+     * 判断当前线程是否为主线程
+     *
+     * @return true 是; false 不是
+     */
+    public static boolean isMainThread() {
+        return sMainTid == Process.myTid();
+    }
 }
