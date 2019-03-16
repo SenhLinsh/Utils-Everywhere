@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -157,6 +158,22 @@ public class ResourceUtils {
     }
 
     /**
+     * 将 Assets 目录里的文件复制到储存空间
+     *
+     * @param assetsFileName Assets 目录中的源文件名
+     * @param storageFile    储存空间中的目标文件
+     * @return 是否成功
+     */
+    public static boolean copyAssetsFileToStorage(String assetsFileName, File storageFile) {
+        try {
+            return FileUtils.writeStream(storageFile, getContext().getResources().getAssets().open(assetsFileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * 从 Raw 目录里读取文件的文本
      *
      * @param resId 资源 Id
@@ -217,5 +234,16 @@ public class ResourceUtils {
                 }
             }
         }
+    }
+
+    /**
+     * 将 Raw 目录里的文件复制到储存空间
+     *
+     * @param resId       Raw 目录中的源资源文件 id
+     * @param storageFile 储存空间中的目标文件
+     * @return 是否成功
+     */
+    public static boolean copyRawFileToStorage(int resId, File storageFile) {
+        return FileUtils.writeStream(storageFile, getContext().getResources().openRawResource(resId));
     }
 }
