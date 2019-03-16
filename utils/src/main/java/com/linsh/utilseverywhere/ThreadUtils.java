@@ -25,7 +25,7 @@ public class ThreadUtils {
     }
 
     /**
-     * 判断是否为主线程
+     * 判断当前线程是否为主线程
      *
      * @return true 是; false 不是
      */
@@ -45,14 +45,5 @@ public class ThreadUtils {
 
     private static Context getContext() {
         return ContextUtils.get();
-    }
-
-    /**
-     * 判断当前线程是否为主线程
-     *
-     * @return true 是; false 不是
-     */
-    public static boolean isMainThread() {
-        return sMainTid == Process.myTid();
     }
 }
