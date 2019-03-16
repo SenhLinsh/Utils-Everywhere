@@ -49,7 +49,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
+    testImplementation "com.google.truth:truth:0.42"
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    testImplementation "com.google.truth:truth:0.42"
 }

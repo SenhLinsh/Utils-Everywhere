@@ -1,6 +1,5 @@
 package com.linsh.utilseverywhere;
 
-import android.app.Application;
 import android.content.Context;
 
 /**
@@ -24,15 +23,6 @@ public class Utils {
     public static void init(Context context) {
         ContextUtils.init(context);
         HandlerUtils.init(context);
-        HandlerUtils.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                ThreadUtils.init();
-            }
-        });
-        if (context.getApplicationContext() instanceof Application) {
-            ActivityLifecycleUtils.init((Application) context.getApplicationContext());
-        }
     }
 
     /**

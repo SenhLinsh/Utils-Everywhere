@@ -21,16 +21,18 @@ public class HandlerUtils {
     }
 
     static void init(Context context) {
-        if (mainHandler == null) mainHandler = new Handler(context.getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                Object obj = msg.obj;
-                if (obj instanceof Runnable) {
-                    ((Runnable) obj).run();
+        if (mainHandler == null) {
+            mainHandler = new Handler(context.getMainLooper()) {
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+                    Object obj = msg.obj;
+                    if (obj instanceof Runnable) {
+                        ((Runnable) obj).run();
+                    }
                 }
-            }
-        };
+            };
+        }
     }
 
     /**
@@ -39,6 +41,9 @@ public class HandlerUtils {
      * @return 主线程 Handler
      */
     public static Handler getMainHandler() {
+        if (mainHandler == null) {
+            init(ContextUtils.get());
+        }
         return mainHandler;
     }
 

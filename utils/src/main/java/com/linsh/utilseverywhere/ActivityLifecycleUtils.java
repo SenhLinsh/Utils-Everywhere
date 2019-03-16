@@ -1,10 +1,14 @@
 package com.linsh.utilseverywhere;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,6 +25,7 @@ import java.util.Set;
  */
 public class ActivityLifecycleUtils {
 
+    private static final String TAG = "ActivityLifecycleUtils";
     private static int foregroundActivityCount = 0;
     private static LinkedHashMap<Integer, ActivityStatus> sCreatedActivities;
     private static Application.ActivityLifecycleCallbacks sLifecycleCallbacks = null;
@@ -193,7 +198,16 @@ public class ActivityLifecycleUtils {
      */
     private static void check() {
         if (sLifecycleCallbacks == null) {
-            throw new RuntimeException(String.format("请先调用初始化方法 %s.init()", ActivityLifecycleUtils.class.getName()));
+            Context context = ContextUtils.get();
+            if (context instanceof Application) {
+                init((Application) context);
+            } else {
+                Application application = getApplication();
+                if (application != null)
+                    init(application);
+            }
+            if (sLifecycleCallbacks == null)
+                throw new RuntimeException(String.format("请先调用初始化方法 %s.init()", ActivityLifecycleUtils.class.getName()));
         }
     }
 
@@ -244,5 +258,23 @@ public class ActivityLifecycleUtils {
         public boolean isDestroyed() {
             return status == STATUS_DESTROYED;
         }
+    }
+
+    /**
+     * 反射获取 Application
+     */
+    @SuppressLint("PrivateApi")
+    private static Application getApplication() {
+        try {
+            Method method = Class.forName("android.app.ActivityThread").getMethod("currentActivityThread");
+            method.setAccessible(true);
+            Object activityThread = method.invoke(null);
+            Object app = activityThread.getClass().getMethod("getApplication")
+                    .invoke(activityThread);
+            return (Application) app;
+        } catch (Throwable e) {
+            Log.e(TAG, "can not access Application context by reflection", e);
+        }
+        return null;
     }
 }

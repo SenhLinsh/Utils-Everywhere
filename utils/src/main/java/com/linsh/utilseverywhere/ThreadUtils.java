@@ -1,6 +1,6 @@
 package com.linsh.utilseverywhere;
 
-import android.os.Process;
+import android.content.Context;
 
 /**
  * <pre>
@@ -12,13 +12,7 @@ import android.os.Process;
  */
 public class ThreadUtils {
 
-    private static int sMainTid;
-
     private ThreadUtils() {
-    }
-
-    static void init() {
-        sMainTid = Process.myTid();
     }
 
     /**
@@ -33,11 +27,24 @@ public class ThreadUtils {
     /**
      * 判断是否为主线程
      *
-     * @param tid 当前线程的 thread id
      * @return true 是; false 不是
      */
-    public static boolean isMainThread(int tid) {
-        return sMainTid == tid;
+    public static boolean isMainThread() {
+        return getContext().getMainLooper().getThread().getId() == Thread.currentThread().getId();
+    }
+
+    /**
+     * 判断是否为主线程
+     *
+     * @param tid thread id
+     * @return true 是; false 不是
+     */
+    public static boolean isMainThread(long tid) {
+        return getContext().getMainLooper().getThread().getId() == tid;
+    }
+
+    private static Context getContext() {
+        return ContextUtils.get();
     }
 
     /**
