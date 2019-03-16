@@ -1,5 +1,7 @@
 package com.linsh.utilseverywhere;
 
+import android.os.Build;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
@@ -242,6 +244,19 @@ public class StringUtils {
                 builder.append((char) 12288);
             }
             return builder.toString();
+        }
+    }
+
+    /**
+     * 换行符, Android 为 {@code "\n"}, Windows 为 {@code "\r\n"}.
+     *
+     * @return 换行符
+     */
+    public static String lineSeparator() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return System.lineSeparator();
+        } else {
+            return System.getProperty("line.separator");
         }
     }
 }
