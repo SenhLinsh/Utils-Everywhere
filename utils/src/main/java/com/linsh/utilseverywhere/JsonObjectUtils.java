@@ -10,8 +10,11 @@ import org.json.JSONObject;
  *    github : https://github.com/SenhLinsh
  *    date   : 2017/11/10
  *    desc   : 工具类: 对 JsonObject 的处理进行了封装
+ *
+ *             已过时, 将移出 Utils-Everywhere
  * </pre>
  */
+@Deprecated
 public class JsonObjectUtils {
 
     private JsonObjectUtils() {
