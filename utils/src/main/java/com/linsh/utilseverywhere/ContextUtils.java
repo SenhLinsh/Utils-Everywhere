@@ -1,12 +1,16 @@
 package com.linsh.utilseverywhere;
 
+import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.util.Log;
 
 import java.io.File;
+import java.lang.reflect.Method;
 
 /**
  * <pre>
@@ -18,6 +22,7 @@ import java.io.File;
  */
 public class ContextUtils {
 
+    private static final String TAG = "ContextUtils";
     private static Context sAppContext;
 
     private ContextUtils() {
@@ -34,9 +39,30 @@ public class ContextUtils {
      */
     public static Context get() {
         if (sAppContext == null) {
-            throw new RuntimeException(String.format("must call %s.init() first.", Utils.class.getName()));
+            sAppContext = getApplication();
+            if (sAppContext == null)
+                throw new RuntimeException(String.format("must call %s.init() first.", Utils.class.getName()));
         }
         return sAppContext;
+    }
+
+    /**
+     * 反射获取 Application
+     */
+    @SuppressLint("PrivateApi")
+    private static Application getApplication() {
+        try {
+            Method method = Class.forName("android.app.ActivityThread")
+                    .getMethod("currentActivityThread");
+            method.setAccessible(true);
+            Object activityThread = method.invoke(null);
+            Object app = activityThread.getClass().getMethod("getApplication")
+                    .invoke(activityThread);
+            return (Application) app;
+        } catch (Throwable e) {
+            Log.e(TAG, "can not access Application context by reflection", e);
+        }
+        return null;
     }
 
     /**
