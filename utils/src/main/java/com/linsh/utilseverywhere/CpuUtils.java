@@ -13,6 +13,9 @@ import android.support.annotation.NonNull;
  */
 public class CpuUtils {
 
+    /**
+     * 获取设备 cpu 架构
+     */
     public static String getCpuAbi() {
         String cpuAbi = Build.CPU_ABI;
         if (cpuAbi == null) {
@@ -26,6 +29,9 @@ public class CpuUtils {
         return cpuAbi;
     }
 
+    /**
+     * 匹配 cpu 结构
+     */
     public static boolean matchAbi(@NonNull String... abis) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && Build.SUPPORTED_ABIS != null) {
             for (String supportedAbi : Build.SUPPORTED_ABIS)
@@ -33,7 +39,8 @@ public class CpuUtils {
                     if (supportedAbi.equals(abi)) return true;
         } else {
             for (String abi : abis)
-                if (abi != null && (abi.equals(Build.CPU_ABI) || abi.equals(Build.CPU_ABI2))) return true;
+                if (abi != null && (abi.equals(Build.CPU_ABI) || abi.equals(Build.CPU_ABI2)))
+                    return true;
         }
         return false;
     }
