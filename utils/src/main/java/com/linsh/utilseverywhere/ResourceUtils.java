@@ -97,7 +97,7 @@ public class ResourceUtils {
         if (TextUtils.isEmpty(fileName)) {
             return null;
         }
-        StringBuilder s = new StringBuilder("");
+        StringBuilder s = new StringBuilder();
         InputStreamReader in = null;
         try {
             in = new InputStreamReader(getContext().getResources().getAssets().open(fileName));
@@ -127,7 +127,7 @@ public class ResourceUtils {
      * @param fileName 文件名
      * @return 文本字符串集合
      */
-    public static List<String> geTextListFromAssets(String fileName) {
+    public static List<String> getTextListFromAssets(String fileName) {
         if (TextUtils.isEmpty(fileName)) {
             return null;
         }
@@ -162,7 +162,7 @@ public class ResourceUtils {
      * @param resId 资源 Id
      * @return 文本内容
      */
-    public static String geTextFromRaw(int resId) {
+    public static String getTextFromRaw(int resId) {
         StringBuilder s = new StringBuilder();
         InputStreamReader in = null;
         try {
@@ -193,13 +193,13 @@ public class ResourceUtils {
      * @param resId 资源 Id
      * @return 文本字符串集合
      */
-    public static List<String> geFileToListFromRaw(int resId) {
-        List<String> fileContent = new ArrayList<String>();
+    public static List<String> getTextListFromRaw(int resId) {
+        List<String> fileContent = new ArrayList<>();
         InputStreamReader in = null;
         try {
             in = new InputStreamReader(getContext().getResources().openRawResource(resId));
             BufferedReader reader = new BufferedReader(in);
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 fileContent.add(line);
             }
