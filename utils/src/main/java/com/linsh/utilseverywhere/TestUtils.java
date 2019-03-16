@@ -6,8 +6,11 @@ package com.linsh.utilseverywhere;
  *    github : https://github.com/SenhLinsh
  *    date   : 2017/11/13
  *    desc   : 工具类: 测试相关
+ *
+ *          该工具类不再使用
  * </pre>
  */
+@Deprecated
 public class TestUtils {
 
     private TestUtils() {
