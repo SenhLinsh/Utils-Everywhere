@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 
 import java.io.File;
@@ -109,15 +110,22 @@ public class AppUtils {
      * @return 当前 APP 的版本名称
      */
     public static String getVersionName() {
-        PackageManager packageManager = getContext().getPackageManager();
+        return getVersionName(getPackageName());
+    }
+
+    /**
+     * 获取指定 APP 的版本名称
+     *
+     * @return APP 的版本名称
+     */
+    public static String getVersionName(@NonNull String packageName) {
         try {
-            PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
-            // 获取版本名称
+            PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(packageName, 0);
             return packageInfo.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return null;
     }
 
     /**
@@ -125,18 +133,25 @@ public class AppUtils {
      * <p>
      * 推荐使用自己项目的 BuildConfig.VERSION_CODE 来获取
      *
-     * @return 当前 APP 的版本号
+     * @return 当前 APP 的版本号, 获取失败返回 -1
      */
     public static int getVersionCode() {
-        PackageManager packageManager = getContext().getPackageManager();
+        return getVersionCode(getPackageName());
+    }
+
+    /**
+     * 获取指定 APP 的版本号
+     *
+     * @return 指定 APP 的版本号, 获取失败返回 -1
+     */
+    public static int getVersionCode(@NonNull String packageName) {
         try {
-            PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
-            // 获取版本名称
+            PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(packageName, 0);
             return packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return 0;
+        return -1;
     }
 
     /**
@@ -145,9 +160,18 @@ public class AppUtils {
      * @return 当前 APP 的应用名称
      */
     public String getAppName() {
+        return getAppName(getPackageName());
+    }
+
+    /**
+     * 获取指定 APP 的应用名称
+     *
+     * @return 指定 APP 的应用名称
+     */
+    public String getAppName(@NonNull String packageName) {
         PackageManager pm = getContext().getPackageManager();
         try {
-            ApplicationInfo info = pm.getApplicationInfo(getPackageName(), 0);
+            ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
             return info.loadLabel(pm).toString();
         } catch (Exception e) {
             e.printStackTrace();
@@ -161,16 +185,23 @@ public class AppUtils {
      * @return 当前 APP 的应用签名
      */
     public static String getAppSignature() {
-        PackageManager pm = getContext().getPackageManager();
+        return getAppSignature(getPackageName());
+    }
+
+    /**
+     * 获取指定 APP 的应用签名
+     *
+     * @return 指定 APP 的应用签名
+     */
+    public static String getAppSignature(@NonNull String packageName) {
         try {
-            PackageInfo packinfo = pm.getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            PackageInfo packinfo = getContext().getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
             return packinfo.signatures[0].toCharsString();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-
 
     /**
      * 安装 APK 文件
@@ -189,7 +220,6 @@ public class AppUtils {
     public static void uninstallApp(String packageName) {
         IntentUtils.gotoUninstallApp(packageName);
     }
-
 
     /**
      * 判断指定的应用程序是否已安装
@@ -224,7 +254,11 @@ public class AppUtils {
      */
     public static void launchApp(Activity activity, String packageName, int requestCode) {
         Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
-        activity.startActivityForResult(launchIntent, requestCode);
+        try {
+            activity.startActivityForResult(launchIntent, requestCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -237,7 +271,12 @@ public class AppUtils {
     public static boolean checkAndStartInstalledApp(Activity activity, String packageName) {
         if (isAppInstalled(packageName)) {
             Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
-            activity.startActivity(intent);
+            try {
+                activity.startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
             return true;
         } else {
             return false;
