@@ -4,13 +4,14 @@ import android.Manifest;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
-import android.support.annotation.RequiresPermission;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.RequiresPermission;
 
 /**
  * <pre>

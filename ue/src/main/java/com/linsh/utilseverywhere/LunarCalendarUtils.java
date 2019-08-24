@@ -1,6 +1,5 @@
 package com.linsh.utilseverywhere;
 
-import android.support.annotation.IntRange;
 import android.text.TextUtils;
 
 import com.linsh.utilseverywhere.module.SimpleDate;
@@ -8,6 +7,8 @@ import com.linsh.utilseverywhere.module.SimpleDate;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import androidx.annotation.IntRange;
 
 /**
  * <pre>

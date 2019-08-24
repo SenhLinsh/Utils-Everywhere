@@ -8,11 +8,12 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresPermission;
 
 import java.io.File;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
 
 /**
  * <pre>

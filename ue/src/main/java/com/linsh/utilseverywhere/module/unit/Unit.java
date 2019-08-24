@@ -1,8 +1,9 @@
 package com.linsh.utilseverywhere.module.unit;
 
-import android.support.annotation.IntDef;
 
 import java.lang.annotation.Retention;
+
+import androidx.annotation.IntDef;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 

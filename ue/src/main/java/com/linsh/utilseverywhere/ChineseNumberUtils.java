@@ -1,6 +1,7 @@
 package com.linsh.utilseverywhere;
 
-import android.support.annotation.IntRange;
+
+import androidx.annotation.IntRange;
 
 /**
  * <pre>

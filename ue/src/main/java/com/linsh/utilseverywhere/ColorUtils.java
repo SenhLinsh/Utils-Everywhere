@@ -1,7 +1,8 @@
 package com.linsh.utilseverywhere;
 
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
+
+import androidx.annotation.ColorInt;
 
 /**
  * <pre>
@@ -18,7 +19,7 @@ public class ColorUtils {
     }
 
     public static int compositeColors(@ColorInt int foreground, @ColorInt int background) {
-        return android.support.v4.graphics.ColorUtils.compositeColors(foreground, background);
+        return androidx.core.graphics.ColorUtils.compositeColors(foreground, background);
     }
 
     /**

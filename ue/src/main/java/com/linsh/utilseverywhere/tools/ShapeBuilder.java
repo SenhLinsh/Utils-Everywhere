@@ -4,11 +4,12 @@ import android.annotation.TargetApi;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.support.annotation.IntDef;
-import android.support.annotation.RequiresApi;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.RequiresApi;
 
 /**
  * <pre>

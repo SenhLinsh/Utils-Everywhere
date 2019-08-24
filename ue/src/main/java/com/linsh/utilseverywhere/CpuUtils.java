@@ -1,7 +1,8 @@
 package com.linsh.utilseverywhere;
 
 import android.os.Build;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 /**
  * <pre>

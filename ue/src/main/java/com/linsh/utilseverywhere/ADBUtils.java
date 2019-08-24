@@ -4,13 +4,14 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 
 import com.linsh.utilseverywhere.module.CommandResult;
 
 import java.util.Set;
+
+import androidx.annotation.NonNull;
 
 /**
  * <pre>

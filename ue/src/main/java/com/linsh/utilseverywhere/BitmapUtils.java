@@ -24,7 +24,6 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
-import android.support.annotation.FloatRange;
 import android.view.View;
 
 import java.io.BufferedInputStream;
@@ -36,6 +35,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import androidx.annotation.FloatRange;
 
 /**
  * <pre>

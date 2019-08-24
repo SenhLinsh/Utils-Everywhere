@@ -11,8 +11,6 @@ import android.os.Build;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.annotation.RequiresPermission;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
@@ -23,6 +21,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import androidx.annotation.RequiresPermission;
+import androidx.fragment.app.Fragment;
 
 /**
  * <pre>

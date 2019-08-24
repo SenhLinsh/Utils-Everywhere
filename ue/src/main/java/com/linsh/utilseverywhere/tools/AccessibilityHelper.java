@@ -2,12 +2,13 @@ package com.linsh.utilseverywhere.tools;
 
 import android.accessibilityservice.AccessibilityService;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * <pre>

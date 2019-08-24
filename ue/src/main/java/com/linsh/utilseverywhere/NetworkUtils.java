@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
-import android.support.annotation.RequiresPermission;
 import android.telephony.TelephonyManager;
 
 import java.lang.reflect.Method;
@@ -13,6 +12,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+
+import androidx.annotation.RequiresPermission;
 
 /**
  * <pre>
