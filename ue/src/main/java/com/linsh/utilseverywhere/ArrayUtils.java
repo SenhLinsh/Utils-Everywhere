@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -103,9 +104,9 @@ public class ArrayUtils {
 
     /**
      * 将数组转化为集合形式<br/>
-     * 本质还是数组, 所有无法使用 {@link List#add(Object)}、{@link List#remove(int)}} 等改变集合长度的方法,
+     * 本质还是数组, 所有无法使用 {@link List#add(T)}、{@link List#remove(int)}} 等改变集合长度的方法,
      * 使用后会抛出异常<br/>
-     * 如果需要改变集合长度等操作, 可使用 {@link #toList(Object[])} 方法, 转成集合
+     * 如果需要改变集合长度等操作, 可使用 {@link #toList(T[])} 方法, 转成集合
      *
      * @param array 指定的数组
      * @return 转化后得到的集合 (注意不能增删)
@@ -208,7 +209,19 @@ public class ArrayUtils {
      * @return 格式化的数组形式的字符串
      */
     public static String toString(Object[] array) {
-        return Arrays.toString(array);
+        if (array == null)
+            return "null";
+        int iMax = array.length - 1;
+        if (iMax == -1)
+            return "[]";
+        StringBuilder b = new StringBuilder();
+        b.append('[');
+        for (int i = 0; ; i++) {
+            b.append(toString(array[i]));
+            if (i == iMax)
+                return b.append(']').toString();
+            b.append(", ");
+        }
     }
 
     /**
@@ -219,26 +232,33 @@ public class ArrayUtils {
      */
     public static String toString(Object array) {
         if (array == null) return "null";
-        if (array instanceof int[]) {
-            return Arrays.toString((int[]) array);
-        } else if (array instanceof long[]) {
-            return Arrays.toString((long[]) array);
-        } else if (array instanceof short[]) {
-            return Arrays.toString((short[]) array);
-        } else if (array instanceof char[]) {
-            return Arrays.toString((char[]) array);
-        } else if (array instanceof byte[]) {
-            return Arrays.toString((byte[]) array);
-        } else if (array instanceof boolean[]) {
-            return Arrays.toString((boolean[]) array);
-        } else if (array instanceof float[]) {
-            return Arrays.toString((float[]) array);
-        } else if (array instanceof double[]) {
-            return Arrays.toString((double[]) array);
-        } else if (array instanceof Object[]) {
-            return Arrays.toString((Object[]) array);
-        } else {
-            return "not an array";
+        if (array.getClass().isArray()) {
+            if (array instanceof int[]) {
+                return Arrays.toString((int[]) array);
+            } else if (array instanceof long[]) {
+                return Arrays.toString((long[]) array);
+            } else if (array instanceof short[]) {
+                return Arrays.toString((short[]) array);
+            } else if (array instanceof char[]) {
+                return Arrays.toString((char[]) array);
+            } else if (array instanceof byte[]) {
+                return Arrays.toString((byte[]) array);
+            } else if (array instanceof boolean[]) {
+                return Arrays.toString((boolean[]) array);
+            } else if (array instanceof float[]) {
+                return Arrays.toString((float[]) array);
+            } else if (array instanceof double[]) {
+                return Arrays.toString((double[]) array);
+            } else if (array instanceof Object[]) {
+                return toString((Object[]) array);
+            } else {
+                return "not an array";
+            }
+        } else if (array instanceof Iterator) {
+            return ListUtils.toString((Iterator) array);
+        } else if (array instanceof Iterable) {
+            return ListUtils.toString((Iterable) array);
         }
+        return array.toString();
     }
 }

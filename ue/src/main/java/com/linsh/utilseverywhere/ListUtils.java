@@ -49,24 +49,20 @@ public class ListUtils {
     }
 
     /**
-     * 将指定的集合转成 String 集合, 即将集合的元素转成或抽取成 String
+     * 转换集合
      *
-     * @param list            源集合
-     * @param action 将元素转成 String 的可执行任务
-     * @return 新的 String 集合
+     * @param list   集合
+     * @param action 用于将元素T 转换元素R
+     * @return 转换后的集合
      */
-    public static <T> List<String> toStringList(List<T> list, Action<String, T> action) {
-        List<String> stringList = new ArrayList<>();
-
+    public static <R, T> List<R> convertList(List<T> list, Action<R, T> action) {
+        ArrayList<R> result = new ArrayList<>();
         if (list != null && action != null) {
             for (T t : list) {
-                String item = action.call(t);
-                if (item != null) {
-                    stringList.add(item);
-                }
+                result.add(action.call(t));
             }
         }
-        return stringList;
+        return result;
     }
 
     /**
@@ -86,50 +82,6 @@ public class ListUtils {
             builder.append(list.get(i));
         }
         return builder.toString();
-    }
-
-    /**
-     * 将集合转化成 int 数组
-     *
-     * @param list 指定的集合
-     * @return 转化后得到的 int 数组
-     */
-    public static int[] toIntArray(List<Integer> list) {
-        if (list == null) return null;
-        int[] array = new int[list.size()];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = list.get(i);
-        }
-        return array;
-    }
-
-    /**
-     * 将集合转化成 String 数组
-     *
-     * @param list 指定的集合
-     * @return 转化后得到的 String 数组
-     */
-    public static String[] toStringArray(List<String> list) {
-        if (list == null) return null;
-        String[] array = new String[list.size()];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = list.get(i);
-        }
-        return array;
-    }
-
-    /**
-     * 将集合转化成数组
-     *
-     * @param list  指定的集合
-     * @param <T>   泛型, 集合中的泛型或其父类
-     * @return 转化后得到的数组
-     */
-    public static <T> T[] toArray(List<? extends T> list) {
-        if (list == null) {
-            return null;
-        }
-        return (T[]) list.toArray();
     }
 
     /**
@@ -171,7 +123,17 @@ public class ListUtils {
         builder.append('[');
         for (; ; ) {
             Object element = iterator.next();
-            builder.append(element);
+            if (element == null) {
+                builder.append("null");
+            } else if (element instanceof Iterable) {
+                builder.append(toString((Iterable) element));
+            } else if (element instanceof Iterator) {
+                builder.append(toString((Iterator) element));
+            } else if (element.getClass().isArray()) {
+                builder.append(ArrayUtils.toString(element));
+            } else {
+                builder.append(element);
+            }
             if (!iterator.hasNext())
                 return builder.append(']').toString();
             builder.append(',').append(' ');
