@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -19,11 +18,6 @@ import androidx.core.content.ContextCompat;
  * </pre>
  */
 public class PermissionUtils {
-
-    /**
-     * 默认的请求码
-     */
-    private static final int REQUEST_CODE_PERMISSION = 666;
 
     private PermissionUtils() {
     }
@@ -67,12 +61,12 @@ public class PermissionUtils {
     /**
      * 检查权限, 如果不通过, 将自动请求该系统权限
      *
-     * @param activity   Activity
-     * @param permission 系统权限
-     * @param listener   权限回调
+     * @param activity    Activity
+     * @param permission  系统权限
+     * @param requestCode 请求码
      */
-    public static void checkAndRequestPermission(Activity activity, String permission, @Nullable PermissionListener listener) {
-        checkAndRequestPermissions(activity, new String[]{permission}, listener);
+    public static void checkOrRequestPermission(Activity activity, String permission, int requestCode) {
+        checkOrRequestPermissions(activity, new String[]{permission}, requestCode);
     }
 
     /**
@@ -80,18 +74,14 @@ public class PermissionUtils {
      *
      * @param activity    Activity
      * @param permissions 多个系统权限
-     * @param listener    权限回调
+     * @param requestCode 请求码
      */
-    public static void checkAndRequestPermissions(Activity activity, String[] permissions, @Nullable PermissionListener listener) {
+    public static void checkOrRequestPermissions(Activity activity, String[] permissions, int requestCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String[] requests = new String[permissions.length];
             int size = 0;
             for (String permission : permissions) {
-                if (checkPermission(permission)) {
-                    if (listener != null) listener.onGranted(permission);
-                } else if (isPermissionNeverAsked(activity, permission)) {
-                    if (listener != null) listener.onDenied(permission, true);
-                } else {
+                if (!checkPermission(permission) && isPermissionNeverAsked(activity, permission)) {
                     requests[size++] = permission;
                 }
             }
@@ -103,11 +93,7 @@ public class PermissionUtils {
                     newRequests = new String[size];
                     System.arraycopy(requests, 0, newRequests, 0, size);
                 }
-                requestPermissions(activity, newRequests, listener);
-            }
-        } else {
-            for (String permission : permissions) {
-                if (listener != null) listener.onBeforeAndroidM(permission);
+                requestPermissions(activity, newRequests, requestCode);
             }
         }
     }
@@ -115,12 +101,12 @@ public class PermissionUtils {
     /**
      * 申请系统权限
      *
-     * @param activity   Activity
-     * @param permission 系统权限
-     * @param listener   权限回调
+     * @param activity    Activity
+     * @param permission  系统权限
+     * @param requestCode 请求码
      */
-    public static void requestPermission(Activity activity, String permission, @Nullable PermissionListener listener) {
-        requestPermissions(activity, new String[]{permission}, listener);
+    public static void requestPermission(Activity activity, String permission, int requestCode) {
+        requestPermissions(activity, new String[]{permission}, requestCode);
     }
 
     /**
@@ -128,11 +114,11 @@ public class PermissionUtils {
      *
      * @param activity    Activity
      * @param permissions 系统权限
-     * @param listener    权限回调
+     * @param requestCode 请求码
      */
-    public static void requestPermissions(Activity activity, String[] permissions, @Nullable PermissionListener listener) {
+    public static void requestPermissions(Activity activity, String[] permissions, int requestCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ActivityCompat.requestPermissions(activity, permissions, REQUEST_CODE_PERMISSION);
+            ActivityCompat.requestPermissions(activity, permissions, requestCode);
         }
     }
 
@@ -159,15 +145,13 @@ public class PermissionUtils {
      */
     public static void onRequestPermissionsResult(Activity activity, int requestCode, @NonNull String[] permissions,
                                                   @NonNull int[] grantResults, @NonNull PermissionListener listener) {
-        if (REQUEST_CODE_PERMISSION == requestCode) {
-            for (int i = 0; i < permissions.length; i++) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    listener.onGranted(permissions[i]);
-                } else if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[i])) {
-                    listener.onDenied(permissions[i], false);
-                } else {
-                    listener.onDenied(permissions[i], true);
-                }
+        for (int i = 0; i < permissions.length; i++) {
+            if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                listener.onGranted(permissions[i]);
+            } else if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[i])) {
+                listener.onDenied(permissions[i], false);
+            } else {
+                listener.onDenied(permissions[i], true);
             }
         }
     }
