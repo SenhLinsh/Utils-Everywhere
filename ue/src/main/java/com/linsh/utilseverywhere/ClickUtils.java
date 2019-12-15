@@ -8,6 +8,7 @@ package com.linsh.utilseverywhere;
  *    desc   : 工具类: 点击事件相关
  * </pre>
  */
+@Deprecated
 public class ClickUtils {
 
     private static long lastClickTime;
