@@ -81,7 +81,7 @@ public class PermissionUtils {
             String[] requests = new String[permissions.length];
             int size = 0;
             for (String permission : permissions) {
-                if (!checkPermission(permission) && isPermissionNeverAsked(activity, permission)) {
+                if (!checkPermission(permission) && !isPermissionNeverAsked(activity, permission)) {
                     requests[size++] = permission;
                 }
             }
