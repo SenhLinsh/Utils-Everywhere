@@ -105,6 +105,7 @@ public class ResourceUtils {
             BufferedReader br = new BufferedReader(in);
             String line;
             while ((line = br.readLine()) != null) {
+                if (s.length() > 0) s.append("\n");
                 s.append(line);
             }
             return s.toString();
@@ -187,6 +188,7 @@ public class ResourceUtils {
             BufferedReader br = new BufferedReader(in);
             String line;
             while ((line = br.readLine()) != null) {
+                if (s.length() > 0) s.append("\n");
                 s.append(line);
             }
             return s.toString();
