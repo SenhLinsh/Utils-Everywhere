@@ -148,9 +148,7 @@ public class ClassUtils {
     public static Object newInstance(Class<?> clazz, boolean accessible)
             throws IllegalAccessException, InstantiationException,
             NoSuchMethodException, InvocationTargetException {
-        Constructor<?> constructor = clazz.getConstructor();
-        constructor.setAccessible(accessible);
-        return constructor.newInstance();
+        return newInstance(clazz, null, null, accessible);
     }
 
     /**
@@ -181,8 +179,7 @@ public class ClassUtils {
         for (int i = 0; i < args.length; i++) {
             parameterTypes[i] = args[i].getClass();
         }
-        return clazz.getConstructor(parameterTypes)
-                .newInstance(args);
+        return newInstance(clazz, parameterTypes, args);
     }
 
     /**
@@ -210,7 +207,6 @@ public class ClassUtils {
     public static Object newInstance(Class<?> clazz, Class[] parameterTypes, Object[] args)
             throws IllegalAccessException, InstantiationException,
             NoSuchMethodException, InvocationTargetException {
-        if (parameterTypes == null || args == null) return clazz.newInstance();
         return clazz.getConstructor(parameterTypes).newInstance(args);
     }
 
@@ -226,8 +222,7 @@ public class ClassUtils {
     public static Object newInstance(Class<?> clazz, Class[] parameterTypes, Object[] args, boolean accessible)
             throws IllegalAccessException, InstantiationException,
             NoSuchMethodException, InvocationTargetException {
-        if (parameterTypes == null || args == null) return clazz.newInstance();
-        Constructor<?> constructor = clazz.getConstructor(parameterTypes);
+        Constructor<?> constructor = clazz.getDeclaredConstructor(parameterTypes);
         constructor.setAccessible(accessible);
         return constructor.newInstance(args);
     }
