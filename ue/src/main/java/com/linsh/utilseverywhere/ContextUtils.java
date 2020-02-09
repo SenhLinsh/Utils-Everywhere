@@ -1,7 +1,9 @@
 package com.linsh.utilseverywhere;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Application;
+import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +31,19 @@ public class ContextUtils {
     }
 
     static void init(Context context) {
-        sAppContext = context.getApplicationContext();
+        try {
+            sAppContext = context.getApplicationContext();
+        } catch (Exception ignored) {
+        }
+        if (sAppContext == null) {
+            if (context instanceof Activity) {
+                sAppContext = ((Activity) context).getBaseContext();
+            } else if (context instanceof Service) {
+                sAppContext = ((Service) context).getBaseContext();
+            } else {
+                sAppContext = context;
+            }
+        }
     }
 
     /**

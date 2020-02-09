@@ -21,6 +21,7 @@ public class Utils {
      * @param context Context 对象
      */
     public static void init(Context context) {
+        if (context == null) return;
         ContextUtils.init(context);
         HandlerUtils.init(context);
     }
