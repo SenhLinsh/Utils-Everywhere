@@ -32,6 +32,23 @@ public class ListUtils {
     }
 
     /**
+     * 将不同泛型的来源集合元素添加到目标集合
+     *
+     * @param dest   目标集合
+     * @param src    来源集合
+     * @param action 用于将元素T 转换元素R
+     * @return 目标集合
+     */
+    public static <R, T, L extends List<R>> L addAll(L dest, List<T> src, Action<R, T> action) {
+        if (dest != null && src != null && action != null) {
+            for (T t : src) {
+                dest.add(action.call(t));
+            }
+        }
+        return dest;
+    }
+
+    /**
      * 反转集合
      *
      * @param list 集合
