@@ -20,6 +20,6 @@ public class FileSize {
     }
 
     public static float formatByte(long size, @Unit.FileSizeDef int unit) {
-        return format(size, B, unit);
+        return format(size, unit, B);
     }
 }
