@@ -65,8 +65,16 @@ public class PermissionUtils {
      * @param permission  系统权限
      * @param requestCode 请求码
      */
-    public static void checkOrRequestPermission(Activity activity, String permission, int requestCode) {
-        checkOrRequestPermissions(activity, new String[]{permission}, requestCode);
+    public static boolean checkOrRequestPermission(Activity activity, String permission, int requestCode) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkPermission(permission)) {
+                return true;
+            }
+            if (!isPermissionNeverAsked(activity, permission)) {
+                requestPermission(activity, permission, requestCode);
+            }
+        }
+        return false;
     }
 
     /**
@@ -76,7 +84,7 @@ public class PermissionUtils {
      * @param permissions 多个系统权限
      * @param requestCode 请求码
      */
-    public static void checkOrRequestPermissions(Activity activity, String[] permissions, int requestCode) {
+    public static boolean checkOrRequestPermissions(Activity activity, String[] permissions, int requestCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String[] requests = new String[permissions.length];
             int size = 0;
@@ -94,8 +102,12 @@ public class PermissionUtils {
                     System.arraycopy(requests, 0, newRequests, 0, size);
                 }
                 requestPermissions(activity, newRequests, requestCode);
+                return false;
+            } else {
+                return true;
             }
         }
+        return false;
     }
 
     /**

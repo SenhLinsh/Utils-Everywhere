@@ -1190,7 +1190,7 @@ public class BitmapUtils {
      *
      * @param bitmap      Bitmap 图片
      * @param output      图片文件
-     * @param maxFileSize 最大文件尺寸
+     * @param maxFileSize 最大文件尺寸, 单位: KB
      * @return true 为保存成功; false 为失败
      */
     public static boolean saveBitmap(Bitmap bitmap, File output, int maxFileSize) {
@@ -1202,7 +1202,7 @@ public class BitmapUtils {
      *
      * @param bitmap      Bitmap 图片
      * @param output      图片文件
-     * @param maxFileSize 最大文件尺寸
+     * @param maxFileSize 最大文件尺寸, 单位: KB
      * @param recycle     是否回收所处理的原 Bitmap 对象
      * @return true 为保存成功; false 为失败
      */
