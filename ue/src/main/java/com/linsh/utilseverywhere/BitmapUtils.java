@@ -1207,7 +1207,24 @@ public class BitmapUtils {
      * @return true 为保存成功; false 为失败
      */
     public static boolean saveBitmap(Bitmap bitmap, File output, int maxFileSize, boolean recycle) {
+        return saveBitmap(bitmap, output, maxFileSize, 10, recycle);
+    }
+
+    /**
+     * 将 Bitmap 保存为图片文件, 如果尺寸过大, 将对图片进行压缩处理
+     *
+     * @param bitmap          Bitmap 图片
+     * @param output          图片文件
+     * @param maxFileSize     最大文件尺寸, 单位: KB
+     * @param qualityInterval 压缩时图片质量递减的间隔, 质量将根据该间隔从 100 递减直到文件尺寸符合要求或为质量为 0. 间隔范围控制在 1 - 50
+     * @param recycle         是否回收所处理的原 Bitmap 对象
+     * @return true 为保存成功; false 为失败
+     */
+    public static boolean saveBitmap(Bitmap bitmap, File output, int maxFileSize, int qualityInterval, boolean recycle) {
         if (output == null || output.isDirectory()) return false;
+        // 校验 qualityInterval
+        if (qualityInterval < 1) qualityInterval = 1;
+        else if (qualityInterval > 50) qualityInterval = 50;
 
         Bitmap.CompressFormat format = Bitmap.CompressFormat.JPEG;
         if (output.getPath().endsWith(".png")) format = Bitmap.CompressFormat.PNG;
@@ -1215,12 +1232,16 @@ public class BitmapUtils {
         int quality = 100;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(format, quality, baos);
-
-        while (baos.toByteArray().length / 1024 > maxFileSize) { // 循环判断如果压缩后图片是否大于maxMemmorrySize,大于继续压缩
-            baos.reset(); // 重置baos即让下一次的写入覆盖之前的内容
-            quality = Math.max(0, quality - 10);//图片质量每次减少10
-            bitmap.compress(format, quality, baos); // 将压缩后的图片保存到baos中
-            if (quality == 0) // 如果图片的质量已降到最低则，不再进行压缩
+        // 循环判断如果压缩后图片是否大于 maxFileSize, 大于继续压缩
+        while (baos.toByteArray().length / 1024 > maxFileSize) {
+            // 重置baos即让下一次的写入覆盖之前的内容
+            baos.reset();
+            // 图片质量每次递减 qualityInterval
+            quality = Math.max(0, quality - qualityInterval);
+            // 将压缩后的图片保存到baos中
+            bitmap.compress(format, quality, baos);
+            // 如果图片的质量已降到最低则, 不再进行压缩
+            if (quality == 0)
                 break;
         }
         if (recycle) {
