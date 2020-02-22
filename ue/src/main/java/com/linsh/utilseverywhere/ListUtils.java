@@ -22,6 +22,20 @@ public class ListUtils {
     }
 
     /**
+     * 读取集合元素
+     * <p>
+     * 可有效避免空指针, 索引越界的问题, 出现以上问题将返回 null
+     *
+     * @param list  集合
+     * @param index 元素索引
+     */
+    public static <T> T get(List<T> list, int index) {
+        if (list == null) return null;
+        if (index >= list.size()) return null;
+        return list.get(index);
+    }
+
+    /**
      * 判断集合是否为空
      *
      * @param list 集合
