@@ -8,12 +8,7 @@ package com.linsh.utilseverywhere.interfaces;
  *    desc   :
  * </pre>
  */
-public interface Consumer<T> {
+public interface Function<R, P> {
 
-    /**
-     * 消费给定的值
-     *
-     * @param t 被消费的值
-     */
-    void accept(T t);
+    R call(P p);
 }

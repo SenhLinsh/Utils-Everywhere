@@ -1,6 +1,6 @@
 package com.linsh.utilseverywhere;
 
-import com.linsh.utilseverywhere.interfaces.Action;
+import com.linsh.utilseverywhere.interfaces.Function;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -50,13 +50,13 @@ public class ListUtils {
      *
      * @param dest   目标集合
      * @param src    来源集合
-     * @param action 用于将元素T 转换元素R
+     * @param function 用于将元素T 转换元素R
      * @return 目标集合
      */
-    public static <R, T, L extends List<R>> L addAll(L dest, List<T> src, Action<R, T> action) {
-        if (dest != null && src != null && action != null) {
+    public static <R, T, L extends List<R>> L addAll(L dest, List<T> src, Function<R, T> function) {
+        if (dest != null && src != null && function != null) {
             for (T t : src) {
-                dest.add(action.call(t));
+                dest.add(function.call(t));
             }
         }
         return dest;
@@ -83,14 +83,14 @@ public class ListUtils {
      * 转换集合
      *
      * @param list   集合
-     * @param action 用于将元素T 转换元素R
+     * @param function 用于将元素T 转换元素R
      * @return 转换后的集合
      */
-    public static <R, T> List<R> convertList(List<T> list, Action<R, T> action) {
+    public static <R, T> List<R> convertList(List<T> list, Function<R, T> function) {
         ArrayList<R> result = new ArrayList<>();
-        if (list != null && action != null) {
+        if (list != null && function != null) {
             for (T t : list) {
-                result.add(action.call(t));
+                result.add(function.call(t));
             }
         }
         return result;
