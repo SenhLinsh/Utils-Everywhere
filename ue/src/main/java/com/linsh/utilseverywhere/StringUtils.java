@@ -226,7 +226,7 @@ public class StringUtils {
     }
 
     /**
-     * 获取中文空格 (宽度和中文字符一致)
+     * 获取中文空格 (宽度和中文字符一致), 在字符串中可以用 \u3000 表示
      *
      * @param length 空格数
      * @return 中文空格字符串
