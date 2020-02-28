@@ -48,8 +48,8 @@ public class ListUtils {
     /**
      * 将不同泛型的来源集合元素添加到目标集合
      *
-     * @param dest   目标集合
-     * @param src    来源集合
+     * @param dest     目标集合
+     * @param src      来源集合
      * @param function 用于将元素T 转换元素R
      * @return 目标集合
      */
@@ -82,11 +82,11 @@ public class ListUtils {
     /**
      * 转换集合
      *
-     * @param list   集合
+     * @param list     集合
      * @param function 用于将元素T 转换元素R
      * @return 转换后的集合
      */
-    public static <R, T> List<R> convertList(List<T> list, Function<R, T> function) {
+    public static <R, T> List<R> convertList(List<? extends T> list, Function<R, T> function) {
         ArrayList<R> result = new ArrayList<>();
         if (list != null && function != null) {
             for (T t : list) {
