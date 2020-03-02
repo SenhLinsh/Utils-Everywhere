@@ -26,6 +26,8 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.view.View;
 
+import androidx.annotation.FloatRange;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -35,8 +37,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import androidx.annotation.FloatRange;
 
 /**
  * <pre>
@@ -116,6 +116,8 @@ public class BitmapUtils {
      * @return Bitmap 对象
      */
     public static Bitmap from(Drawable drawable) {
+        if (drawable == null)
+            return null;
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
             if (bitmapDrawable.getBitmap() != null) {
