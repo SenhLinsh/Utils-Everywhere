@@ -118,23 +118,37 @@ public class BitmapUtils {
     public static Bitmap from(Drawable drawable) {
         if (drawable == null)
             return null;
+        return from(drawable, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+    }
+
+    /**
+     * Drawable 转 Bitmap
+     *
+     * @param drawable Drawable 对象
+     * @param width    对于无法确定宽高的 Drawable, 建议将宽高传入进来
+     * @param height   对于无法确定宽高的 Drawable, 建议将宽高传入进来
+     * @return Bitmap 对象
+     */
+    public static Bitmap from(Drawable drawable, int width, int height) {
+        if (drawable == null)
+            return null;
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
             if (bitmapDrawable.getBitmap() != null) {
                 return bitmapDrawable.getBitmap();
             }
         }
-        Bitmap bitmap;
-        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1,
-                    drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
-        } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
-                    drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
+        if (width <= 0 || height <= 0) {
+            width = height = 1;
         }
+        Bitmap bitmap = Bitmap.createBitmap(width, height,
+                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(bitmap);
+        Rect bounds = drawable.getBounds();
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
+        // 恢复原有的 bounds
+        drawable.setBounds(bounds);
         return bitmap;
     }
 

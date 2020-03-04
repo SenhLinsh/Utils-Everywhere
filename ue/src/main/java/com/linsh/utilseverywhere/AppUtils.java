@@ -9,11 +9,11 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import java.io.File;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * <pre>
@@ -41,7 +41,6 @@ public class AppUtils {
     public static boolean isServiceRunning(String serviceClassName) {
         ActivityManager activityManager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
-
         for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
             if (runningServiceInfo.service.getClassName().equals(serviceClassName)) {
                 return true;
