@@ -59,46 +59,6 @@ public class BitmapUtils {
         return ContextUtils.get();
     }
 
-    @Deprecated
-    public static Bitmap getBitmap(int resId) {
-        return from(resId);
-    }
-
-    @Deprecated
-    public static Bitmap getBitmap(Drawable drawable) {
-        return from(drawable);
-    }
-
-    @Deprecated
-    public static Bitmap getBitmap(byte[] bytes) {
-        return from(bytes);
-    }
-
-    @Deprecated
-    public static Bitmap getBitmap(byte[] bytes, int offset, int length, int reqWidth, int reqHeight) {
-        return from(bytes, offset, length, reqWidth, reqHeight);
-    }
-
-    @Deprecated
-    public static Bitmap getBitmap(View view) {
-        return from(view);
-    }
-
-    @Deprecated
-    public static Bitmap getBitmap(File file) {
-        return from(file);
-    }
-
-    @Deprecated
-    public static Bitmap getBitmap(File file, int maxWidth, int maxHeight) {
-        return from(file, maxWidth, maxHeight);
-    }
-
-    @Deprecated
-    public static Bitmap getBitmap(InputStream is, int maxWidth, int maxHeight) {
-        return from(is, maxWidth, maxHeight);
-    }
-
     /**
      * 读取资源文件中图片
      *

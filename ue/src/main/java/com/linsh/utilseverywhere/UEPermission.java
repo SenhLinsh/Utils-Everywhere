@@ -28,8 +28,6 @@ import androidx.core.content.ContextCompat;
  */
 public class UEPermission {
 
-    public static final int REQUEST_CODE = 666;
-
     private UEPermission() {
     }
 
@@ -86,6 +84,22 @@ public class UEPermission {
         public static void request(Activity activity, @IntRange(from = 0) int requestCode) {
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.CAMERA}, requestCode);
+        }
+
+        /**
+         * 检查相机权限, 如果检查未通过, 则自动请求权限
+         *
+         * @param activity    Activity
+         * @param requestCode 请求码
+         * @return 检查通过返回 true, 检查未通过返回 false
+         */
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        public static boolean checkOrRequest(Activity activity, @IntRange(from = 0) int requestCode) {
+            if (check()) {
+                return true;
+            }
+            request(activity, requestCode);
+            return false;
         }
 
         /**
@@ -193,6 +207,22 @@ public class UEPermission {
         }
 
         /**
+         * 检查麦克风权限, 如果检查未通过, 则自动请求权限
+         *
+         * @param activity    Activity
+         * @param requestCode 请求码
+         * @return 检查通过返回 true, 检查未通过返回 false
+         */
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        public static boolean checkOrRequest(Activity activity, @IntRange(from = 0) int requestCode) {
+            if (check()) {
+                return true;
+            }
+            request(activity, requestCode);
+            return false;
+        }
+
+        /**
          * 检查 Activity 中 onRequestPermissionResult() 回调的结果, 是否获取到该权限
          *
          * @return 是否获取到该权限
@@ -243,6 +273,23 @@ public class UEPermission {
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                             Manifest.permission.READ_EXTERNAL_STORAGE}, requestCode);
+        }
+
+        /**
+         * 检查文件读写权限, 如果检查未通过, 则自动请求权限
+         *
+         * @param activity    Activity
+         * @param requestCode 请求码
+         * @return 检查通过返回 true, 检查未通过返回 false
+         */
+        public static boolean checkOrRequest(Activity activity, @IntRange(from = 0) int requestCode) {
+            if (check()) {
+                return true;
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                request(activity, requestCode);
+            }
+            return false;
         }
 
         /**

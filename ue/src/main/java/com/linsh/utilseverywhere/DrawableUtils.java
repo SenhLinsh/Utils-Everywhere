@@ -60,7 +60,7 @@ public class DrawableUtils {
      * @return Bitmap 对象
      */
     public static Bitmap toBitmap(Drawable drawable) {
-        return BitmapUtils.getBitmap(drawable);
+        return BitmapUtils.from(drawable);
     }
 
     /**

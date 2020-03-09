@@ -201,30 +201,4 @@ public class ScreenUtils {
     public static void setScreenOrientation(Activity activity, int orientation) {
         activity.setRequestedOrientation(orientation);
     }
-
-    /**
-     * see {@link ViewUtils#getLocationOnScreen(View)}
-     */
-    @Deprecated
-    public static int[] getLocationOnScreen(View view) {
-        int[] location = new int[2];
-        view.getLocationOnScreen(location);
-        return location;
-    }
-
-    /**
-     * see {@link ViewUtils#getLocationXOnScreen(View)}
-     */
-    @Deprecated
-    public static int getLocationXOnScreen(View view) {
-        return getLocationOnScreen(view)[0];
-    }
-
-    /**
-     * see {@link ViewUtils#getLocationYOnScreen(View)}
-     */
-    @Deprecated
-    public static int getLocationYOnScreen(View view) {
-        return getLocationOnScreen(view)[1];
-    }
 }

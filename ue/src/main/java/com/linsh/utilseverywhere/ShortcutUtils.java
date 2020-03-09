@@ -14,8 +14,11 @@ import android.os.Parcelable;
  *    github : https://github.com/SenhLinsh
  *    date   : 2017/11/13
  *    desc   : 工具类: 快捷方式 相关
+ *
+ *          该工具类存在部分问题, 需要后期优化, 目前仅供参考
  * </pre>
  */
+@Deprecated
 public class ShortcutUtils {
 
     private ShortcutUtils() {

@@ -39,19 +39,6 @@ public class ClassUtils {
     }
 
     /**
-     * @see ClassUtils#getClass(String)
-     */
-    @Deprecated
-    public static Class<?> getReflectedClass(String className) {
-        try {
-            return getClass(className);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
      * 获取类的字节码对象 (反射)
      *
      * @param className 类名
@@ -59,61 +46,6 @@ public class ClassUtils {
      */
     public static Class<?> getClass(String className) throws ClassNotFoundException {
         return Class.forName(className);
-    }
-
-    /**
-     * 获取无参构造的类的实例 (反射)
-     *
-     * @param className 类名
-     * @return 类实例, 如果该类不存在或获取失败则返回 null
-     */
-    @Deprecated
-    public static Object getInstance(String className) {
-        try {
-            return newInstance(className);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * @see ClassUtils#newInstance(Class)
-     */
-    @Deprecated
-    public static Object getInstance(Class<?> clazz) {
-        try {
-            return newInstance(clazz);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * @see ClassUtils#newInstance(String, Object...)
-     */
-    @Deprecated
-    public static Object getInstance(String className, Object... args) {
-        try {
-            return newInstance(className, args);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * @see ClassUtils#newInstance(String, Class[], Object[])
-     */
-    @Deprecated
-    public static Object getInstance(String className, Class[] parameterTypes, Object[] args) {
-        try {
-            return newInstance(className, parameterTypes, args);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     /**
@@ -518,40 +450,10 @@ public class ClassUtils {
     }
 
     /**
-     * 获取指定字节码对象中泛型(首个)的类型
+     * 获取已确定泛型的类对象所确定的泛型
      *
-     * @param clazz 字节码对象
-     * @return 泛型类型
-     */
-    @Deprecated
-    public static Type getGenericType(Class<?> clazz) {
-        return getGenericType(clazz, 0);
-    }
-
-    /**
-     * 获取指定字节码对象中第 index 个泛型的类型
-     *
-     * @param clazz 字节码对象
-     * @param index 索引
-     * @return 泛型类型
-     */
-    @Deprecated
-    public static Type getGenericType(Class<?> clazz, int index) {
-        Type genericSuperclass = clazz.getGenericSuperclass();
-        if (genericSuperclass instanceof ParameterizedType) {
-            Type[] actualTypeArguments = ((ParameterizedType) genericSuperclass).getActualTypeArguments();
-            if (actualTypeArguments.length > index) {
-                return actualTypeArguments[index];
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 获取指定字节码对象对于目标字节码的泛型的实现类型
-     *
-     * @param clazz     字节码对象
-     * @param typeClass 目标字节码对象
+     * @param clazz     已确定该泛型的类对象
+     * @param typeClass 待确定泛型的类对象
      * @return 泛型类型, 如果没有实现该泛型则返回 null
      */
     public static <T> Type getGenericType(Class<? extends T> clazz, Class<T> typeClass) {
@@ -559,11 +461,11 @@ public class ClassUtils {
     }
 
     /**
-     * 获取指定字节码对象对于目标字节码的泛型的实现类型
+     * 获取已确定泛型的类对象所确定的泛型
      *
-     * @param clazz     字节码对象
-     * @param typeClass 目标字节码对象
-     * @param index     泛型在目标字节码对象中的索引
+     * @param clazz     已确定该泛型的类对象
+     * @param typeClass 待确定泛型的类对象
+     * @param index     该泛型在 typeClass 定义的泛型中的索引 (有时候可能会定义多个泛型)
      * @return 泛型类型, 如果没有实现该泛型则返回 null
      */
     public static <T> Type getGenericType(Class<? extends T> clazz, Class<T> typeClass, int index) {

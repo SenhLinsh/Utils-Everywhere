@@ -7,11 +7,11 @@ import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import androidx.annotation.RequiresPermission;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.RequiresPermission;
 
 /**
  * <pre>
@@ -28,18 +28,6 @@ public class DeviceUtils {
 
     private static Context getContext() {
         return ContextUtils.get();
-    }
-
-    /**
-     * 判断是否为手机设备
-     *
-     * @return true 为手机, false 为平板
-     * @deprecated 该方法已过时, 请使用 {@link DeviceUtils#getScreenSizeType()} 自行判断屏幕大小
-     */
-    @Deprecated
-    public static boolean isPhoneDevice() {
-        return (getContext().getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) < Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     /**

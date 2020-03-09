@@ -9,6 +9,9 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.linsh.utilseverywhere.interfaces.Consumer;
 import com.linsh.utilseverywhere.module.unit.FileSize;
 import com.linsh.utilseverywhere.module.unit.Unit;
@@ -28,9 +31,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 /**
  * <pre>
@@ -64,7 +64,7 @@ public class FileUtils {
     private static boolean checkFile(File file) {
         if (file == null) return false;
         boolean isStorageFile = file.getAbsolutePath().contains(Environment.getExternalStorageDirectory().getAbsolutePath());
-        return !isStorageFile || isSdAvailable() && checkPermissionAndRequest();
+        return !isStorageFile || isSdAvailable() && checkPermission();
     }
 
     private static boolean isSdAvailable() {
@@ -127,17 +127,34 @@ public class FileUtils {
      * 检查文件权限 (即外部存储的读写权限)
      * <p>如果没有权限, 将自动发起权限申请</p>
      *
+     * @param activity Activity
      * @return true 为拥有权限, false 为没有权限
      */
-    public static boolean checkPermissionAndRequest() {
+    public static boolean checkPermissionOrRequest(Activity activity) {
         boolean check = checkPermission();
         if (!check) {
-            Activity activity = ActivityLifecycleUtils.getTopActivitySafely();
-            if (activity != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    ActivityCompat.requestPermissions(activity,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
-                }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ActivityCompat.requestPermissions(activity,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+            }
+        }
+        return check;
+    }
+
+    /**
+     * 检查文件权限 (即外部存储的读写权限)
+     * <p>如果没有权限, 将自动发起权限申请</p>
+     *
+     * @param activity    Activity
+     * @param requestCode 请求码
+     * @return true 为拥有权限, false 为没有权限
+     */
+    public static boolean checkPermissionOrRequest(Activity activity, int requestCode) {
+        boolean check = checkPermission();
+        if (!check) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ActivityCompat.requestPermissions(activity,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
             }
         }
         return check;
@@ -184,30 +201,6 @@ public class FileUtils {
     }
 
     //================================================ 读取文件 ================================================//
-
-    /**
-     * see {@link #readAsStringBuilder(File)}
-     */
-    @Deprecated
-    public static StringBuilder readFile(File file) {
-        return readAsStringBuilder(file);
-    }
-
-    /**
-     * see {@link #readAsStringBuilder(String)}
-     */
-    @Deprecated
-    public static StringBuilder readFile(String filePath) {
-        return readAsStringBuilder(filePath);
-    }
-
-    /**
-     * see {@link #readAsStringBuilder(File, String)}
-     */
-    @Deprecated
-    public static StringBuilder readFile(File file, String charsetName) {
-        return readAsStringBuilder(file, charsetName);
-    }
 
     /**
      * 读取文件, 默认编码 UTF-8
@@ -303,22 +296,6 @@ public class FileUtils {
     }
 
     /**
-     * see: {@link #readLines(File)}
-     */
-    @Deprecated
-    public static List<String> readFileAsList(File file) {
-        return readLines(file);
-    }
-
-    /**
-     * see: {@link #readLines(File, String)}
-     */
-    @Deprecated
-    public static List<String> readFileAsList(File file, String charsetName) {
-        return readLines(file, charsetName);
-    }
-
-    /**
      * 以集合形式读取文件, 每一行为一个元素, 默认编码 UTF-8
      *
      * @param file 文件对象
@@ -364,104 +341,6 @@ public class FileUtils {
     }
 
     //================================================ 写入文件 ================================================//
-
-    /**
-     * see: {@link #writeString(File, String)}
-     */
-    @Deprecated
-    public static boolean writeFile(File file, String content) {
-        return writeString(file, content);
-    }
-
-    /**
-     * see: {@link #writeString(File, String, boolean)}
-     */
-    @Deprecated
-    public static boolean writeFile(File file, String content, boolean append) {
-        return writeString(file, content, append);
-    }
-
-    /**
-     * see: {@link #writeString(File, String, boolean, boolean)}
-     */
-    @Deprecated
-    public static boolean writeFile(File file, String content, boolean append, boolean endWithNewLine) {
-        return writeString(file, content, append, endWithNewLine);
-    }
-
-    /**
-     * see: {@link #writeLines(File, List)}
-     */
-    @Deprecated
-    public static boolean writeFile(File file, List<String> contents) {
-        return writeLines(file, contents);
-    }
-
-    /**
-     * see: {@link #writeLines(File, String...)}
-     */
-    @Deprecated
-    public static boolean writeFile(File file, String... contents) {
-        return writeLines(file, contents);
-    }
-
-    /**
-     * see: {@link #writeLines(File, List, boolean)}
-     */
-    @Deprecated
-    public static boolean writeFile(File file, List<String> contents, boolean append) {
-        return writeLines(file, contents, append);
-    }
-
-    /**
-     * see: {@link #writeCustom(File, Consumer)}
-     */
-    @Deprecated
-    public static boolean writeFile(File file, Consumer<BufferedWriter> consumer) {
-        return writeCustom(file, consumer);
-    }
-
-    /**
-     * see: {@link #writeCustom(File, Consumer, boolean)}
-     */
-    @Deprecated
-    public static boolean writeFile(File file, Consumer<BufferedWriter> consumer, boolean append) {
-        return writeCustom(file, consumer, append);
-    }
-
-    /**
-     * see: {@link #writeStream(File, InputStream)}
-     */
-    @Deprecated
-    public static boolean writeFile(File file, InputStream is) {
-        return writeStream(file, is);
-    }
-
-    /**
-     * see: {@link #writeStream(File, InputStream, boolean)}
-     */
-    @Deprecated
-    public static boolean writeFile(File file, InputStream is, boolean append) {
-        return writeStream(file, is, append);
-    }
-
-
-    /**
-     * see: {@link #writeBytes(File, byte[])}
-     */
-    @Deprecated
-    public static boolean writeFile(File file, byte[] bytes) {
-        return writeBytes(file, bytes);
-    }
-
-    /**
-     * see: {@link #writeBytes(File, byte[], boolean)}
-     */
-    @Deprecated
-    public static boolean writeFile(final File file, final byte[] bytes, final boolean append) {
-        return writeBytes(file, bytes, append);
-    }
-
     /**
      * 将字符串写入文件
      *
@@ -807,7 +686,7 @@ public class FileUtils {
             return false;
 
         try {
-            return writeFile(destFile, new FileInputStream(srcFile), false) && !(isMove && !deleteFile(srcFile));
+            return writeStream(destFile, new FileInputStream(srcFile), false) && !(isMove && !deleteFile(srcFile));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
