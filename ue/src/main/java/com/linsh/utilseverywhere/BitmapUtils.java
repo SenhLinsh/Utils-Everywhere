@@ -416,27 +416,27 @@ public class BitmapUtils {
      * 缩放图片
      *
      * @param src         源 Bitmap 对象
-     * @param scaleWidth  宽的缩放比例
-     * @param scaleHeight 高的缩放比例
+     * @param widthScale  宽的缩放比例
+     * @param heightScale 高的缩放比例
      * @return 缩放处理后生成的新的 Bitmap 对象
      */
-    public static Bitmap scale(Bitmap src, float scaleWidth, float scaleHeight) {
-        return scale(src, scaleWidth, scaleHeight, false);
+    public static Bitmap scale(Bitmap src, float widthScale, float heightScale) {
+        return scale(src, widthScale, heightScale, false);
     }
 
     /**
      * 缩放图片
      *
      * @param src         源 Bitmap 对象
-     * @param scaleWidth  宽的缩放比例
-     * @param scaleHeight 高的缩放比例
+     * @param widthScale  宽的缩放比例
+     * @param heightScale 高的缩放比例
      * @param recycle     是否回收所处理的原 Bitmap 对象
      * @return 缩放处理后生成的新的 Bitmap 对象
      */
-    public static Bitmap scale(Bitmap src, float scaleWidth, float scaleHeight, boolean recycle) {
+    public static Bitmap scale(Bitmap src, float widthScale, float heightScale, boolean recycle) {
         if (isEmptyBitmap(src)) return null;
         Matrix matrix = new Matrix();
-        matrix.setScale(scaleWidth, scaleHeight);
+        matrix.setScale(widthScale, heightScale);
         Bitmap ret = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
         if (recycle && !src.isRecycled()) src.recycle();
         return ret;
