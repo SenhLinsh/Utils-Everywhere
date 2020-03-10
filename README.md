@@ -32,23 +32,14 @@
  ```
 
 ##### 2.1.2 在module里面添加依赖
-新版 Gradle 依赖 (Android Gradle 3.0.0 之后):
 
  ```
  dependencies {
-     implementation 'com.github.SenhLinsh:Utils-Everywhere:2.1.0'
+     implementation 'com.github.SenhLinsh:Utils-Everywhere:3.0.0'
  }
   ```
 
-旧版 Gradle 依赖 (Android Gradle 3.0.0 之前):
-
- ```
- dependencies {
-     compile 'com.github.SenhLinsh:Utils-Everywhere:2.1.0'
- }
-  ```
-
-### 2.2 初始化
+### 2.2 初始化 (可选)
 在使用本项目中工具类的方法之前，请先进行初始化
 
  ```
@@ -80,8 +71,7 @@
 | EncodeUtils | 编码解码相关 | - |
 | EncryptUtils | 加密解密相关 | - |
 | FileUtils | 文件或文件夹操作相关，如读写文件、操作文件等 | - |
-| FragmentUtils | Fragment 相关 | - |
-| HandlerUtils | 默认开启一个 Handler，方便在各个地方随时执行主线程任务 | - |
+| HandlerUtils | 默认开启一个绑定主线程的 Handler，方便在各个地方随时执行主线程任务 | - |
 | IntentUtils | Intent 意图相关 | - |
 | IOUtils | IO 流对象相关，用于简化关闭流操作 | - |
 | KeyboardUtils | 操作系统键盘 | - |
@@ -99,13 +89,16 @@
 | ResourceUtils | 简化资源的对象的获取（资源 id、图片、字符串、颜色等） | - |
 | ScreenUtils | 屏幕相关，如获取屏幕尺寸、方向、截屏等 | - |
 | SDCardUtils | 外部储存相关，如检查 SD 卡，获取根目录、容量等 | - |
+| Shapes | 构建 shape 形状相关 | - |
 | SharedPreferenceUtils | 简化 SharedPreference 配置的保存和获取 | - |
 | ShellUtils | Shell 命令相关 | - |
-| ShortcutUtils | 桌面快捷方式相关 | - |
 | StringUtils | 字符串处理 | - |
+| ThreadUtils | 线程相关 | - |
 | ToastUtils | Toast 相关，简化调用 | - |
+| UEPermission | 权限操作简化 | - |
 | UnitConverseUtils | 单位转换相关，如 dp、px、sp 之间的转换 | - |
-| XmlUtils | XML 相关，目前有生成 Shape 和状态选择器 | - |
+| UriUtils | Uri 相关 | - |
+| ViewUtils | View 相关 | - |
 | ZipUtils | 压缩相关 | - |
 
 ### 3.2 辅助类（tools）
@@ -114,7 +107,6 @@
 | - | - | - |
 | AccessibilityHelper | 简化 AccessibilityService 的使用 | - |
 | ColorSelectorBuilder | 构建颜色选择器的辅助类 | - |
-| ContactsEditor | 对系统联系人 (Contacts) 进行增删改的帮助类 | - |
 | CursorHelper | 简化 Cursor 对象的操作 | - |
 | DrawableSelectorBuilder | 构建图像选择器的辅助类 | - |
 | IntentBuilder | Intent 构建辅助类，链式编程简化 Intent 构建，传递数据时可隐藏 key 的使用 | - |
