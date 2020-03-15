@@ -234,13 +234,14 @@ public class DateUtils {
         return new SimpleDateFormat(pattern, Locale.getDefault()).format(date);
     }
 
-
     /**
      * 解析时间字符串, 字符串需要符合格式: [yyyy-MM-dd HH:mm:ss]
      *
      * @param date 时间字符串
      * @return 时间, 解析失败返回 -1
+     * @deprecated 请使用 {@link DateUtils#parseDateTime(String)}
      */
+    @Deprecated
     public static long parse(String date) {
         return parse(date, "yyyy-MM-dd HH:mm:ss");
     }
@@ -260,6 +261,26 @@ public class DateUtils {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    /**
+     * 解析日期字符串, 字符串需要符合格式: [yyyy-MM-dd]
+     *
+     * @param date 时间字符串
+     * @return 时间, 解析失败返回 -1
+     */
+    public static long parseDate(String date) {
+        return parse(date, "yyyy-MM-dd");
+    }
+
+    /**
+     * 解析日期字符串, 字符串需要符合格式: [yyyy-MM-dd HH:mm:ss]
+     *
+     * @param date 时间字符串
+     * @return 时间, 解析失败返回 -1
+     */
+    public static long parseDateTime(String date) {
+        return parse(date, "yyyy-MM-dd HH:mm:ss");
     }
 
     /**
