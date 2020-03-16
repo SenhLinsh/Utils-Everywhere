@@ -97,8 +97,9 @@ public class StringUtils {
      */
     public static boolean isBlank(String string) {
         if (string == null) return true;
+        char c;
         for (int i = 0, len = string.length(); i < len; ++i) {
-            if (!Character.isWhitespace(string.charAt(i))) {
+            if (!Character.isWhitespace(c = string.charAt(i)) || c == '\uFEFF') {
                 return false;
             }
         }
@@ -157,6 +158,38 @@ public class StringUtils {
      */
     public static String emptyToDefault(String str, String defaultEmptyStr) {
         return str == null || str.length() == 0 ? defaultEmptyStr : str;
+    }
+
+
+    /**
+     * 修剪头尾的空格字符
+     *
+     * @param string 字符串
+     * @return 返回修剪之后的字符串, 如果为 null 则返回 null
+     */
+    public static String trim(String string) {
+        if (string == null) return null;
+        return string.trim();
+    }
+
+    /**
+     * 修剪头尾的空白字符, 包括空格, 缩进, 回车等
+     *
+     * @param string 字符串
+     * @return 返回修剪之后的字符串, 如果为 null 则返回 null
+     */
+    public static String trimBlank(String string) {
+        if (string == null) return null;
+        int len = string.length();
+        int st = 0;
+        char c;
+        while ((st < len) && (Character.isWhitespace(c = string.charAt(st)) || c == '\uFEFF')) {
+            st++;
+        }
+        while ((st < len) && (Character.isWhitespace(c = string.charAt(len - 1)) || c == '\uFEFF')) {
+            len--;
+        }
+        return ((st > 0) || (len < string.length())) ? string.substring(st, len) : string;
     }
 
     /**
