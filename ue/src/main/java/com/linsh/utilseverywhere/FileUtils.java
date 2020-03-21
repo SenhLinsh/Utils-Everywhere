@@ -9,9 +9,6 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.linsh.utilseverywhere.interfaces.Consumer;
 import com.linsh.utilseverywhere.module.unit.FileSize;
 import com.linsh.utilseverywhere.module.unit.Unit;
@@ -31,6 +28,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 /**
  * <pre>
@@ -277,7 +277,7 @@ public class FileUtils {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (fileContent.length() != 0) {
-                    fileContent.append("\r\n");
+                    fileContent.append(StringUtils.lineSeparator());
                 }
                 fileContent.append(line);
             }
@@ -341,6 +341,7 @@ public class FileUtils {
     }
 
     //================================================ 写入文件 ================================================//
+
     /**
      * 将字符串写入文件
      *

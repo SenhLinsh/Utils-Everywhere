@@ -18,6 +18,10 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
 
+    private static final String LINE_SEPARATOR = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+            ? System.lineSeparator() : System.getProperty("line.separator");
+    private static final char CHINESE_SPACE_CHAR = '\u3000';
+
     private StringUtils() {
     }
 
@@ -259,22 +263,31 @@ public class StringUtils {
     }
 
     /**
-     * 获取中文空格 (宽度和中文字符一致), 在字符串中可以用 \u3000 表示
+     * 中文空格 (宽度和中文字符一致), 在字符串中可以用 \u3000 表示
      *
-     * @param length 空格数
      * @return 中文空格字符串
      */
-    public static String getChineseSpaces(int length) {
-        if (length < 100) {
+    public static String chineseSpace() {
+        return String.valueOf(CHINESE_SPACE_CHAR);
+    }
+
+    /**
+     * 获取中文空格 (宽度和中文字符一致), 在字符串中可以用 \u3000 表示
+     *
+     * @param num 空格数
+     * @return 中文空格字符串
+     */
+    public static String getChineseSpaces(int num) {
+        if (num < 100) {
             String spaces = "";
-            for (int i = 0; i < length; i++) {
-                spaces += (char) 12288;
+            for (int i = 0; i < num; i++) {
+                spaces += CHINESE_SPACE_CHAR;
             }
             return spaces;
         } else {
             StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < length; i++) {
-                builder.append((char) 12288);
+            for (int i = 0; i < num; i++) {
+                builder.append(CHINESE_SPACE_CHAR);
             }
             return builder.toString();
         }
@@ -286,10 +299,6 @@ public class StringUtils {
      * @return 换行符
      */
     public static String lineSeparator() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return System.lineSeparator();
-        } else {
-            return System.getProperty("line.separator");
-        }
+        return LINE_SEPARATOR;
     }
 }
