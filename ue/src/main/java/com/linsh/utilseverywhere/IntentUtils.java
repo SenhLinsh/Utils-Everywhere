@@ -75,10 +75,10 @@ public class IntentUtils {
      *
      * @param context  当前 Activity
      * @param activity 需要启动的 Activity 类
-     * @param data     需要传递的 String 类型数据, 获取数据时使用 {@link IntentBuilder#getStringExtra(Activity, int)} , 传入对应的 index 即可
+     * @param data     需要传递的 String 类型数据, 获取数据时使用 {@link IntentBuilder#getStringExtra(int)} , 传入对应的 index 即可
      */
     public static void startActivityWithData(Activity context, Class<?> activity, String... data) {
-        IntentBuilder build = IntentBuilder.build(activity);
+        IntentBuilder build = new IntentBuilder(activity);
         for (int i = 0; i < data.length; i++) {
             build.putExtra(data[i], i);
         }
@@ -752,7 +752,6 @@ public class IntentUtils {
     public static void gotoAccessibilitySetting() {
         getContext().startActivity(getAccessibilitySettingIntent());
     }
-
 
 
     /**
