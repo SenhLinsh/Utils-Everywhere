@@ -6,12 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Parcelable;
 
+import androidx.fragment.app.Fragment;
+
 import com.linsh.utilseverywhere.ContextUtils;
-import com.linsh.utilseverywhere.interfaces.Convertible;
 
 import java.io.Serializable;
-
-import androidx.fragment.app.Fragment;
 
 /**
  * <pre>
@@ -26,8 +25,10 @@ import androidx.fragment.app.Fragment;
  */
 public class IntentBuilder {
 
-    private static final String INTENT_EXTRA_PREFIX = "intent_extra_prefix";
+    private static final String INTENT_EXTRA_PREFIX = "extra_";
+    private Context context;
     private Intent intent;
+    private int[] indexes = new int[8];
 
     public IntentBuilder() {
         intent = new Intent();
@@ -37,397 +38,207 @@ public class IntentBuilder {
         this.intent = intent;
     }
 
-    public IntentBuilder(Class<?> cls) {
-        intent = new Intent(getContext(), cls);
+    public IntentBuilder(Class<?> target) {
+        intent = new Intent(ContextUtils.get(), target);
     }
 
-    public static IntentBuilder build() {
-        return new IntentBuilder();
+    public IntentBuilder context(Context context) {
+        this.context = context;
+        return this;
     }
 
-    public static IntentBuilder build(Class<?> cls) {
-        return new IntentBuilder(cls);
+    public IntentBuilder target(Class<? extends Activity> activity) {
+        intent.setClass(ContextUtils.get(), activity);
+        return this;
     }
 
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 String 数据
-     *
-     * @param activity 当前 Activity
-     * @return 当前 Activity Intent 中的 String 数据
-     */
-    public static String getStringExtra(Activity activity) {
-        return getStringExtra(activity.getIntent());
+    public IntentBuilder target(String className) {
+        intent.setClassName(ContextUtils.get(), className);
+        return this;
     }
 
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 String 数据
-     */
-    public static String getStringExtra(Intent intent) {
-        return intent.getStringExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_string");
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 String 数据
-     *
-     * @param activity 当前 Activity
-     * @param index    如果传递多个 String 数据或者指定了 index, 则需要在这里指定与传递时一致的 index
-     * @return 当前 Activity Intent 中的 String 数据
-     */
-    public static String getStringExtra(Activity activity, int index) {
-        return getStringExtra(activity.getIntent(), index);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 String 数据
-     */
-    public static String getStringExtra(Intent intent, int index) {
-        return intent.getStringExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_string" + index);
-    }
-
-    /**
-     * 获取当前 Activity Intent 中的 String 数据
-     *
-     * @param activity 当前 Activity
-     * @param key      指定的 key
-     * @return 当前 Activity Intent 中的 String 数据
-     */
-    public static String getStringExtra(Activity activity, String key) {
-        return activity.getIntent().getStringExtra(key);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 int 数据
-     *
-     * @param activity 当前 Activity
-     * @return 当前 Activity Intent 中的 int 数据
-     */
-    public static int getIntExtra(Activity activity) {
-        return getIntExtra(activity.getIntent());
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 int 数据
-     */
-    public static int getIntExtra(Intent intent) {
-        return intent.getIntExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_int", 0);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 int 数据
-     *
-     * @param activity 当前 Activity
-     * @param index    如果传递多个 int 数据或者指定了 index, 则需要在这里指定与传递时一致的 index
-     * @return 当前 Activity Intent 中的 int 数据
-     */
-    public static int getIntExtra(Activity activity, int index) {
-        return getIntExtra(activity.getIntent(), index);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 int 数据
-     */
-    public static int getIntExtra(Intent intent, int index) {
-        return intent.getIntExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_int" + index, 0);
-    }
-
-    /**
-     * 获取当前 Activity Intent 中的 int 数据
-     *
-     * @param activity 当前 Activity
-     * @param key      指定的 key
-     * @return 当前 Activity Intent 中的 int 数据
-     */
-    public static int getIntExtra(Activity activity, String key) {
-        return activity.getIntent().getIntExtra(key, 0);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 boolean 数据
-     *
-     * @param activity 当前 Activity
-     * @param defValue 无数据时的默认值
-     * @return 当前 Activity Intent 中的 boolean 数据
-     */
-    public static boolean getBooleanExtra(Activity activity, boolean defValue) {
-        return getBooleanExtra(activity.getIntent(), defValue);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 boolean 数据
-     */
-    public static boolean getBooleanExtra(Intent intent, boolean defValue) {
-        return intent.getBooleanExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_boolean", defValue);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 boolean 数据
-     *
-     * @param activity 当前 Activity
-     * @param index    如果传递多个 boolean 数据或者指定了 index, 则需要在这里指定与传递时一致的 index
-     * @param defValue 无数据时的默认值
-     * @return 当前 Activity Intent 中的 boolean 数据
-     */
-    public static boolean getBooleanExtra(Activity activity, int index, boolean defValue) {
-        return getBooleanExtra(activity.getIntent(), index, defValue);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 boolean 数据
-     */
-    public static boolean getBooleanExtra(Intent intent, int index, boolean defValue) {
-        return intent.getBooleanExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_boolean" + index, defValue);
-    }
-
-    /**
-     * 获取当前 Activity Intent 中的 boolean 数据
-     *
-     * @param activity 当前 Activity
-     * @param key      指定的 key
-     * @param defValue 无数据时的默认值
-     * @return 当前 Activity Intent 中的 boolean 数据
-     */
-    public static boolean getBooleanExtra(Activity activity, String key, boolean defValue) {
-        return activity.getIntent().getBooleanExtra(key, defValue);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 long 数据
-     *
-     * @param activity 当前 Activity
-     * @return 当前 Activity Intent 中的 long 数据
-     */
-    public static long getLongExtra(Activity activity) {
-        return getLongExtra(activity.getIntent());
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 long 数据
-     */
-    public static long getLongExtra(Intent intent) {
-        return intent.getLongExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_long", 0);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 long 数据
-     *
-     * @param activity 当前 Activity
-     * @param index    如果传递多个 long 数据或者指定了 index, 则需要在这里指定与传递时一致的 index
-     * @return 当前 Activity Intent 中的 long 数据
-     */
-    public static long getLongExtra(Activity activity, int index) {
-        return getLongExtra(activity.getIntent(), index);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 long 数据
-     */
-    public static long getLongExtra(Intent intent, int index) {
-        return intent.getLongExtra(IntentBuilder.INTENT_EXTRA_PREFIX + "_long" + index, 0);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 JsonBean 数据
-     *
-     * @param activity 当前 Activity
-     * @param clazz    JsonBean 的类, 用于 Json 的解析和转换
-     * @return 当前 Activity Intent 中的 JsonBean 数据
-     */
-    public static <T> T getJsonBeanExtra(Activity activity, Convertible<String, T> convertible, Class<T> clazz) {
-        return getJsonBeanExtra(activity, convertible, INTENT_EXTRA_PREFIX + "_" + clazz.getSimpleName());
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 JsonBean 数据
-     *
-     * @param activity    当前 Activity
-     * @param convertible 用于解析 json 为 Bean 类
-     * @param clazz       JsonBean 的类, 用于 Json 的解析和转换
-     * @param index       如果传递多个 JsonBean 数据或者指定了 index, 则需要在这里指定与传递时一致的 index
-     * @return 当前 Activity Intent 中的 JsonBean 数据
-     */
-    public static <T> T getJsonBeanExtra(Activity activity, Convertible<String, T> convertible, Class<?> clazz, int index) {
-        return getJsonBeanExtra(activity, convertible, INTENT_EXTRA_PREFIX + "_" + clazz.getSimpleName() + index);
-    }
-
-    /**
-     * 获取通过 {@link IntentBuilder} 传递过来的 JsonBean 数据
-     *
-     * @param activity    当前 Activity
-     * @param convertible 用于解析 json 为 Bean 类
-     * @param key         指定的 key
-     * @return 当前 Activity Intent 中的 JsonBean 数据
-     */
-    public static <T> T getJsonBeanExtra(Activity activity, Convertible<String, T> convertible, String key) {
-        String stringExtra = activity.getIntent().getStringExtra(key);
-        if (stringExtra == null) return null;
-        return convertible.convert(stringExtra);
-    }
-
-    public IntentBuilder setClass(Class<?> cls) {
-        intent.setClass(getContext(), cls);
+    public IntentBuilder target(String packageName, String className) {
+        intent.setClassName(packageName, className);
         return this;
     }
 
     public IntentBuilder putExtra(String value) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_string", value);
+        intent.putExtra(INTENT_EXTRA_PREFIX + "String@" + indexes[0]++, value);
+        return this;
+    }
+
+    public IntentBuilder putExtras(String... values) {
+        for (int i = 0; i < values.length; i++) {
+            intent.putExtra(INTENT_EXTRA_PREFIX + "String@" + indexes[0]++, values[i]);
+        }
         return this;
     }
 
     public String getStringExtra() {
-        return intent.getStringExtra(INTENT_EXTRA_PREFIX + "_string");
-    }
-
-    public IntentBuilder putExtra(String value, int index) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_string" + index, value);
-        return this;
+        return getStringExtra(0);
     }
 
     public String getStringExtra(int index) {
-        return intent.getStringExtra(INTENT_EXTRA_PREFIX + "_string" + index);
-    }
-
-    public IntentBuilder putExtra(String value, String key) {
-        intent.putExtra(key, value);
-        return this;
-    }
-
-    public String getStringExtra(String key) {
-        return intent.getStringExtra(key);
-    }
-
-    public IntentBuilder putExtra(boolean value) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_boolean", value);
-        return this;
-    }
-
-    public boolean getBooleanExtra(boolean defaultValue) {
-        return intent.getBooleanExtra(INTENT_EXTRA_PREFIX + "_boolean", defaultValue);
-    }
-
-    public IntentBuilder putExtra(boolean value, int index) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_boolean" + index, value);
-        return this;
-    }
-
-    public boolean getBooleanExtra(int index, boolean defaultValue) {
-        return intent.getBooleanExtra(INTENT_EXTRA_PREFIX + "_boolean" + index, defaultValue);
-    }
-
-    public IntentBuilder putExtra(boolean value, String key) {
-        intent.putExtra(key, value);
-        return this;
-    }
-
-    public boolean getBooleanExtra(String key, boolean defaultValue) {
-        return intent.getBooleanExtra(key, defaultValue);
+        return intent.getStringExtra(INTENT_EXTRA_PREFIX + "String@" + index);
     }
 
     public IntentBuilder putExtra(int value) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_int", value);
+        intent.putExtra(INTENT_EXTRA_PREFIX + "int@" + indexes[1]++, value);
+        return this;
+    }
+
+    public IntentBuilder putExtras(int... values) {
+        for (int i = 0; i < values.length; i++) {
+            intent.putExtra(INTENT_EXTRA_PREFIX + "int@" + indexes[1]++, values[i]);
+        }
         return this;
     }
 
     public int getIntExtra() {
-        return intent.getIntExtra(INTENT_EXTRA_PREFIX + "_int", 0);
-    }
-
-    public IntentBuilder putExtra(int value, int index) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_int" + index, value);
-        return this;
+        return getIntExtra(0);
     }
 
     public int getIntExtra(int index) {
-        return intent.getIntExtra(INTENT_EXTRA_PREFIX + "_int" + index, 0);
-    }
-
-    public IntentBuilder putExtra(int value, String key) {
-        intent.putExtra(key, value);
-        return this;
-    }
-
-    public int getIntExtra(String key) {
-        return intent.getIntExtra(key, 0);
+        return intent.getIntExtra(INTENT_EXTRA_PREFIX + "int@" + index, 0);
     }
 
     public IntentBuilder putExtra(long value) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_long", value);
+        intent.putExtra(INTENT_EXTRA_PREFIX + "long@" + indexes[2]++, value);
+        return this;
+    }
+
+    public IntentBuilder putExtras(long... values) {
+        for (int i = 0; i < values.length; i++) {
+            intent.putExtra(INTENT_EXTRA_PREFIX + "long@" + indexes[2]++, values[i]);
+        }
         return this;
     }
 
     public long getLongExtra() {
-        return intent.getLongExtra(INTENT_EXTRA_PREFIX + "_long", 0);
-    }
-
-    public IntentBuilder putExtra(long value, int index) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_long" + index, value);
-        return this;
+        return getLongExtra(0);
     }
 
     public long getLongExtra(int index) {
-        return intent.getLongExtra(INTENT_EXTRA_PREFIX + "_long" + index, 0);
-    }
-
-    public IntentBuilder putExtra(long value, String key) {
-        intent.putExtra(key, value);
-        return this;
-    }
-
-    public long getLongExtra(String key) {
-        return intent.getLongExtra(key, 0);
+        return intent.getLongExtra(INTENT_EXTRA_PREFIX + "long@" + index, 0);
     }
 
     public IntentBuilder putExtra(float value) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_float", value);
+        intent.putExtra(INTENT_EXTRA_PREFIX + "float@" + indexes[3]++, value);
         return this;
     }
 
-    public IntentBuilder putExtra(float value, int index) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_float" + index, value);
+    public IntentBuilder putExtras(float... values) {
+        for (int i = 0; i < values.length; i++) {
+            intent.putExtra(INTENT_EXTRA_PREFIX + "float@" + indexes[3]++, values[i]);
+        }
         return this;
     }
 
-    public IntentBuilder putExtra(float value, String key) {
-        intent.putExtra(key, value);
-        return this;
+    public float getFloatExtra() {
+        return getFloatExtra(0);
+    }
+
+    public float getFloatExtra(int index) {
+        return intent.getFloatExtra(INTENT_EXTRA_PREFIX + "float@" + index, 0);
     }
 
     public IntentBuilder putExtra(double value) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_double", value);
+        intent.putExtra(INTENT_EXTRA_PREFIX + "double@" + indexes[4]++, value);
         return this;
     }
 
-    public IntentBuilder putExtra(double value, int index) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_double" + index, value);
+    public IntentBuilder putExtras(double... values) {
+        for (int i = 0; i < values.length; i++) {
+            intent.putExtra(INTENT_EXTRA_PREFIX + "double@" + indexes[4]++, values[i]);
+        }
         return this;
     }
 
-    public IntentBuilder putExtra(double value, String key) {
-        intent.putExtra(key, value);
+    public double getDoubleExtra() {
+        return getDoubleExtra(0);
+    }
+
+    public double getDoubleExtra(int index) {
+        return intent.getDoubleExtra(INTENT_EXTRA_PREFIX + "double@" + index, 0);
+    }
+
+    public IntentBuilder putExtra(boolean value) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "boolean@" + indexes[5]++, value);
         return this;
     }
 
-    public IntentBuilder putExtra(String[] values, String key) {
-        intent.putExtra(key, values);
+    public IntentBuilder putExtras(boolean... values) {
+        for (int i = 0; i < values.length; i++) {
+            intent.putExtra(INTENT_EXTRA_PREFIX + "boolean@" + indexes[5]++, values[i]);
+        }
         return this;
     }
 
-    public IntentBuilder putExtra(Serializable serializable) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_" + serializable.getClass().getSimpleName(), serializable);
+    public boolean getBooleanExtra() {
+        return getBooleanExtra(0);
+    }
+
+    public boolean getBooleanExtra(int index) {
+        return intent.getBooleanExtra(INTENT_EXTRA_PREFIX + "boolean@" + index, false);
+    }
+
+    public IntentBuilder putExtra(Serializable value) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "Serializable@" + indexes[6]++, value);
         return this;
     }
 
-    public IntentBuilder putExtra(Parcelable parcelable) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_" + parcelable.getClass().getSimpleName(), parcelable);
+    public IntentBuilder putExtras(Serializable... values) {
+        for (int i = 0; i < values.length; i++) {
+            intent.putExtra(INTENT_EXTRA_PREFIX + "Serializable@" + indexes[6]++, values[i]);
+        }
         return this;
     }
 
-    public <T> IntentBuilder putJsonExtra(T bean, Convertible<T, String> convertible) {
-        intent.putExtra(INTENT_EXTRA_PREFIX + "_" + bean.getClass().getSimpleName(), convertible.convert(bean));
+    public Serializable getSerializableExtra() {
+        return getSerializableExtra(0);
+    }
+
+    public Serializable getSerializableExtra(int index) {
+        return intent.getSerializableExtra(INTENT_EXTRA_PREFIX + "Serializable@" + index);
+    }
+
+    public IntentBuilder putExtra(Parcelable value) {
+        intent.putExtra(INTENT_EXTRA_PREFIX + "Parcelable@" + indexes[7]++, value);
         return this;
     }
 
-    public <T> IntentBuilder putJsonExtra(T bean, Convertible<T, String> convertible, String key) {
-        intent.putExtra(key, convertible.convert(bean));
+    public IntentBuilder putExtras(Parcelable... values) {
+        for (int i = 0; i < values.length; i++) {
+            intent.putExtra(INTENT_EXTRA_PREFIX + "Parcelable@" + indexes[7]++, values[i]);
+        }
+        return this;
+    }
+
+    public Parcelable getParcelableExtra() {
+        return getParcelableExtra(0);
+    }
+
+    public Parcelable getParcelableExtra(int index) {
+        return intent.getParcelableExtra(INTENT_EXTRA_PREFIX + "Parcelable@" + index);
+    }
+
+    public IntentBuilder putExtra(String key, Object value) {
+        if (value instanceof String)
+            intent.putExtra(key, (String) value);
+        else if (value instanceof Integer)
+            intent.putExtra(key, (int) value);
+        else if (value instanceof Long)
+            intent.putExtra(key, (long) value);
+        else if (value instanceof Float)
+            intent.putExtra(key, (float) value);
+        else if (value instanceof Double)
+            intent.putExtra(key, (double) value);
+        else if (value instanceof Parcelable)
+            intent.putExtra(key, (Parcelable) value);
+        else if (value instanceof Serializable)
+            intent.putExtra(key, (Serializable) value);
+        else
+            throw new IllegalArgumentException("不支持该类型的 Extra : " + value.getClass());
         return this;
     }
 
@@ -436,18 +247,17 @@ public class IntentBuilder {
         return this;
     }
 
+    public Uri getData() {
+        return intent.getData();
+    }
+
+    public IntentBuilder setPackage(String packageName) {
+        intent.setPackage(packageName);
+        return this;
+    }
+
     public IntentBuilder setAction(String action) {
         intent.setAction(action);
-        return this;
-    }
-
-    public IntentBuilder setClass(Context packageContext, Class<?> cls) {
-        intent.setClass(packageContext, cls);
-        return this;
-    }
-
-    public IntentBuilder setClassName(String packageName, String className) {
-        intent.setClassName(packageName, className);
         return this;
     }
 
@@ -481,8 +291,13 @@ public class IntentBuilder {
     }
 
     public void startActivity() {
-        newTask();
-        getContext().startActivity(intent);
+        if (context == null) {
+            context = ContextUtils.get();
+            newTask();
+        } else if (!(context instanceof Activity)) {
+            newTask();
+        }
+        context.startActivity(intent);
     }
 
     public void startActivity(Context context) {
@@ -510,10 +325,10 @@ public class IntentBuilder {
     }
 
     public void startService() {
-        getContext().startService(intent);
-    }
-
-    private static Context getContext() {
-        return ContextUtils.get();
+        if (context == null) {
+            context = ContextUtils.get();
+            newTask();
+        }
+        context.startService(intent);
     }
 }

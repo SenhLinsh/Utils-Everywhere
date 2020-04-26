@@ -14,6 +14,8 @@ public final class NumberUtils {
     }
 
     /**
+     * 格式化小数数值
+     *
      * @param num           数值
      * @param decimalPlaces 小数位数
      */
@@ -22,6 +24,8 @@ public final class NumberUtils {
     }
 
     /**
+     * 格式化小数数值
+     *
      * @param num           数值
      * @param decimalPlaces 小数位数
      * @param round         是否四舍五入, 如果为 false 则去掉多余位数
@@ -32,6 +36,8 @@ public final class NumberUtils {
 
 
     /**
+     * 格式化小数数值
+     *
      * @param num           数值
      * @param decimalPlaces 小数位数
      * @param round         是否四舍五入, 如果为 false 则去掉多余位数
