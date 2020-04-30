@@ -122,6 +122,23 @@ public class StringUtils {
     }
 
     /**
+     * 判断两个字符串是否相同
+     *
+     * @param str    需要进行对比的字符串
+     * @param others 作为对比的字符串 (可多个)
+     * @return 是否相同
+     */
+    public static boolean isAnyEquals(String str, String... others) {
+        if (others == null) return false;
+        for (String other : others) {
+            if (isEquals(str, other)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 判断两个字符串是否不同
      *
      * @param a 作为对比的字符串
