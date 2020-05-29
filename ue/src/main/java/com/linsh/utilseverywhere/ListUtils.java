@@ -4,6 +4,7 @@ import com.linsh.utilseverywhere.interfaces.Function;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,6 +20,16 @@ import java.util.List;
 public class ListUtils {
 
     private ListUtils() {
+    }
+
+    /**
+     * 创建一个集合, 并将所有参数作为元素添加到该集合中
+     *
+     * @param a 包含所有需要添加的元素的可变参数
+     * @return 创建的集合
+     */
+    public static <T> List<T> create(T... a) {
+        return new ArrayList<>(Arrays.asList(a));
     }
 
     /**
