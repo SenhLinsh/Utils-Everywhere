@@ -1,6 +1,6 @@
 package com.linsh.utilseverywhere;
 
-import com.linsh.utilseverywhere.interfaces.Function;
+import com.linsh.utilseverywhere.interfaces.Convertible;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -64,10 +64,10 @@ public class ListUtils {
      * @param function 用于将元素T 转换元素R
      * @return 目标集合
      */
-    public static <R, T, L extends List<R>> L addAll(L dest, List<T> src, Function<R, T> function) {
+    public static <F, T> List<T> addAll(List<T> dest, List<F> src, Convertible<F, T> function) {
         if (dest != null && src != null && function != null) {
-            for (T t : src) {
-                dest.add(function.call(t));
+            for (F from : src) {
+                dest.add(function.convert(from));
             }
         }
         return dest;
@@ -93,15 +93,15 @@ public class ListUtils {
     /**
      * 转换集合
      *
-     * @param list     集合
-     * @param function 用于将元素T 转换元素R
+     * @param list      集合
+     * @param converter 用于将元素T 转换元素R
      * @return 转换后的集合
      */
-    public static <R, T> List<R> convertList(List<? extends T> list, Function<R, T> function) {
-        ArrayList<R> result = new ArrayList<>();
-        if (list != null && function != null) {
-            for (T t : list) {
-                result.add(function.call(t));
+    public static <F, T> List<T> convertList(List<? extends F> list, Convertible<F, T> converter) {
+        ArrayList<T> result = new ArrayList<>();
+        if (list != null && converter != null) {
+            for (F from : list) {
+                result.add(converter.convert(from));
             }
         }
         return result;
@@ -140,6 +140,29 @@ public class ListUtils {
         }
         T[] array = (T[]) Array.newInstance(clazz, list.size());
         return list.toArray(array);
+    }
+
+    /**
+     * 将集合转化成数组
+     *
+     * @param list 指定的集合
+     * @param <F>  待转换集合的泛型
+     * @param <T>  转换目标数组的泛型
+     * @return 转化后得到的数组
+     */
+    public static <F, T> T[] toArray(List<? extends F> list, Convertible<F, T> convertible) {
+        if (list == null) {
+            return null;
+        }
+        if (convertible == null) {
+            throw new IllegalArgumentException("convertible can not be null");
+        }
+        Class type = (Class) ClassUtils.getGenericType(convertible.getClass(), Convertible.class, 1);
+        T[] array = (T[]) Array.newInstance(type, list.size());
+        for (int i = 0; i < list.size(); i++) {
+            array[i] = convertible.convert(list.get(i));
+        }
+        return array;
     }
 
     /**
