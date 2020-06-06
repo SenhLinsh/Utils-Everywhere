@@ -205,6 +205,12 @@ public class AppUtils {
 
     /**
      * 安装 APK 文件
+     * <p>
+     * 注:
+     * Android O 以上需要注册权限 {@link Manifest.permission#REQUEST_INSTALL_PACKAGES}
+     * <p>
+     * 判断权限:
+     * {@link PackageManager#canRequestPackageInstalls()}
      *
      * @param apkFile 指定的 APK 文件
      */

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -248,6 +249,12 @@ public class IntentUtils {
 
     /**
      * 获取跳转「安装应用」的意图
+     * <p>
+     * 注:
+     * Android O 以上需要注册权限 {@link Manifest.permission#REQUEST_INSTALL_PACKAGES}
+     * <p>
+     * 判断权限:
+     * {@link PackageManager#canRequestPackageInstalls()}
      *
      * @param apkFile APK 文件
      * @return 意图
@@ -444,6 +451,12 @@ public class IntentUtils {
 
     /**
      * 跳转:「安装应用」界面
+     * <p>
+     * 注:
+     * Android O 以上需要注册权限 {@link Manifest.permission#REQUEST_INSTALL_PACKAGES}
+     * <p>
+     * 判断权限:
+     * {@link PackageManager#canRequestPackageInstalls()}
      *
      * @param apkFile APK 文件
      */
