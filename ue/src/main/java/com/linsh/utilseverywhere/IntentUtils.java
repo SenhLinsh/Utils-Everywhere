@@ -759,6 +759,7 @@ public class IntentUtils {
      */
     private static void startActivity(Intent intent) {
         if (intent != null) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getContext().startActivity(intent);
         }
     }

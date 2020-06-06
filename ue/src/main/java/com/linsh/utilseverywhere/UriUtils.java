@@ -44,7 +44,7 @@ public final class UriUtils {
      */
     public static Uri file2Uri(@NonNull final File file) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            String authority = ContextUtils.getPackageName() + ".utilcode.provider";
+            String authority = ContextUtils.getPackageName() + ".file.provider";
             return FileProvider.getUriForFile(ContextUtils.get(), authority, file);
         } else {
             return Uri.fromFile(file);

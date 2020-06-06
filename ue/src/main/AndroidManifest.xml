@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.linsh.utilseverywhere">
 
-    <application
-        android:allowBackup="true">
+    <application android:allowBackup="true">
         <provider
             android:name=".FileProviderUtils$LshFileProvider"
-            android:authorities="${applicationId}.lshfileprovider"
+            android:authorities="${applicationId}.file.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/lsh_file_paths"/>
+                android:resource="@xml/ue_provider_paths" />
         </provider>
     </application>
 </manifest>
