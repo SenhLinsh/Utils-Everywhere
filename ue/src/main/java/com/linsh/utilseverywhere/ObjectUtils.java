@@ -60,12 +60,12 @@ public class ObjectUtils {
     }
 
     /**
-     * 检查非空, 否则返回默认值
+     * 检查对象为空时, 返回默认值
      *
      * @param value        检查值
      * @param defaultValue 默认值
      */
-    public static <T> T checkNotNull(T value, T defaultValue) {
+    public static <T> T nullToDefault(T value, T defaultValue) {
         return value != null ? value : defaultValue;
     }
 }
