@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <pre>
@@ -73,19 +75,69 @@ public class StreamUtils {
      * @param charsetName 字符集
      */
     public static String readAsString(InputStream inputStream, String charsetName) throws IOException {
-        StringBuilder fileContent = new StringBuilder();
+        return readAsStringBuilder(inputStream, charsetName).toString();
+    }
+
+    /**
+     * 以文本形式读流
+     *
+     * @param inputStream 输入流
+     */
+    public static StringBuilder readAsStringBuilder(InputStream inputStream) throws IOException {
+        return readAsStringBuilder(inputStream, DEFAULT_CHARSET);
+    }
+
+    /**
+     * 以文本形式读流
+     *
+     * @param inputStream 输入流
+     * @param charsetName 字符集
+     */
+    public static StringBuilder readAsStringBuilder(InputStream inputStream, String charsetName) throws IOException {
+        StringBuilder builder = new StringBuilder();
         BufferedReader reader = null;
         try {
-            InputStreamReader is = new InputStreamReader(inputStream, charsetName);
-            reader = new BufferedReader(is);
+            reader = new BufferedReader(new InputStreamReader(inputStream, charsetName));
             String line;
             while ((line = reader.readLine()) != null) {
-                if (fileContent.length() != 0) {
-                    fileContent.append(StringUtils.lineSeparator());
+                if (builder.length() != 0) {
+                    builder.append(StringUtils.lineSeparator());
                 }
-                fileContent.append(line);
+                builder.append(line);
             }
-            return fileContent.toString();
+            return builder;
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
+        }
+    }
+
+    /**
+     * 以文本行形式读流
+     *
+     * @param inputStream 输入流
+     */
+    public static List<String> readLines(InputStream inputStream) throws IOException {
+        return readLines(inputStream, DEFAULT_CHARSET);
+    }
+
+    /**
+     * 以文本行形式读流
+     *
+     * @param inputStream 输入流
+     * @param charsetName 字符集
+     */
+    public static List<String> readLines(InputStream inputStream, String charsetName) throws IOException {
+        ArrayList<String> lines = new ArrayList<>();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(inputStream, charsetName));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+            return lines;
         } finally {
             if (reader != null) {
                 reader.close();
@@ -113,6 +165,54 @@ public class StreamUtils {
     public static String readAsStringQuietly(InputStream inputStream, String charsetName) {
         try {
             return readAsString(inputStream, charsetName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 以文本形式读流
+     *
+     * @param inputStream 输入流
+     */
+    public static StringBuilder readAsStringBuilderQuietly(InputStream inputStream) {
+        return readAsStringBuilderQuietly(inputStream, DEFAULT_CHARSET);
+    }
+
+    /**
+     * 以文本形式读流
+     *
+     * @param inputStream 输入流
+     * @param charsetName 字符集
+     */
+    public static StringBuilder readAsStringBuilderQuietly(InputStream inputStream, String charsetName) {
+        try {
+            return readAsStringBuilder(inputStream, charsetName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 以文本行形式读流
+     *
+     * @param inputStream 输入流
+     */
+    public static List<String> readLinesQuietly(InputStream inputStream) {
+        return readLinesQuietly(inputStream, DEFAULT_CHARSET);
+    }
+
+    /**
+     * 以文本行形式读流
+     *
+     * @param inputStream 输入流
+     * @param charsetName 字符集
+     */
+    public static List<String> readLinesQuietly(InputStream inputStream, String charsetName) {
+        try {
+            return readLines(inputStream, charsetName);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -166,7 +266,7 @@ public class StreamUtils {
      * 将输入流写入到输出流
      *
      * @param inputStream  输入流
-     * @param outputStream 目标文件
+     * @param outputStream 输出流
      */
     public static void write(InputStream inputStream, OutputStream outputStream) throws IOException {
         ExceptionUtils.checkNotNull(inputStream, "inputStream == null");
@@ -186,6 +286,20 @@ public class StreamUtils {
         }
     }
 
+    /**
+     * 将文本写入到输出流
+     *
+     * @param content      文本
+     * @param outputStream 输出流
+     */
+    public static void write(String content, OutputStream outputStream) throws IOException {
+        try {
+            outputStream.write(content.getBytes());
+        } finally {
+            if (outputStream != null)
+                outputStream.close();
+        }
+    }
 
     /**
      * 将输入流写入到文件
@@ -209,10 +323,27 @@ public class StreamUtils {
     public static boolean writeQuietly(InputStream inputStream, File file, boolean append) {
         try {
             write(inputStream, file, append);
-        } catch (IOException e) {
+            return true;
+        } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
+        return false;
+    }
+
+    /**
+     * 将文本写入到输出流
+     *
+     * @param content      文本
+     * @param outputStream 输出流
+     * @return 是否成功
+     */
+    public static boolean writeQuietly(String content, OutputStream outputStream) {
+        try {
+            write(content, outputStream);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
