@@ -159,7 +159,7 @@ public class AppUtils {
      *
      * @return 当前 APP 的应用名称
      */
-    public String getAppName() {
+    public static String getAppName() {
         return getAppName(getPackageName());
     }
 
@@ -168,7 +168,7 @@ public class AppUtils {
      *
      * @return 指定 APP 的应用名称
      */
-    public String getAppName(@NonNull String packageName) {
+    public static String getAppName(@NonNull String packageName) {
         PackageManager pm = getContext().getPackageManager();
         try {
             ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
@@ -177,6 +177,28 @@ public class AppUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 获取应用 uid
+     */
+    public static int getUid() {
+        return getUid(getPackageName());
+    }
+
+    /**
+     * 获取应用 uid
+     *
+     * @param packageName 应用包名
+     */
+    public static int getUid(String packageName) {
+        PackageManager pm = getContext().getPackageManager();
+        try {
+            return pm.getApplicationInfo(packageName, 0).uid;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     /**

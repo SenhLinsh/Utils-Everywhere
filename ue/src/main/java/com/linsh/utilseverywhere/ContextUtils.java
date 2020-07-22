@@ -2,14 +2,18 @@ package com.linsh.utilseverywhere;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.media.AudioManager;
 import android.util.Log;
+import android.view.WindowManager;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -105,6 +109,13 @@ public class ContextUtils {
     }
 
     /**
+     * 获取 ContentResolver
+     */
+    public static ContentResolver getContentResolver() {
+        return get().getContentResolver();
+    }
+
+    /**
      * 获取 PackageManager, 在不方便获取 Context 的地方直接获取 PackageManager, 简化代码
      */
     public static PackageManager getPackageManager() {
@@ -112,10 +123,38 @@ public class ContextUtils {
     }
 
     /**
+     * 获取 ActivityManager
+     */
+    public static ActivityManager getActivityManager() {
+        return (ActivityManager) get().getSystemService(Context.ACTIVITY_SERVICE);
+    }
+
+    /**
+     * 获取 WindowManager
+     */
+    public static WindowManager getWindowManager() {
+        return (WindowManager) get().getSystemService(Context.WINDOW_SERVICE);
+    }
+
+    /**
+     * 获取 NotificationManager
+     */
+    public static NotificationManager getNotificationManager() {
+        return (NotificationManager) get().getSystemService(Context.NOTIFICATION_SERVICE);
+    }
+
+    /**
+     * 获取 AudioManager
+     */
+    public static AudioManager getAudioManager() {
+        return (AudioManager) get().getSystemService(Context.AUDIO_SERVICE);
+    }
+
+    /**
      * 启动 Activity
      */
     public static void startActivity(Intent intent) {
-        get().startActivity(intent);
+        get().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     /**
@@ -160,9 +199,5 @@ public class ContextUtils {
      */
     public static File getExternalCacheDir() {
         return get().getExternalCacheDir();
-    }
-
-    public static ContentResolver getContentResolver() {
-        return get().getContentResolver();
     }
 }
