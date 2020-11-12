@@ -265,6 +265,22 @@ public class AppUtils {
     }
 
     /**
+     * 判断是否是系统应用
+     *
+     * @param packageName 指定的 APP 的包名
+     */
+    public static boolean isSystemApp(String packageName) {
+        try {
+            PackageInfo info = getContext().getPackageManager().getPackageInfo(packageName, 0);
+            return info != null && info.applicationInfo != null
+                    && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
      * 启动指定的应用程序
      *
      * @param packageName 指定的 APP 的包名
