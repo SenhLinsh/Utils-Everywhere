@@ -68,4 +68,17 @@ public class ObjectUtils {
     public static <T> T nullToDefault(T value, T defaultValue) {
         return value != null ? value : defaultValue;
     }
+
+    /**
+     * 判断两个对象是否想等
+     *
+     * @param o1 对象1
+     * @param o2 对象2
+     * @return 是否想等
+     */
+    public static boolean isEqual(Object o1, Object o2) {
+        if (o1 == null)
+            return o2 == null;
+        return o1.equals(o2);
+    }
 }

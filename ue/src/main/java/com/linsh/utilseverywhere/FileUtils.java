@@ -9,6 +9,9 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.linsh.utilseverywhere.interfaces.Consumer;
 import com.linsh.utilseverywhere.module.unit.FileSize;
 import com.linsh.utilseverywhere.module.unit.Unit;
@@ -28,9 +31,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 /**
  * <pre>
@@ -769,7 +769,6 @@ public class FileUtils {
      */
     public static String getFileNameWithoutExtension(File file) {
         if (file == null) return null;
-
         return getFileNameWithoutExtension(file.getPath());
     }
 
@@ -801,7 +800,6 @@ public class FileUtils {
      */
     public static String getFileExtension(File file) {
         if (file == null) return null;
-
         return getFileExtension(file.getPath());
     }
 
@@ -818,6 +816,39 @@ public class FileUtils {
         int lastSep = filePath.lastIndexOf(File.separator);
         if (lastPoi == -1 || lastSep >= lastPoi) return "";
         return filePath.substring(lastPoi + 1);
+    }
+
+    /**
+     * 分割扩展名
+     *
+     * @param file 文件
+     * @return 返回长度为 2 的数组, 索引0 表示不带扩展名的文件名, 索引1 表示扩展名 (如果没有扩展名, 则为空字符串)
+     */
+    public static String[] splitFileExtension(File file) {
+        if (file == null) return null;
+        return splitFileExtension(file.getPath());
+    }
+
+    /**
+     * 分割扩展名
+     *
+     * @param filePath 文件路径
+     * @return 返回长度为 2 的数组, 索引0 表示不带扩展名的文件名, 索引1 表示扩展名 (如果没有扩展名, 则为空字符串)
+     */
+    public static String[] splitFileExtension(String filePath) {
+        if (TextUtils.isEmpty(filePath)) return null;
+
+        int lastPoi = filePath.lastIndexOf('.');
+        int lastSep = filePath.lastIndexOf(File.separator);
+        if (lastSep == -1) {
+            if (lastPoi == -1)
+                return new String[]{filePath, ""};
+            return new String[]{filePath.substring(0, lastPoi), filePath.substring(lastPoi + 1)};
+        }
+        if (lastPoi == -1 || lastSep > lastPoi) {
+            return new String[]{filePath.substring(lastSep + 1), ""};
+        }
+        return new String[]{filePath.substring(lastSep + 1, lastPoi), filePath.substring(lastPoi + 1)};
     }
 
     /**
