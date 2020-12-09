@@ -743,8 +743,6 @@ public class FileUtils {
      * @return 文件名
      */
     public static String getFileName(File file) {
-        if (file == null) return null;
-
         return getFileName(file.getPath());
     }
 
@@ -755,8 +753,6 @@ public class FileUtils {
      * @return 文件名
      */
     public static String getFileName(String filePath) {
-        if (TextUtils.isEmpty(filePath)) return filePath;
-
         int lastSep = filePath.lastIndexOf(File.separator);
         return lastSep == -1 ? filePath : filePath.substring(lastSep + 1);
     }
@@ -768,7 +764,6 @@ public class FileUtils {
      * @return 文件名
      */
     public static String getFileNameWithoutExtension(File file) {
-        if (file == null) return null;
         return getFileNameWithoutExtension(file.getPath());
     }
 
@@ -779,8 +774,6 @@ public class FileUtils {
      * @return 文件名
      */
     public static String getFileNameWithoutExtension(String filePath) {
-        if (TextUtils.isEmpty(filePath)) return filePath;
-
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
         if (lastSep == -1) {
@@ -799,7 +792,6 @@ public class FileUtils {
      * @return 文件扩展名
      */
     public static String getFileExtension(File file) {
-        if (file == null) return null;
         return getFileExtension(file.getPath());
     }
 
@@ -810,8 +802,6 @@ public class FileUtils {
      * @return 文件扩展名
      */
     public static String getFileExtension(String filePath) {
-        if (TextUtils.isEmpty(filePath)) return filePath;
-
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
         if (lastPoi == -1 || lastSep >= lastPoi) return "";
@@ -825,7 +815,6 @@ public class FileUtils {
      * @return 返回长度为 2 的数组, 索引0 表示不带扩展名的文件名, 索引1 表示扩展名 (如果没有扩展名, 则为空字符串)
      */
     public static String[] splitFileExtension(File file) {
-        if (file == null) return null;
         return splitFileExtension(file.getPath());
     }
 
@@ -836,8 +825,6 @@ public class FileUtils {
      * @return 返回长度为 2 的数组, 索引0 表示不带扩展名的文件名, 索引1 表示扩展名 (如果没有扩展名, 则为空字符串)
      */
     public static String[] splitFileExtension(String filePath) {
-        if (TextUtils.isEmpty(filePath)) return null;
-
         int lastPoi = filePath.lastIndexOf('.');
         int lastSep = filePath.lastIndexOf(File.separator);
         if (lastSep == -1) {
