@@ -202,46 +202,23 @@ public class BitmapUtils {
     public static Bitmap from(File file, int maxWidth, int maxHeight) {
         if (file == null || !file.exists() || !file.isFile())
             return null;
-
-        InputStream is = null;
-        try {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            is = new BufferedInputStream(new FileInputStream(file));
-            BitmapFactory.decodeStream(is, null, options);
-            options.inSampleSize = computeSampleSize(options, maxWidth, maxHeight);
-            options.inJustDecodeBounds = false;
-            return BitmapFactory.decodeStream(is, null, options);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(file.getPath(), options);
+        options.inSampleSize = computeSampleSize(options, maxWidth, maxHeight);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(file.getPath(), options);
     }
 
     /**
      * 给定最长宽和最长高, 读取输入流生成 Bitmap
      *
      * @param is        输入流
-     * @param maxWidth  最长宽
-     * @param maxHeight 最长高
      * @return Bitmap 对象
      */
-    public static Bitmap from(InputStream is, int maxWidth, int maxHeight) {
+    public static Bitmap from(InputStream is) {
         if (is == null) return null;
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(is, null, options);
-        options.inSampleSize = computeSampleSize(options, maxWidth, maxHeight);
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeStream(is, null, options);
+        return BitmapFactory.decodeStream(is, null, null);
     }
 
     /**
