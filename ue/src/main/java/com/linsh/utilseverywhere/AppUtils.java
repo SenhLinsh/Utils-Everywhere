@@ -32,6 +32,14 @@ public class AppUtils {
         return ContextUtils.get();
     }
 
+    private static PackageInfo getPackageInfo(@NonNull String packageName) throws Exception {
+        return getContext().getPackageManager().getPackageInfo(packageName, 0);
+    }
+
+    private static ApplicationInfo getApplicationInfo(String packageName) throws Exception {
+        return getContext().getPackageManager().getApplicationInfo(packageName, 0);
+    }
+
     /**
      * 判断服务是否正在运行
      *
@@ -120,12 +128,10 @@ public class AppUtils {
      */
     public static String getVersionName(@NonNull String packageName) {
         try {
-            PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(packageName, 0);
-            return packageInfo.versionName;
+            return getPackageInfo(packageName).versionName;
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -146,12 +152,10 @@ public class AppUtils {
      */
     public static int getVersionCode(@NonNull String packageName) {
         try {
-            PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo(packageName, 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            return getPackageInfo(packageName).versionCode;
+        } catch (Exception e) {
+            return -1;
         }
-        return -1;
     }
 
     /**
@@ -169,14 +173,12 @@ public class AppUtils {
      * @return 指定 APP 的应用名称
      */
     public static String getAppName(@NonNull String packageName) {
-        PackageManager pm = getContext().getPackageManager();
         try {
-            ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
-            return info.loadLabel(pm).toString();
+            PackageManager pm = getContext().getPackageManager();
+            return pm.getApplicationInfo(packageName, 0).loadLabel(pm).toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -192,9 +194,8 @@ public class AppUtils {
      * @param packageName 应用包名
      */
     public static int getUid(String packageName) {
-        PackageManager pm = getContext().getPackageManager();
         try {
-            return pm.getApplicationInfo(packageName, 0).uid;
+            return getApplicationInfo(packageName).uid;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -220,9 +221,8 @@ public class AppUtils {
             PackageInfo packinfo = getContext().getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
             return packinfo.signatures[0].toCharsString();
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -257,9 +257,9 @@ public class AppUtils {
      */
     public static boolean isAppInstalled(String packageName) {
         try {
-            getContext().getPackageManager().getPackageInfo(packageName, 0);
+            getPackageInfo(packageName);
             return true;
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -271,13 +271,12 @@ public class AppUtils {
      */
     public static boolean isSystemApp(String packageName) {
         try {
-            PackageInfo info = getContext().getPackageManager().getPackageInfo(packageName, 0);
+            PackageInfo info = getPackageInfo(packageName);
             return info != null && info.applicationInfo != null
                     && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -297,8 +296,8 @@ public class AppUtils {
      * @param requestCode
      */
     public static void launchApp(Activity activity, String packageName, int requestCode) {
-        Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
         try {
+            Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
             activity.startActivityForResult(launchIntent, requestCode);
         } catch (Exception e) {
             e.printStackTrace();
@@ -344,11 +343,9 @@ public class AppUtils {
      */
     public static boolean isAppDebug(String packageName) {
         try {
-            PackageManager pm = getContext().getPackageManager();
-            ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
-            return ai != null && (ai.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            ApplicationInfo info = getApplicationInfo(packageName);
+            return info != null && (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
             return false;
         }
     }
