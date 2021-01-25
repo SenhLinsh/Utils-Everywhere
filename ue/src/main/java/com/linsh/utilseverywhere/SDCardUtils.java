@@ -16,8 +16,11 @@ import java.io.File;
  *    date   : 2017/11/13
  *    desc   : 工具类: 外部储存相关
  *             API  : 判断是否存在/可用, 获取状态, 获取根目录, 获取容量 等
+ *
+ * @deprecated 请使用 {@link StorageUtils}
  * </pre>
  */
+@Deprecated
 public class SDCardUtils {
 
     private SDCardUtils() {
