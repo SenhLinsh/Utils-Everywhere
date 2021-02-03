@@ -16,6 +16,18 @@ public class ExceptionUtils {
      * 检查对象为空时抛异常
      *
      * @param object  检查对象
+     */
+    public static <T> T checkNotNull(@Nullable T object) {
+        if (object == null) {
+            throw new NullPointerException();
+        }
+        return object;
+    }
+
+    /**
+     * 检查对象为空时抛异常
+     *
+     * @param object  检查对象
      * @param message 异常信息
      */
     public static <T> T checkNotNull(@Nullable T object, String message) {
