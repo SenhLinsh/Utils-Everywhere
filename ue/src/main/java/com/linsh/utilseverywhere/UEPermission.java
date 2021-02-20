@@ -257,7 +257,7 @@ public class UEPermission {
         public static boolean check() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 return ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                        || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+                        && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
             }
             return true;
         }
@@ -300,7 +300,7 @@ public class UEPermission {
         public static boolean checkResult(@NonNull String[] permissions, @NonNull int[] grantResults) {
             for (int i = 0; i < permissions.length; i++) {
                 if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])
-                        || Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i])) {
+                        && Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i])) {
                     return grantResults[i] == PackageManager.PERMISSION_GRANTED;
                 }
             }
