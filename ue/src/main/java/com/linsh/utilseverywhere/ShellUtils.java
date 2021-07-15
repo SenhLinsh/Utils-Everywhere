@@ -123,8 +123,8 @@ public final class ShellUtils {
                     successMsg.append(s);
                 }
                 while ((s = errorResult.readLine()) != null) {
-                    if (successMsg.length() != 0)
-                        successMsg.append('\n');
+                    if (errorMsg.length() != 0)
+                        errorMsg.append('\n');
                     errorMsg.append(s);
                 }
             }
