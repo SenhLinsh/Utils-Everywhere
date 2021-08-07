@@ -1,15 +1,14 @@
 package com.linsh.utilseverywhere.tools;
 
-import android.annotation.TargetApi;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
 import androidx.annotation.IntDef;
 import androidx.annotation.RequiresApi;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * <pre>
@@ -44,6 +43,18 @@ public class ShapeBuilder {
     }
 
     /**
+     * 设置宽高
+     *
+     * @param width  宽
+     * @param height 高
+     * @return
+     */
+    public ShapeBuilder setSize(int width, int height) {
+        mGradientDrawable.setSize(width, height);
+        return this;
+    }
+
+    /**
      * 设置填充的颜色
      *
      * @param fillColor 颜色值
@@ -72,7 +83,7 @@ public class ShapeBuilder {
      * @param colors 至少两种颜色
      * @return ShapeBuilder
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     public ShapeBuilder setColors(int... colors) {
         mGradientDrawable.setColors(colors);
         return this;
