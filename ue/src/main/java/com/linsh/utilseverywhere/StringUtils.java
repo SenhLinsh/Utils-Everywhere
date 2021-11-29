@@ -84,6 +84,16 @@ public class StringUtils {
     }
 
     /**
+     * 判断所有的字符串是否有任何一个为空
+     *
+     * @param strings 指定字符串数组获或可变参数
+     * @return 任意存在一个为空返回 true, 否则返回 false
+     */
+    public static boolean isAnyEmpty(CharSequence... strings) {
+        return !isAllNotEmpty(strings);
+    }
+
+    /**
      * 判断字符串是否为空或空格
      *
      * @param string 指定字符串
