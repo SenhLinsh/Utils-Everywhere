@@ -396,4 +396,45 @@ public class FileIOUtils {
             }
         }
     }
+
+    /**
+     * 删除文件
+     *
+     * @param file 文件
+     * @return 是否删除成功
+     */
+    public static boolean deleteFile(File file) throws Exception {
+        return file.delete();
+    }
+
+    /**
+     * 删除文件夹及文件夹内的文件
+     *
+     * @param dir 文件夹
+     * @return 是否删除成功
+     */
+    public static boolean deleteDir(File dir) throws Exception {
+        if (!executeDeleteDir(dir))
+            return false;
+        return dir.delete();
+    }
+
+    /**
+     * 递归执行删除文件夹操作
+     */
+    private static boolean executeDeleteDir(File dir) throws Exception {
+        File[] files = dir.listFiles();
+        if (files != null && files.length != 0) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    if (!file.delete())
+                        return false;
+                } else if (file.isDirectory()) {
+                    if (!deleteDir(file))
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
 }
