@@ -1,5 +1,8 @@
 package com.linsh.utilseverywhere;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 /**
  * <pre>
  *    author : Senh Linsh
@@ -65,8 +68,21 @@ public class ObjectUtils {
      * @param value        检查值
      * @param defaultValue 默认值
      */
-    public static <T> T nullToDefault(T value, T defaultValue) {
+    public static <T> T nullToDefault(@Nullable T value, @Nullable T defaultValue) {
         return value != null ? value : defaultValue;
+    }
+
+    /**
+     * 从对象列表中取首个不为空的值
+     *
+     * @param values 检查值列表
+     */
+    public static <T> T firstNotNull(T... values) {
+        for (T value : values) {
+            if (value != null)
+                return value;
+        }
+        return null;
     }
 
     /**
@@ -76,9 +92,44 @@ public class ObjectUtils {
      * @param o2 对象2
      * @return 是否想等
      */
-    public static boolean isEqual(Object o1, Object o2) {
+    public static boolean isEqual(@Nullable Object o1, @Nullable Object o2) {
         if (o1 == null)
             return o2 == null;
         return o1.equals(o2);
+    }
+
+    /**
+     * 检查对象是否为空, 如果不为空则返回, 如果为空则抛异常
+     *
+     * @param object 被检查对象
+     */
+    public static <T> T checkNotNull(@Nullable T object) {
+        if (object == null) {
+            throw new NullPointerException();
+        }
+        return object;
+    }
+
+    /**
+     * 检查对象是否为空, 如果不为空则返回, 如果为空则抛异常
+     *
+     * @param object  被检查对象
+     * @param message 异常信息
+     */
+    public static <T> T checkNotNull(@Nullable T object, String message) {
+        if (object == null) {
+            throw new NullPointerException(message);
+        }
+        return object;
+    }
+
+    /**
+     * 转 Object 对象默认的字符串
+     *
+     * @param obj 对象
+     * @return 转字符串
+     */
+    public static String toString(@NonNull Object obj) {
+        return obj.getClass().getName() + "@" + Integer.toHexString(obj.hashCode());
     }
 }

@@ -42,6 +42,8 @@ public class AppUtils {
 
     /**
      * 判断服务是否正在运行
+     * <p>
+     * 注：Build.VERSION_CODES.O 以上不再支持
      *
      * @param serviceClassName 指定的服务类名
      * @return true 为正在运行; 其他为 false
