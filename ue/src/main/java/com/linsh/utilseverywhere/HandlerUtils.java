@@ -118,6 +118,23 @@ public class HandlerUtils {
     }
 
     /**
+     * 在主线程 Handler 中重新发送可执行任务的消息
+     * 该方法会清除当前 id 的消息，并重新发送
+     * <p>
+     * 该消息封装了可执行的任务, 在处理消息时会自动执行.
+     * <p>
+     * 注意: 由于该 Handler 是全局的, 使用 what 进行消息区分时, 注意与全局其他消息的冲突,
+     * 防止清除消息时发生误清.
+     *
+     * @param what     消息 Id, 用于区分不同的消息 / 任务
+     * @param runnable 可执行任务
+     */
+    public static void resendMessage(int what, Runnable runnable) {
+        removeMessages(what);
+        sendMessage(what, runnable);
+    }
+
+    /**
      * 在主线程 Handler 中发送延迟的可执行任务的消息
      * <p>
      * 该消息封装了可执行的任务, 在处理消息时会自动执行.
@@ -137,11 +154,38 @@ public class HandlerUtils {
     }
 
     /**
+     * 在主线程 Handler 中重新发送延迟的可执行任务的消息。
+     * 该方法会清除当前 id 的消息，并重新发送
+     * <p>
+     * 该消息封装了可执行的任务, 在处理消息时会自动执行.
+     * <p>
+     * 注意: 由于该 Handler 是全局的, 使用 what 进行消息区分时, 注意与全局其他消息的冲突,
+     * 防止清除消息时发生误清.
+     *
+     * @param what     消息 Id, 用于区分不同的消息 / 任务
+     * @param runnable 可执行任务
+     * @param delay    延迟时间
+     */
+    public static void resendMessage(int what, Runnable runnable, long delay) {
+        removeMessages(what);
+        sendMessage(what, runnable, delay);
+    }
+
+    /**
      * 清除该主线程 Handler 消息队列中标记为 what 的消息
      *
      * @param what 消息 Id
      */
     public static void removeMessages(int what) {
         getMainHandler().removeMessages(what);
+    }
+
+    /**
+     * 查询该主线程 Handler 消息队列中是否存在指定的消息
+     *
+     * @param what 消息 id
+     */
+    public static boolean hasMessages(int what) {
+        return getMainHandler().hasMessages(what);
     }
 }
