@@ -359,4 +359,27 @@ public class AppUtils {
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(0);
     }
+
+    /**
+     * 判断是否为主进程
+     */
+    public static boolean isMainProcess() {
+        return getPackageName().equals(getProcessName());
+    }
+
+    /**
+     * 获取当前进程名
+     */
+    public static String getProcessName() {
+        int pid = android.os.Process.myPid();
+        ActivityManager am = (ActivityManager) ContextUtils.getSystemService(Context.ACTIVITY_SERVICE);
+        if (am != null) {
+            for (ActivityManager.RunningAppProcessInfo process : am.getRunningAppProcesses()) {
+                if (process.pid == pid) {
+                    return process.processName;
+                }
+            }
+        }
+        return null;
+    }
 }
