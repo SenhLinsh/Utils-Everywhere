@@ -1,6 +1,6 @@
 package com.linsh.utilseverywhere;
 
-import com.linsh.utilseverywhere.module.CommandResult;
+import com.linsh.utilseverywhere.entity.CommandResult;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

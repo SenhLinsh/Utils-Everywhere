@@ -2,7 +2,7 @@ package com.linsh.utilseverywhere;
 
 import android.text.TextUtils;
 
-import com.linsh.utilseverywhere.module.SimpleDate;
+import com.linsh.utilseverywhere.entity.SimpleDate;
 
 import java.util.Date;
 import java.util.regex.Matcher;

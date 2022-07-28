@@ -13,8 +13,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.linsh.utilseverywhere.interfaces.Consumer;
-import com.linsh.utilseverywhere.module.unit.FileSize;
-import com.linsh.utilseverywhere.module.unit.Unit;
+import com.linsh.utilseverywhere.entity.unit.FileSize;
+import com.linsh.utilseverywhere.entity.unit.Unit;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

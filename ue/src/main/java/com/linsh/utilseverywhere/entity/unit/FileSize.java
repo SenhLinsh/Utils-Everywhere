@@ -1,4 +1,4 @@
-package com.linsh.utilseverywhere.module.unit;
+package com.linsh.utilseverywhere.entity.unit;
 
 /**
  * <pre>

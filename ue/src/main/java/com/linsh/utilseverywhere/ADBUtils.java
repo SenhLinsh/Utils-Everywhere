@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 
-import com.linsh.utilseverywhere.module.CommandResult;
+import com.linsh.utilseverywhere.entity.CommandResult;
 
 import java.util.Set;
 

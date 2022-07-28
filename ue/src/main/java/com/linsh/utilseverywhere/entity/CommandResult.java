@@ -1,4 +1,4 @@
-package com.linsh.utilseverywhere.module;
+package com.linsh.utilseverywhere.entity;
 
 /**
  * 执行 Shell 命令返回的命令结果

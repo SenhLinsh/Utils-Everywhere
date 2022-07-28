@@ -1,4 +1,4 @@
-package com.linsh.utilseverywhere.module;
+package com.linsh.utilseverywhere.entity;
 
 import com.linsh.utilseverywhere.LunarCalendarUtils;
 

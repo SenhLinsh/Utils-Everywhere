@@ -4,8 +4,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 
-import com.linsh.utilseverywhere.module.unit.FileSize;
-import com.linsh.utilseverywhere.module.unit.Unit;
+import com.linsh.utilseverywhere.entity.unit.FileSize;
+import com.linsh.utilseverywhere.entity.unit.Unit;
 
 import java.io.File;
 
