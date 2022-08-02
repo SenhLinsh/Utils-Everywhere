@@ -18,6 +18,7 @@ public enum DateFormatType {
     DATA_NO_YEAR_CN("MM月dd日"),
     DIGITAL_DATE("yyyyMMdd"),
     DIGITAL_DATE_TIME("yyyyMMddHHmmss"),
+    DIGITAL_DATE_TIME_NO_SECOND("yyyyMMddHHmm"),
     TIME("HH:mm:ss"),
     TIME_NO_SECOND("HH:mm"),
     TIME_NO_SECOND_CN("H时m分"),
