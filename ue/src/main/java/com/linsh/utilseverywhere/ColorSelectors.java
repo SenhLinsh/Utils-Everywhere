@@ -20,7 +20,7 @@ public class ColorSelectors {
      * @return 颜色状态选择器
      */
     public static ColorStateList pressed(int pressedColor, int normalColor) {
-        int[][] states = new int[][]{new int[]{android.R.attr.state_enabled}, new int[]{}};
+        int[][] states = new int[][]{new int[]{android.R.attr.state_pressed}, new int[]{}};
         int[] colors = new int[]{pressedColor, normalColor};
         return new ColorStateList(states, colors);
     }
@@ -33,7 +33,7 @@ public class ColorSelectors {
      * @return 颜色状态选择器
      */
     public static ColorStateList selected(int selectedColor, int normalColor) {
-        int[][] states = new int[][]{new int[]{android.R.attr.state_enabled}, new int[]{}};
+        int[][] states = new int[][]{new int[]{android.R.attr.state_selected}, new int[]{}};
         int[] colors = new int[]{selectedColor, normalColor};
         return new ColorStateList(states, colors);
     }
