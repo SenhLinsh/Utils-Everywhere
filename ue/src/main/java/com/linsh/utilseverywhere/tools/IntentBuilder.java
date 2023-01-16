@@ -223,6 +223,7 @@ public class IntentBuilder {
     }
 
     public IntentBuilder putExtra(String key, Object value) {
+        if (value == null) return this;
         if (value instanceof String)
             intent.putExtra(key, (String) value);
         else if (value instanceof Integer)
