@@ -21,6 +21,7 @@ public class EditTextUtils {
      * @param editText EditText
      */
     public static void moveCursorToLast(EditText editText) {
+        editText.requestFocus();
         editText.setSelection(editText.getText().length());
     }
 
