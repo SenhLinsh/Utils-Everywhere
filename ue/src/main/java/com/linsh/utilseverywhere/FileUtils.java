@@ -876,6 +876,16 @@ public class FileUtils {
      * @return 格式化后的大小
      */
     public static String getFormattedFileSize(File file) {
-        return Formatter.formatFileSize(getContext(), getFileSize(file));
+        return getFormattedFileSize(getFileSize(file));
+    }
+
+    /**
+     * 获取文件或文件夹格式化后的大小, 单位根据算法自动进行调整
+     *
+     * @param fileSize 文件大小
+     * @return 格式化后的大小
+     */
+    public static String getFormattedFileSize(long fileSize) {
+        return Formatter.formatFileSize(getContext(), fileSize);
     }
 }
