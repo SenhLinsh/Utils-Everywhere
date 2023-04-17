@@ -213,7 +213,7 @@ public class BitmapUtils {
     /**
      * 给定最长宽和最长高, 读取输入流生成 Bitmap
      *
-     * @param is        输入流
+     * @param is 输入流
      * @return Bitmap 对象
      */
     public static Bitmap from(InputStream is) {
@@ -300,7 +300,7 @@ public class BitmapUtils {
             int newLength = baos.toByteArray().length;
             long compressPercent = newLength * 100L / length;
             if (compressPercent >= 99 || quality < 50) {
-                quality = Math.max(quality, 40);
+                quality = Math.min((quality / 20 + 1) * 20, 40);
                 decrease = 20;
             } else if (compressPercent > 95 || quality < 80) {
                 decrease = decrease >= 10 ? 20 : 10;
