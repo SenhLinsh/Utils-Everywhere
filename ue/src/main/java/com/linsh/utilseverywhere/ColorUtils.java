@@ -3,6 +3,8 @@ package com.linsh.utilseverywhere;
 import android.graphics.Color;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
 
 /**
  * <pre>
@@ -18,8 +20,47 @@ public class ColorUtils {
     private ColorUtils() {
     }
 
-    public static int compositeColors(@ColorInt int foreground, @ColorInt int background) {
-        return androidx.core.graphics.ColorUtils.compositeColors(foreground, background);
+    /**
+     * 合并颜色
+     *
+     * @param foregroundColor 前景色
+     *                        <p>注意: 该颜色需要有一定的透明度, 如果该颜色不透明, 得到的颜色为该颜色
+     * @param backgroundColor 背景色
+     */
+    public static int compositeColors(@ColorInt int foregroundColor, @ColorInt int backgroundColor) {
+        return androidx.core.graphics.ColorUtils.compositeColors(foregroundColor, backgroundColor);
+    }
+
+    /**
+     * 颜色过渡，根据比例在两个颜色之间过渡
+     *
+     * @param color1 第一个颜色
+     * @param color2 第二个颜色
+     * @param ratio  比例
+     *               <p>0.0 表示完全使用第一个颜色, 1.0 表示完全使用第二个颜色
+     */
+    public static int transitionColors(@ColorInt int color1, @ColorInt int color2, @FloatRange(from = 0.0, to = 1.0) float ratio) {
+        return androidx.core.graphics.ColorUtils.blendARGB(color1, color2, ratio);
+    }
+
+    /**
+     * 颜色过渡，根据比例在多个颜色之间过渡
+     *
+     * @param colors 颜色数组
+     *               <p>注意: 至少需要两个颜色，否则得到的颜色为第一个颜色
+     * @param ratio  比例
+     *               <p>0.0 表示完全使用第一个颜色, colors.length 表示完全使用最后一个颜色
+     */
+    public static int transitionColors(@NonNull @ColorInt int[] colors, float ratio) {
+        if (colors.length == 0)
+            throw new IllegalArgumentException("colors.length must be > 0");
+        if (ratio <= 0 || colors.length == 1)
+            return colors[0];
+        if (ratio >= colors.length)
+            return colors[colors.length - 1];
+        int color1 = colors[(int) ratio];
+        int color2 = colors[(int) ratio + 1];
+        return transitionColors(color1, color2, ratio - (int) ratio);
     }
 
     /**
@@ -91,11 +132,6 @@ public class ColorUtils {
         builder.append(chars[blue / 16]).append(chars[blue % 16]);
         return builder.toString();
     }
-
-    // TODO: 17/11/9 添加解析颜色的方法
-//    public static int parseColor(String color) {
-//        return 0;
-//    }
 
     /**
      * 平衡颜色
