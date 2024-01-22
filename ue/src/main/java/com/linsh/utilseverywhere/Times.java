@@ -28,6 +28,15 @@ public class Times {
     /**
      * 计算天数所需时间
      *
+     * @param day 天
+     */
+    public static long day(float day) {
+        return (long) (day * DAY);
+    }
+
+    /**
+     * 计算天数所需时间
+     *
      * @param day  天
      * @param hour 时
      * @param min  分
