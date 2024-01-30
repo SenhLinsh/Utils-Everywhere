@@ -45,4 +45,36 @@ public class Times {
     public static long day(int day, int hour, int min, int sec) {
         return day * DAY + hour * HOUR + min * MINUTE + sec * SECOND;
     }
+
+    public static long hour(int hour) {
+        return hour * HOUR;
+    }
+
+    public static long hour(float hour) {
+        return (long) (hour * HOUR);
+    }
+
+    public static long hour(int hour, int min, int sec) {
+        return hour * HOUR + min * MINUTE + sec * SECOND;
+    }
+
+    public static long minute(int min) {
+        return min * MINUTE;
+    }
+
+    public static long minute(float min) {
+        return (long) (min * MINUTE);
+    }
+
+    public static long minute(int min, int sec) {
+        return min * MINUTE + sec * SECOND;
+    }
+
+    public static long second(int sec) {
+        return sec * SECOND;
+    }
+
+    public static long second(float sec) {
+        return (long) (sec * SECOND);
+    }
 }
