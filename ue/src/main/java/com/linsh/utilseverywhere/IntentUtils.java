@@ -386,6 +386,16 @@ public class IntentUtils {
     }
 
     /**
+     * 获取跳转「浏览器」的意图
+     *
+     * @param url 网址
+     * @return 意图
+     */
+    public static Intent getBrowserIntent(String url) {
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+    }
+
+    /**
      * 获取跳转「设置界面」的意图
      *
      * @return 意图
@@ -719,6 +729,15 @@ public class IntentUtils {
                                      int aspectX, int aspectY, int outputX, int outputY) {
         Intent intent = getCropPhotoIntent(inputUri, outputUri, aspectX, aspectY, outputX, outputY);
         startActivityForResult(null, fragment, intent, requestCode);
+    }
+
+    /**
+     * 跳转:「浏览器」界面
+     *
+     * @param url 网址
+     */
+    public static void gotoBrowser(String url) {
+        startActivity(getBrowserIntent(url));
     }
 
     /**
