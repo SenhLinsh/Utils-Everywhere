@@ -1,11 +1,9 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
-
+    compileSdk 28
     defaultConfig {
+        namespace "com.linsh.utilseverywhere"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 12
@@ -53,17 +51,4 @@ dependencies {
     testImplementation "com.google.truth:truth:0.42"
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                groupId = 'com.github.SenhLinsh'
-                artifactId = 'Utils-Everywhere'
-                version = '1.0.0'
-            }
-        }
-    }
 }
