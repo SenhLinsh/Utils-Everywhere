@@ -59,7 +59,7 @@ public class ColorUtils {
         if (ratio >= colors.length)
             return colors[colors.length - 1];
         int color1 = colors[(int) ratio];
-        int color2 = colors[(int) ratio + 1];
+        int color2 = colors[Math.min((int) ratio + 1, colors.length - 1)];
         return transitionColors(color1, color2, ratio - (int) ratio);
     }
 
