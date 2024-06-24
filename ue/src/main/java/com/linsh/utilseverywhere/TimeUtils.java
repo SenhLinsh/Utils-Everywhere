@@ -44,7 +44,7 @@ public class TimeUtils {
         calendar.setTimeInMillis(milliseconds);
         long hour = calendar.get(Calendar.HOUR_OF_DAY);
         long datetime = System.currentTimeMillis() - (milliseconds);
-        long day = (long) Math.ceil(datetime / 24 / 60 / 60 / 1000.0f); // 天前 (向上取整)
+        long day = (long) Math.floor(datetime / 1000.0f / 60 / 60 / 24); // 天前 (向上取整)
 
         if (day <= 7) { // 一周内
             if (day == 0) { // 今天
